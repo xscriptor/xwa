@@ -2,6 +2,12 @@
 
 import { useEffect, useState } from "react";
 import "./ReportDashboard.css";
+import OverviewTab from "./tabs/OverviewTab";
+import SeoTab from "./tabs/SeoTab";
+import SecurityTab from "./tabs/SecurityTab";
+import SitemapTab from "./tabs/SitemapTab";
+import AccessibilityTab from "./tabs/AccessibilityTab";
+import StructureTab from "./tabs/StructureTab";
 
 interface ScanReport {
   target_url: string;
@@ -9,67 +15,110 @@ interface ScanReport {
   seo: any;
   sitemap: any;
   security: any;
+  accessibility: any;
+  structure: any;
+}
+
+type TabKey = "overview" | "seo" | "security" | "sitemap" | "accessibility" | "structure";
+
+function computeHealthScore(r: ScanReport): number {
+  let s = 100;
+  if (!r.seo.standard_meta?.title) s -= 10;
+  if (!r.seo.standard_meta?.description) s -= 10;
+  if (r.seo.headings?.missing_h1) s -= 8;
+  if (r.seo.headings?.multiple_h1) s -= 5;
+  if ((r.seo.image_alts?.missing_alt || 0) > 0) s -= Math.min(r.seo.image_alts.missing_alt * 2, 10);
+  if (!r.seo.canonical) s -= 5;
+  if (!r.seo.robots_txt?.presence) s -= 3;
+  s -= (r.security.headers?.missing_headers?.length || 0) * 3;
+  if (!r.security.ssl?.valid) s -= 15;
+  if (r.security.ssl?.is_expired) s -= 10;
+  if ((r.security.cookies?.issues?.length || 0) > 0) s -= Math.min(r.security.cookies.issues.length * 2, 10);
+  if ((r.security.sensitive_paths_found?.length || 0) > 0) s -= r.security.sensitive_paths_found.length * 5;
+  if ((r.sitemap.broken_links?.length || 0) > 0) s -= Math.min(r.sitemap.broken_links.length * 2, 15);
+  const a11y = r.accessibility?.main_page?.summary;
+  if (a11y) s -= Math.min((a11y.errors || 0) * 3 + (a11y.warnings || 0), 15);
+  const struct = r.structure?.main_page?.summary;
+  if (struct) s -= Math.min((struct.total_issues || 0) * 2, 10);
+  return Math.max(0, Math.min(100, s));
+}
+
+function collectWarnings(r: ScanReport): string[] {
+  const w: string[] = [];
+  if (!r.seo.standard_meta?.title) w.push("Page title is missing");
+  if (!r.seo.standard_meta?.description) w.push("Meta description is missing");
+  if (r.seo.headings?.missing_h1) w.push("No H1 tag found");
+  if (r.seo.headings?.multiple_h1) w.push("Multiple H1 tags");
+  if ((r.seo.image_alts?.missing_alt || 0) > 0) w.push(`${r.seo.image_alts.missing_alt} image(s) missing alt`);
+  if (!r.seo.canonical) w.push("No canonical URL");
+  if (!r.seo.robots_txt?.presence) w.push("robots.txt not found");
+  if (!r.security.ssl?.valid) w.push("SSL invalid/missing");
+  if (r.security.ssl?.is_expired) w.push("SSL expired");
+  if ((r.security.headers?.missing_headers?.length || 0) > 0) w.push(`${r.security.headers.missing_headers.length} security header(s) missing`);
+  if ((r.security.sensitive_paths_found?.length || 0) > 0) w.push(`${r.security.sensitive_paths_found.length} sensitive path(s) exposed`);
+  if ((r.security.cookies?.issues?.length || 0) > 0) w.push(`${r.security.cookies.issues.length} cookie issue(s)`);
+  if ((r.sitemap.broken_links?.length || 0) > 0) w.push(`${r.sitemap.broken_links.length} broken link(s)`);
+  const a11y = r.accessibility?.main_page;
+  if (a11y?.language && !a11y.language.has_lang) w.push("Missing html lang attribute");
+  if (a11y?.language && !a11y.language.has_charset) w.push("Missing charset declaration");
+  if ((a11y?.aria?.missing_labels || 0) > 0) w.push(`${a11y.aria.missing_labels} element(s) missing ARIA label`);
+  const struct = r.structure?.main_page;
+  if (struct?.summary?.total_issues > 0) w.push(`${struct.summary.total_issues} structure issue(s) found`);
+  if (struct?.semantic && !struct.semantic.has_main) w.push("Missing <main> landmark");
+  return w;
 }
 
 export default function ReportDashboard({ scanId }: { scanId: string }) {
-  const [status, setStatus] = useState<string>("Connecting to engine...");
-  const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [status, setStatus] = useState("Connecting to engine...");
+  const [isCompleted, setIsCompleted] = useState(false);
   const [reportData, setReportData] = useState<ScanReport | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<TabKey>("overview");
+
+  const handleQuickScan = async (targetUrl: string) => {
+    try {
+      const res = await fetch("http://localhost:8000/api/scan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: targetUrl })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        window.location.href = `/reports/${data.scan_id}`;
+      }
+    } catch (err) {
+      console.error("Scan trigger failed", err);
+    }
+  };
 
   useEffect(() => {
-    // Connect to SSE Endpoint
     const es = new EventSource(`http://localhost:8000/api/progress/${scanId}`);
-
     es.onmessage = (event) => {
-      const newStatus = event.data;
-      setStatus(newStatus);
-      
-      if (newStatus.includes("Completed")) {
-        setIsCompleted(true);
-        es.close();
-      } else if (newStatus.includes("Error")) {
-        setError(newStatus);
-        es.close();
-      }
+      const s = event.data;
+      setStatus(s);
+      if (s.includes("Completed")) { setIsCompleted(true); es.close(); }
+      else if (s.includes("Error")) { setError(s); es.close(); }
     };
-
-    es.onerror = (err) => {
-      console.error("SSE Error:", err);
-      // Sometimes it fails immediately if already finished, so we just attempt to fetch
-      setIsCompleted(true);
-      es.close();
-    };
-
-    return () => {
-      es.close();
-    };
+    es.onerror = () => { setIsCompleted(true); es.close(); };
+    return () => { es.close(); };
   }, [scanId]);
 
   useEffect(() => {
     if (isCompleted && !error) {
-      // Fetch full report payload
       fetch(`http://localhost:8000/api/reports/${scanId}`)
         .then(r => r.json())
         .then(data => {
-          if (data.status === "In Progress") {
-            // Edge case where SSE disconnected but DB says in progress
-            setIsCompleted(false);
-          } else {
-            setReportData(data);
-          }
+          if (data.status === "In Progress") setIsCompleted(false);
+          else setReportData(data);
         })
-        .catch(err => setError("Failed to load report data"));
+        .catch(() => setError("Failed to load report data"));
     }
   }, [isCompleted, error, scanId]);
 
   if (error) {
     return (
       <div className="dashboard-container">
-        <div className="glass-panel error-panel">
-          <h2>Scan Failed</h2>
-          <p>{error}</p>
-        </div>
+        <div className="glass-panel error-panel"><h2>SCAN_FAILED</h2><p>{error}</p></div>
       </div>
     );
   }
@@ -79,187 +128,67 @@ export default function ReportDashboard({ scanId }: { scanId: string }) {
       <div className="dashboard-container loading-state">
         <div className="glass-panel loader-panel">
           <div className="pulse-ring"></div>
-          <h2>Analysis In Progress</h2>
+          <h2>ANALYSIS_IN_PROGRESS</h2>
           <p className="status-text">{status}</p>
-          <div className="progress-bar">
-            {/* Indeterminate premium progress bar */}
-            <div className="progress-fill indeterminate"></div>
-          </div>
+          <div className="progress-bar"><div className="progress-fill indeterminate"></div></div>
         </div>
       </div>
     );
   }
 
-  // Dashboard Overview
+  const healthScore = computeHealthScore(reportData);
+  const warnings = collectWarnings(reportData);
+
+  const tabs: { key: TabKey; label: string }[] = [
+    { key: "overview", label: "Overview" },
+    { key: "seo", label: "SEO" },
+    { key: "security", label: "Security" },
+    { key: "sitemap", label: "Sitemap" },
+    { key: "accessibility", label: "A11y" },
+    { key: "structure", label: "Structure" },
+  ];
+
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-container fade-in">
       <header className="dashboard-header glass-panel">
         <div>
-          <h1>Scan Report: {reportData.target_url}</h1>
-          <p className="scan-time">Timestamp: {new Date(reportData.scan_timestamp).toLocaleString()}</p>
+          <h1>// {reportData.target_url}</h1>
+          <p className="scan-time">{new Date(reportData.scan_timestamp).toLocaleString()}</p>
         </div>
         <div className="header-actions">
-          <a href={`http://localhost:8000/api/export/md/${scanId}`} className="btn-secondary" download>Export MD</a>
-          <a href={`http://localhost:8000/api/export/jsonc/${scanId}`} className="btn-primary" download>Export JSON</a>
+          <a href={`http://localhost:8000/api/export/md/${scanId}`} className="btn-secondary" download>.md</a>
+          <a href={`http://localhost:8000/api/export/jsonc/${scanId}`} className="btn-primary" download>.jsonc</a>
         </div>
       </header>
 
-      <div className="metrics-grid">
-        <div className="metric-card glass-panel">
-          <h3>SEO Score (Estimate)</h3>
-          <div className="metric-value text-accent">
-            {reportData.seo.standard_meta?.title ? "Good" : "Needs Work"}
-          </div>
-          <p className="metric-sub">H1 Tags: {reportData.seo.headings?.counts?.h1 || 0}</p>
-        </div>
-        
-        <div className="metric-card glass-panel">
-          <h3>Sitemap Map</h3>
-          <div className="metric-value text-success">
-            {reportData.sitemap.urls_found} URLs
-          </div>
-          <p className="metric-sub">Broken Links: {reportData.sitemap.broken_links?.length || 0}</p>
-        </div>
-        
-        <div className="metric-card glass-panel">
-          <h3>Security Rating</h3>
-          <div className="metric-value text-warning">
-            {reportData.security.ssl?.valid ? "Secured" : "Insecure"}
-          </div>
-          <p className="metric-sub">Missing Headers: {reportData.security.headers?.missing_headers?.length || 0}</p>
-        </div>
-        
-        <div className="metric-card glass-panel">
-          <h3>Exposed Paths</h3>
-          <div className="metric-value text-danger">
-            {reportData.security.sensitive_paths_found?.length || 0}
-          </div>
-          <p className="metric-sub">Directory Brute-Forced</p>
-        </div>
+      <div className="tab-nav glass-panel">
+        {tabs.map(t => (
+          <button
+            key={t.key}
+            className={`tab-btn ${activeTab === t.key ? "active" : ""}`}
+            onClick={() => setActiveTab(t.key)}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
 
-      <div className="details-grid">
-        {/* SEO Details */}
-        <div className="details-card glass-panel">
-          <h2>SEO Analysis</h2>
-          <div className="details-content">
-            <div className="detail-item">
-              <span className="label">Title:</span>
-              <span className="value">{reportData.seo.standard_meta?.title || "Missing"}</span>
-            </div>
-            <div className="detail-item">
-              <span className="label">Description:</span>
-              <span className="value">{reportData.seo.standard_meta?.description || "Missing"}</span>
-            </div>
-            <div className="detail-item">
-              <span className="label">Canonical URL:</span>
-              <span className="value">{reportData.seo.canonical || "Not Set"}</span>
-            </div>
-            <div className="detail-item">
-              <span className="label">Text Ratio:</span>
-              <span className="value">{reportData.seo.text_ratio?.text_to_html_ratio}% ({reportData.seo.text_ratio?.word_count} words)</span>
-            </div>
-            <div className="detail-item">
-              <span className="label">Headings:</span>
-              <span className="value">
-                H1: {reportData.seo.headings?.counts?.h1 || 0} | 
-                H2: {reportData.seo.headings?.counts?.h2 || 0} | 
-                H3: {reportData.seo.headings?.counts?.h3 || 0}
-              </span>
-            </div>
-            <div className="detail-item">
-              <span className="label">Missing Image Alts:</span>
-              <span className="value">{reportData.seo.image_alts?.missing_alt || 0} / {reportData.seo.image_alts?.total_images || 0}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Security Details */}
-        <div className="details-card glass-panel">
-          <h2>Security & Headers</h2>
-          <div className="details-content">
-            <div className="detail-item">
-              <span className="label">SSL Issuer:</span>
-              <span className="value">{reportData.security.ssl?.issuer || "Unknown"}</span>
-            </div>
-            <div className="detail-item">
-              <span className="label">SSL Expiration:</span>
-              <span className="value">{reportData.security.ssl?.expires_on || "N/A"}</span>
-            </div>
-            <div className="detail-item">
-              <span className="label">Server Info Leaks:</span>
-              <span className="value text-warning">
-                {Object.keys(reportData.security.headers?.leaked_server_info || {}).length > 0 
-                  ? JSON.stringify(reportData.security.headers.leaked_server_info) 
-                  : "None Detected"}
-              </span>
-            </div>
-            <div className="detail-item vertical">
-              <span className="label">Missing Security Headers:</span>
-              <ul className="value-list">
-                {reportData.security.headers?.missing_headers?.length > 0 ? (
-                  reportData.security.headers.missing_headers.map((h: string) => <li key={h}>{h}</li>)
-                ) : (
-                  <li>None. All good!</li>
-                )}
-              </ul>
-            </div>
-            {reportData.security.sensitive_paths_found?.length > 0 && (
-              <div className="detail-item vertical">
-                <span className="label text-danger">⚠️ Exposed Sensitive Paths:</span>
-                <ul className="value-list error-list">
-                  {reportData.security.sensitive_paths_found.map((p: string) => <li key={p}>{p}</li>)}
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
-        
-        {/* Sitemap Details */}
-        <div className="details-card glass-panel full-width">
-          <h2>Sitemap & Links</h2>
-          <div className="details-content">
-            <div className="detail-item">
-              <span className="label">Total Sitemap URLs:</span>
-              <span className="value">{reportData.sitemap.urls_found}</span>
-            </div>
-            <div className="detail-item">
-              <span className="label">Validation Scanned:</span>
-              <span className="value">{reportData.sitemap.scanned_count} URLs tested</span>
-            </div>
-            
-            {reportData.sitemap.broken_links?.length > 0 ? (
-              <div className="detail-item vertical mt-4">
-                <span className="label text-danger">Broken Links Found (4xx/5xx):</span>
-                <div className="table-responsive">
-                  <table className="link-table">
-                    <thead>
-                      <tr>
-                        <th>Status</th>
-                        <th>URL</th>
-                        <th>Error</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {reportData.sitemap.broken_links.map((link: any, idx: number) => (
-                        <tr key={idx}>
-                          <td className="text-danger font-medium">{link.status || "FAIL"}</td>
-                          <td className="url-cell">{link.url}</td>
-                          <td className="text-muted">{link.error || "-"}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ) : (
-              <div className="detail-item mt-4">
-                <span className="label">Broken Links:</span>
-                <span className="value text-success">None detected among scanned URLs.</span>
-              </div>
-            )}
-          </div>
-        </div>
+      <div className="tab-content">
+        {activeTab === "overview" && (
+          <OverviewTab
+            seo={reportData.seo}
+            security={reportData.security}
+            sitemap={reportData.sitemap}
+            accessibility={reportData.accessibility}
+            healthScore={healthScore}
+            warnings={warnings}
+          />
+        )}
+        {activeTab === "seo" && <SeoTab seo={reportData.seo} />}
+        {activeTab === "security" && <SecurityTab security={reportData.security} />}
+        {activeTab === "sitemap" && <SitemapTab sitemap={reportData.sitemap} onQuickScan={handleQuickScan} />}
+        {activeTab === "accessibility" && <AccessibilityTab accessibility={reportData.accessibility} />}
+        {activeTab === "structure" && <StructureTab structure={reportData.structure} />}
       </div>
     </div>
   );

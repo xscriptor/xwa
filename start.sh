@@ -60,7 +60,7 @@ FRONTEND_PID=$!
 cd ..
 
 echo -e "\n${BLUE}================================================${NC}"
-echo -e "${GREEN}🚀 xwa is fully running!${NC}"
+echo -e "${GREEN}[DONE] xwa is fully running!${NC}"
 echo -e "-> Frontend Dashboard: http://localhost:3000"
 echo -e "-> API Swagger Docs:   http://localhost:8000/docs"
 echo -e "${RED}Press Ctrl+C at any time to stop everything.${NC}"

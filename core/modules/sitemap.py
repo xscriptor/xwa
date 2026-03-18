@@ -6,28 +6,81 @@ import requests
 from typing import List, Dict, Any
 from core.utils.logger import logger
 
-def fetch_sitemap_urls(base_url: str) -> List[str]:
-    """Finds and parses the sitemap.xml to extract all URLs."""
-    parsed = urlparse(base_url)
-    sitemap_url = f"{parsed.scheme}://{parsed.netloc}/sitemap.xml"
+async def fetch_html_links(session: aiohttp.ClientSession, url: str, base_domain: str, parsed_base_scheme: str) -> List[str]:
+    """Fetches HTML and parses base-domain hrefs."""
+    try:
+        async with session.get(url, timeout=5) as response:
+            if response.status == 200:
+                html = await response.text()
+                soup = BeautifulSoup(html, "html.parser")
+                links = set()
+                for a_tag in soup.find_all("a", href=True):
+                    href = a_tag["href"].strip()
+                    if href.startswith("/"):
+                        links.add(f"{parsed_base_scheme}://{base_domain}{href}")
+                    elif base_domain in href:
+                        links.add(href)
+                return list(links)
+    except Exception:
+        pass
+    return []
+
+async def async_deep_scrape(base_url: str, max_pages: int = 150) -> set[str]:
+    """Performs a BFS concurrent deep scrape."""
+    visited = set()
+    queue = [base_url]
+    parsed_base = urlparse(base_url)
+    base_domain = parsed_base.netloc
     
+    connector = aiohttp.TCPConnector(limit_per_host=10)
+    async with aiohttp.ClientSession(connector=connector) as session:
+        while queue and len(visited) < max_pages:
+            batch = queue[:20]
+            queue = queue[20:]
+            
+            tasks = []
+            for url in batch:
+                if url not in visited:
+                    visited.add(url)
+                    tasks.append(fetch_html_links(session, url, base_domain, parsed_base.scheme))
+                    
+            if not tasks:
+                continue
+                
+            results = await asyncio.gather(*tasks)
+            for links in results:
+                for link in links:
+                    if link not in visited and len(visited) + len(queue) < max_pages:
+                        queue.append(link)
+                        
+    return visited
+
+def fetch_all_urls(base_url: str) -> List[str]:
+    """Finds URLs from sitemap and performs deep recursive scrape on the site."""
+    urls = set()
+    parsed_base = urlparse(base_url)
+    base_domain = parsed_base.netloc
+    
+    # 1. Try Sitemap
+    sitemap_url = f"{parsed_base.scheme}://{base_domain}/sitemap.xml"
     logger.info(f"Attempting to fetch sitemap from: {sitemap_url}")
     try:
         resp = requests.get(sitemap_url, timeout=10)
         if resp.status_code == 200:
-            # Parse XML. We installed lxml so bs4 can use it.
             soup = BeautifulSoup(resp.content, "xml")
-            
-            # Standard sitemaps use <loc> tags for URLs
-            urls = [loc.text.strip() for loc in soup.find_all("loc") if loc.text]
-            logger.info(f"Successfully extracted {len(urls)} URLs from sitemap.")
-            return urls
-        else:
-            logger.warning(f"No sitemap found at {sitemap_url} (HTTP {resp.status_code}).")
+            sitemap_urls = [loc.text.strip() for loc in soup.find_all("loc") if loc.text]
+            urls.update(sitemap_urls)
+            logger.info(f"Extracted {len(sitemap_urls)} URLs from sitemap.")
     except Exception as e:
-        logger.error(f"Error fetching sitemap: {e}")
+        logger.error(f"Sitemap fetch failed: {e}")
+
+    # 2. Deep Scrape site
+    logger.info(f"Deep scraping site {base_url} (max 150 pages)...")
+    scraped = asyncio.run(async_deep_scrape(base_url))
+    urls.update(scraped)
+    logger.info(f"Total internal links discovered: {len(urls)}.")
         
-    return []
+    return list(urls)
 
 async def check_url(session: aiohttp.ClientSession, url: str, semaphore: asyncio.Semaphore) -> Dict[str, Any]:
     """Checks the status of a single URL asynchronously."""
@@ -87,10 +140,10 @@ def build_url_tree(urls: List[str]) -> Dict[str, Any]:
 
 def run_sitemap_analysis(base_url: str) -> Dict[str, Any]:
     """Main entry point for sitemap and crawler analysis."""
-    urls = fetch_sitemap_urls(base_url)
+    urls = fetch_all_urls(base_url)
     
     if not urls:
-        return {"urls_found": 0, "tree": {}, "broken_links": [], "scanned_count": 0}
+        return {"urls_found": 0, "tree": {}, "broken_links": [], "scanned_count": 0, "all_urls": []}
         
     tree = build_url_tree(urls)
     
@@ -110,5 +163,7 @@ def run_sitemap_analysis(base_url: str) -> Dict[str, Any]:
         "urls_found": len(urls),
         "tree_root_children": list(tree.keys()),
         "broken_links": broken_links,
-        "scanned_count": len(test_urls)
+        "scanned_count": len(test_urls),
+        "all_urls": urls,
+        "crawl_results": crawl_results
     }

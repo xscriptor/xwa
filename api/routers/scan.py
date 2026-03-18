@@ -2,12 +2,19 @@ from fastapi import APIRouter, BackgroundTasks, HTTPException, Depends
 from sqlmodel import Session
 from api.db.database import get_session
 from api.db.models import ScanRecord
-from core.models.scan_results import FullScanReport, SEOResults, SitemapResults, SecurityResults
+from core.models.scan_results import (
+    FullScanReport, SEOResults, SitemapResults, SecurityResults,
+    AccessibilityResults, StructureResults
+)
 from core.modules.security import run_security_analysis
 from core.modules.sitemap import run_sitemap_analysis
+from core.modules.accessibility import run_accessibility_analysis
+from core.modules.structure import run_structure_analysis
 from core.modules.seo import (
     extract_standard_meta_tags,
     extract_social_meta_tags,
+    extract_structured_data,
+    extract_link_tags,
     analyze_headings,
     analyze_image_alts,
     analyze_text_ratio,
@@ -17,6 +24,7 @@ from core.modules.seo import (
 from core.utils.http import fetch_url
 from datetime import datetime
 import asyncio
+import aiohttp
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -27,6 +35,33 @@ class ScanRequest(BaseModel):
 # Simple in-memory tracker for SSE (for a real app use Redis)
 scan_progress = {}
 
+
+async def fetch_page_html(session: aiohttp.ClientSession, url: str) -> dict:
+    """Fetch HTML content from a URL for accessibility analysis."""
+    try:
+        async with session.get(url, timeout=aiohttp.ClientTimeout(total=8)) as response:
+            if response.status == 200:
+                html = await response.text()
+                return {"url": url, "html": html, "ok": True}
+    except Exception:
+        pass
+    return {"url": url, "html": None, "ok": False}
+
+
+async def batch_fetch_html(urls: list, max_concurrent: int = 5) -> list:
+    """Fetch HTML content for multiple URLs concurrently."""
+    semaphore = asyncio.Semaphore(max_concurrent)
+    connector = aiohttp.TCPConnector(limit_per_host=max_concurrent)
+
+    async def limited_fetch(session, url):
+        async with semaphore:
+            return await fetch_page_html(session, url)
+
+    async with aiohttp.ClientSession(connector=connector) as session:
+        tasks = [limited_fetch(session, url) for url in urls]
+        return await asyncio.gather(*tasks)
+
+
 def sync_core_execution(url: str, session: Session, scan_id: int):
     """Executes the entire core analysis pipeline synchronously and saves it to DB."""
     try:
@@ -35,32 +70,54 @@ def sync_core_execution(url: str, session: Session, scan_id: int):
         if not response:
             scan_progress[scan_id] = "Error: Connection Failed"
             return
-            
+
         scan_progress[scan_id] = "Running SEO Analysis..."
         html_content = response.text
-        
+
         standard_meta = extract_standard_meta_tags(html_content)
         social_meta = extract_social_meta_tags(html_content)
+        structured_data = extract_structured_data(html_content)
+        link_tags = extract_link_tags(html_content)
         headings = analyze_headings(html_content)
         alts = analyze_image_alts(html_content)
         ratio = analyze_text_ratio(html_content)
         canonical = extract_canonical(html_content)
         robots = check_robots_txt(url)
-        
+
         scan_progress[scan_id] = "Running Sitemap & Crawler Analysis..."
         sitemap_results = run_sitemap_analysis(url)
-        
+
         scan_progress[scan_id] = "Running Security Analysis..."
         security_results = run_security_analysis(url, response.headers, response.cookies)
-        
+
+        scan_progress[scan_id] = "Running Accessibility Analysis..."
+        main_accessibility = run_accessibility_analysis(html_content, url)
+
+        scan_progress[scan_id] = "Running Structure Analysis..."
+        main_structure = run_structure_analysis(html_content, url)
+
+        # Per-URL accessibility: sample up to 15 crawled URLs
+        per_url_accessibility = []
+        crawled_urls = sitemap_results.get("all_urls", [])
+        sample_urls = [u for u in crawled_urls if u != url][:15]
+        if sample_urls:
+            scan_progress[scan_id] = f"Running Accessibility on {len(sample_urls)} sub-pages..."
+            page_results = asyncio.run(batch_fetch_html(sample_urls))
+            for page in page_results:
+                if page["ok"] and page["html"]:
+                    a11y = run_accessibility_analysis(page["html"], page["url"])
+                    per_url_accessibility.append(a11y)
+
         scan_progress[scan_id] = "Formatting Final Report..."
-        
+
         report = FullScanReport(
             target_url=url,
             scan_timestamp=datetime.utcnow().isoformat() + "Z",
             seo=SEOResults(
                 standard_meta=standard_meta,
                 social_meta=social_meta,
+                structured_data=structured_data,
+                link_tags=link_tags,
                 headings=headings,
                 image_alts=alts,
                 text_ratio=ratio,
@@ -68,9 +125,16 @@ def sync_core_execution(url: str, session: Session, scan_id: int):
                 robots_txt=robots
             ),
             sitemap=SitemapResults(**sitemap_results),
-            security=SecurityResults(**security_results)
+            security=SecurityResults(**security_results),
+            accessibility=AccessibilityResults(
+                main_page=main_accessibility,
+                per_url=per_url_accessibility
+            ),
+            structure=StructureResults(
+                main_page=main_structure
+            )
         )
-        
+
         # Save to DB
         scan_record = session.get(ScanRecord, scan_id)
         if scan_record:
@@ -79,27 +143,27 @@ def sync_core_execution(url: str, session: Session, scan_id: int):
             scan_record.missing_security_headers = len(security_results["headers"]["missing_headers"])
             scan_record.is_ssl_valid = security_results["ssl"].get("valid", False)
             scan_record.raw_results = report.serialize()
-            
+
             session.add(scan_record)
             session.commit()
-            
+
         scan_progress[scan_id] = "Completed"
-        
+
     except Exception as e:
         scan_progress[scan_id] = f"Error: {str(e)}"
 
 @router.post("/scan")
 def trigger_scan(req: ScanRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_session)):
     """Receives target URLs and triggers the core engine."""
-    
+
     nuevo_scan = ScanRecord(target_url=req.url)
     db.add(nuevo_scan)
     db.commit()
     db.refresh(nuevo_scan)
-    
+
     scan_id = nuevo_scan.id
     scan_progress[scan_id] = "Initiating scan..."
-    
+
     background_tasks.add_task(sync_core_execution, req.url, db, scan_id)
-    
+
     return {"message": "Scan started.", "scan_id": scan_id}
