@@ -91,18 +91,18 @@ This document outlines the step-by-step development plan for the project, separa
 
 ## Phase 11: Template Parity & UX Alignment <!-- phase:template-parity-ux -->
 
-- [x] Move report modules to independent routes under `/reports/{id}/{section}`.
-- [x] Keep one top navigation bar and show report page tabs in top nav when viewing a report.
-- [x] Add dynamic right-side quick navigation links that point to sections inside each report page.
-- [x] Keep footer developer names as direct profile links.
-- [x] Add report cleanup actions for single-scan delete and full history delete.
-- [x] Add repository ignore rules for generated local scan artifacts.
-- [ ] Complete full section-by-section parity audit against all `design/dark/*/code.html` templates.
-- [ ] Finalize visual parity refinements for cards, micro-panels, and telemetry blocks by section.
+- [x] Move report modules to independent routes under `/reports/{id}/{section}`. (#61)
+- [x] Keep one top navigation bar and show report page tabs in top nav when viewing a report. (#62)
+- [x] Add dynamic right-side quick navigation links that point to sections inside each report page. (#63)
+- [x] Keep footer developer names as direct profile links. (#64)
+- [x] Add report cleanup actions for single-scan delete and full history delete. (#65)
+- [x] Add repository ignore rules for generated local scan artifacts. (#66)
+- [ ] Complete full section-by-section parity audit against all `design/dark/*/code.html` templates. (#67)
+- [ ] Finalize visual parity refinements for cards, micro-panels, and telemetry blocks by section. (#68)
 
 ## Phase x: colavorative development <!-- phase:colaborative-development -->
 
-- [/] Modify frontend
-- [/] Add translations to spanish
-- [/] Add design templates
-- [/] init dev branch
+- [/] Modify frontend (#69)
+- [/] Add translations to spanish (#70)
+- [/] Add design templates (#71)
+- [/] init dev branch (#72)
