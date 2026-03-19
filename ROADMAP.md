@@ -87,3 +87,10 @@ This document outlines the step-by-step development plan for the project, separa
 - [ ] Automate build processes for cross-compiling the binary for Linux, Windows, and macOS. (#57)
 - [ ] Write comprehensive installation and usage documentation for running the tool locally without the web dashboard. (#58)
 - [ ] Explore native GUI alternatives (e.g., PyQt/PySide6) for a standalone desktop application experience. (#59)
+
+## Phase x: colavorative development <!-- phase:colaborative-development -->
+
+- [/] Modify frontend
+- [/] Add translations to spanish
+- [/] Add design templates
+- [/] init dev branch
