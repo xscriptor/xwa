@@ -1,0 +1,2951 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitemap Audit - turismodealmeria.org</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fafbfc;
+            --bg-white: #ffffff;
+            --bg-hover: #f3f5f8;
+            --bg-input: #f0f2f5;
+            --border: #e2e6ed;
+            --border-light: #eef0f4;
+            --text: #1a1d26;
+            --text-secondary: #5b6478;
+            --text-muted: #9098a9;
+            --accent: #4f46e5;
+            --accent-light: #6366f1;
+            --accent-bg: rgba(79,70,229,0.06);
+            --accent-bg-strong: rgba(79,70,229,0.1);
+            --green: #059669;
+            --green-light: #10b981;
+            --green-bg: #ecfdf5;
+            --green-border: #a7f3d0;
+            --red: #dc2626;
+            --red-light: #ef4444;
+            --red-bg: #fef2f2;
+            --red-border: #fecaca;
+            --yellow: #d97706;
+            --yellow-light: #f59e0b;
+            --yellow-bg: #fffbeb;
+            --yellow-border: #fde68a;
+            --blue: #2563eb;
+            --blue-bg: #eff6ff;
+            --blue-border: #bfdbfe;
+            --radius: 14px;
+            --radius-sm: 10px;
+            --radius-xs: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
+        }
+
+        /* Dark mode */
+        [data-theme="dark"] {
+            --bg: #0a0e1a;
+            --bg-white: #151c2c;
+            --bg-hover: #1c2538;
+            --bg-input: #1a2236;
+            --border: #2a3550;
+            --border-light: #222d42;
+            --text: #e8ecf4;
+            --text-secondary: #8896b0;
+            --text-muted: #5e6e8a;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --accent-bg: rgba(99,102,241,0.12);
+            --accent-bg-strong: rgba(99,102,241,0.18);
+            --green-bg: rgba(16,185,129,0.12);
+            --green-border: rgba(16,185,129,0.25);
+            --red-bg: rgba(239,68,68,0.12);
+            --red-border: rgba(239,68,68,0.25);
+            --yellow-bg: rgba(245,158,11,0.12);
+            --yellow-border: rgba(245,158,11,0.25);
+            --blue-bg: rgba(59,130,246,0.12);
+            --blue-border: rgba(59,130,246,0.25);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+            --shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
+        [data-theme="dark"] header {
+            background: rgba(15,20,32,0.92) !important;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ===== LAYOUT ===== */
+        .container { max-width: 1360px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* ===== HEADER ===== */
+        header {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.92);
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .logo-icon {
+            width: 40px; height: 40px;
+            background: var(--accent);
+            border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff;
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+        .header-title h1 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -0.03em;
+        }
+        .header-title p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .header-right { display: flex; gap: 0.5rem; }
+        .header-tag {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            font-size: 0.7rem; font-weight: 700;
+            padding: 0.35rem 0.75rem;
+            border-radius: 100px;
+            letter-spacing: 0.02em;
+        }
+        .tag-live { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+        .theme-toggle {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            width: 38px; height: 38px;
+            border-radius: var(--radius-xs);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover { border-color: var(--accent); }
+        .tag-live .dot { width: 5px; height: 5px; background: var(--green); border-radius: 50%; animation: blink 1.5s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        /* ===== STATS ===== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.75rem;
+            padding: 1.5rem 0 0.75rem;
+        }
+        .stat {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1.1rem 1rem;
+            text-align: center;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .stat:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            color: var(--accent);
+        }
+        .stat-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 0.2rem;
+        }
+
+        /* ===== TABS ===== */
+        .tabs-bar {
+            display: flex;
+            gap: 0.25rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.25rem;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.6rem 1.1rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: var(--radius-xs);
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .tab-btn:hover { color: var(--text); background: var(--bg-hover); }
+        .tab-btn.active { color: var(--accent); background: var(--accent-bg); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ===== CHART ===== */
+        .card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .card-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        .bar-row { display: flex; align-items: center; margin-bottom: 0.5rem; gap: 0.75rem; }
+        .bar-label {
+            width: 55px; text-align: right;
+            font-size: 0.82rem; font-weight: 700;
+            color: var(--text);
+            font-variant-numeric: tabular-nums;
+        }
+        .bar-track {
+            flex: 1;
+            background: var(--bg);
+            border-radius: 6px;
+            height: 26px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            display: flex; align-items: center;
+            padding-left: 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #fff;
+            min-width: fit-content;
+            transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* ===== FILTERS ===== */
+        .filters-row {
+            display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center;
+            margin-bottom: 1rem;
+        }
+        .filter-input, .filter-select {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.55rem 0.9rem;
+            border-radius: var(--radius-xs);
+            font-size: 0.82rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.15s;
+        }
+        .filter-input:focus, .filter-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-bg);
+        }
+        .filter-input { flex: 1; min-width: 260px; }
+        .filter-count { color: var(--text-muted); font-size: 0.75rem; font-weight: 600; }
+
+        /* ===== TABLE ===== */
+        .table-wrap { overflow-x: auto; margin-bottom: 1.25rem; }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        thead th {
+            background: var(--bg);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            transition: color 0.1s;
+        }
+        thead th:hover { color: var(--accent); }
+        thead th .sort-icon { margin-left: 3px; font-size: 0.6rem; }
+        tbody tr { border-bottom: 1px solid var(--border-light); transition: background 0.1s; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: var(--bg-hover); }
+        tbody td { padding: 0.6rem 1rem; font-size: 0.8rem; color: var(--text-secondary); }
+        td.url-cell {
+            max-width: 500px;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        td.url-cell a { color: var(--accent); text-decoration: none; font-weight: 500; }
+        td.url-cell a:hover { text-decoration: underline; }
+
+        .badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            min-width: 36px; padding: 3px 10px;
+            border-radius: 100px; font-size: 0.72rem; font-weight: 700;
+        }
+        .badge-green { background: var(--green-bg); color: var(--green); }
+        .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+        .badge-red { background: var(--red-bg); color: var(--red); }
+
+        /* ===== PAGINATION ===== */
+        .pagination {
+            display: flex; justify-content: center; align-items: center; gap: 0.3rem;
+            padding-bottom: 2rem;
+        }
+        .pagination button {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.45rem 0.8rem;
+            border-radius: var(--radius-xs);
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.12s;
+        }
+        .pagination button:hover:not(:disabled) {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-bg);
+        }
+        .pagination button:disabled { opacity: 0.35; cursor: default; }
+        .pagination button.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .pagination span { color: var(--text-muted); font-size: 0.78rem; margin: 0 0.2rem; }
+
+        /* ===== AUDIT SECTION ===== */
+        .audit-summary {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            margin-bottom: 1.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .audit-summary h2 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 1.25rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .audit-summary h2 .bar {
+            width: 4px; height: 18px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.6rem;
+        }
+        .metric-box {
+            text-align: center;
+            padding: 0.9rem 0.5rem;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+        }
+        .metric-num {
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+        .metric-desc {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.15rem;
+        }
+        .m-red { color: var(--red); }
+        .m-yellow { color: var(--yellow); }
+        .m-green { color: var(--green); }
+        .m-blue { color: var(--blue); }
+
+        /* Crawl budget */
+        .crawl-box {
+            margin-top: 1.25rem;
+            padding: 1.1rem;
+            background: var(--red-bg);
+            border: 1px solid var(--red-border);
+            border-radius: var(--radius-sm);
+        }
+        .crawl-box h4 {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--red);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.5rem;
+        }
+        .crawl-box p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+        .crawl-box strong { color: var(--text); }
+        .crawl-track {
+            margin-top: 0.7rem;
+            height: 10px;
+            background: var(--red-border);
+            border-radius: 100px;
+            overflow: hidden;
+            display: flex;
+        }
+        .crawl-good { background: var(--green); border-radius: 100px 0 0 100px; }
+        .crawl-bad { background: var(--red-light); }
+        .crawl-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.4rem;
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+        .crawl-labels .good { color: var(--green); }
+        .crawl-labels .bad { color: var(--red); }
+
+        /* Audit grid */
+        .audit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 1rem;
+        }
+
+        /* Audit cards */
+        .a-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.4rem;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s;
+            position: relative;
+        }
+        .a-card:hover { box-shadow: var(--shadow); }
+        .a-card h3 {
+            font-size: 0.88rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+            padding-right: 5rem;
+            letter-spacing: -0.01em;
+        }
+        .a-card .desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Severity tags */
+        .sev-tag {
+            position: absolute;
+            top: 1.1rem; right: 1.1rem;
+            font-size: 0.58rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 100px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .sev-critical { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+        .sev-warning { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+        .sev-info { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+
+        /* Card left border accent */
+        .a-critical { border-left: 3px solid var(--red); }
+        .a-critical h3 { color: var(--red); }
+        .a-warning { border-left: 3px solid var(--yellow); }
+        .a-warning h3 { color: var(--yellow); }
+        .a-info { border-left: 3px solid var(--blue); }
+        .a-info h3 { color: var(--blue); }
+        .a-success { border-left: 3px solid var(--green); }
+        .a-success h3 { color: var(--green); }
+
+        /* Issue list */
+        .ilist {
+            list-style: none;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+        .ilist::-webkit-scrollbar { width: 4px; }
+        .ilist::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        .ilist li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .ilist li:last-child { border-bottom: none; }
+        .i-path {
+            color: var(--text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 280px;
+            font-weight: 500;
+        }
+        .i-right { display: flex; align-items: center; gap: 0.3rem; flex-shrink: 0; }
+        .i-count {
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-size: 0.67rem;
+            font-weight: 800;
+        }
+        .ic-red { background: var(--red-bg); color: var(--red); }
+        .ic-yellow { background: var(--yellow-bg); color: var(--yellow); }
+        .ic-blue { background: var(--blue-bg); color: var(--blue); }
+
+        /* Action box */
+        .act-box {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.1rem;
+            margin-top: 0.9rem;
+            border: 1px solid var(--border-light);
+        }
+        .act-box h4 {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.5rem;
+        }
+        .act-box ol, .act-box ul { padding-left: 1.1rem; }
+        .act-box li {
+            font-size: 0.76rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding: 0.1rem 0;
+        }
+        .act-box p {
+            font-size: 0.76rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .act-box code {
+            background: var(--accent-bg-strong);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: var(--accent);
+            font-weight: 600;
+            font-family: 'SF Mono','Fira Code','Consolas', monospace;
+        }
+        .act-box strong { color: var(--text); }
+
+        /* Btn */
+        .btn-view {
+            background: var(--accent-bg);
+            border: 1px solid rgba(79,70,229,0.2);
+            color: var(--accent);
+            padding: 3px 10px;
+            border-radius: 100px;
+            cursor: pointer;
+            font-size: 0.65rem;
+            font-weight: 800;
+            font-family: inherit;
+            transition: all 0.12s;
+            letter-spacing: 0.02em;
+        }
+        .btn-view:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        /* ===== GUIDE TAB ===== */
+        .guide-section { padding: 1.25rem 0 2rem; }
+        .guide-hero {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border: 1px solid #c7d2fe;
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .guide-hero h2 { font-size: 1.3rem; font-weight: 900; color: var(--accent); margin-bottom: 0.5rem; }
+        .guide-hero p { font-size: 0.88rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto; line-height: 1.7; }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .concept-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .concept-card .icon-circle {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+        }
+        .concept-card h3 { font-size: 0.92rem; font-weight: 800; margin-bottom: 0.4rem; color: var(--text); }
+        .concept-card p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.7; }
+        .concept-card .good-bad {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        .gb-box {
+            padding: 0.6rem 0.8rem;
+            border-radius: var(--radius-xs);
+            font-size: 0.73rem;
+            line-height: 1.5;
+        }
+        .gb-good { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); }
+        .gb-bad { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+        .gb-box strong { display: block; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.2rem; }
+
+        .tutorial {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+        .tutorial-header {
+            padding: 1.1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.1s;
+        }
+        .tutorial-header:hover { background: var(--bg-hover); }
+        .tutorial-header h3 { font-size: 0.9rem; font-weight: 800; display: flex; align-items: center; gap: 0.6rem; }
+        .tutorial-header .t-badge {
+            font-size: 0.6rem; font-weight: 800; padding: 2px 8px;
+            border-radius: 100px; letter-spacing: 0.04em;
+        }
+        .tutorial-header .arrow {
+            font-size: 0.7rem; color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+        .tutorial.open .arrow { transform: rotate(180deg); }
+        .tutorial-body {
+            display: none;
+            padding: 0 1.5rem 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+        .tutorial.open .tutorial-body { display: block; }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .step:last-child { border-bottom: none; }
+        .step-num {
+            width: 32px; height: 32px; flex-shrink: 0;
+            background: var(--accent-bg);
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.78rem; font-weight: 900;
+        }
+        .step-content h4 { font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
+        .step-content p { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.7; }
+        .step-content code {
+            background: var(--accent-bg-strong);
+            padding: 1px 6px; border-radius: 4px;
+            font-size: 0.72rem; color: var(--accent); font-weight: 600;
+            font-family: 'SF Mono','Consolas',monospace;
+        }
+        .step-path {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            background: var(--bg); border: 1px solid var(--border);
+            padding: 0.3rem 0.7rem; border-radius: var(--radius-xs);
+            font-size: 0.72rem; color: var(--text-secondary); font-weight: 600;
+            margin: 0.4rem 0;
+            font-family: 'SF Mono','Consolas',monospace;
+        }
+        .step-path .sep { color: var(--text-muted); }
+
+        .note-box {
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-xs);
+            font-size: 0.78rem;
+            line-height: 1.6;
+            margin-top: 0.5rem;
+        }
+        .note-info { background: var(--blue-bg); border: 1px solid var(--blue-border); color: #1e40af; }
+        .note-warn { background: var(--yellow-bg); border: 1px solid var(--yellow-border); color: #92400e; }
+        .note-danger { background: var(--red-bg); border: 1px solid var(--red-border); color: #991b1b; }
+        .note-box strong { font-weight: 800; }
+
+        .score-ring {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+            margin: 0 auto 1rem;
+        }
+        .score-ring .score-num { font-size: 2.2rem; font-weight: 900; }
+        .score-ring .score-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* ===== TOOLS TAB ===== */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .tool-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .tool-card h3 {
+            font-size: 0.92rem; font-weight: 800;
+            margin-bottom: 0.3rem; color: var(--text);
+        }
+        .tool-card .tool-desc {
+            font-size: 0.78rem; color: var(--text-muted);
+            margin-bottom: 1rem; line-height: 1.5;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius-xs);
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-primary:hover { background: #4338ca; box-shadow: 0 2px 12px rgba(79,70,229,0.3); }
+        .btn-primary:disabled { opacity: 0.5; cursor: default; }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius-xs);
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+        .btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+        /* URL Checker */
+        .check-results {
+            margin-top: 1rem;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        .check-row {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.78rem;
+        }
+        .check-row:last-child { border-bottom: none; }
+        .status-dot {
+            width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+        }
+        .dot-green { background: var(--green); }
+        .dot-red { background: var(--red); }
+        .dot-yellow { background: var(--yellow); }
+        .dot-gray { background: var(--text-muted); }
+        .check-url {
+            flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            color: var(--text-secondary);
+        }
+        .check-status { font-weight: 700; flex-shrink: 0; }
+        .progress-bar {
+            height: 6px;
+            background: var(--bg);
+            border-radius: 100px;
+            overflow: hidden;
+            margin-top: 0.6rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 100px;
+            transition: width 0.3s;
+        }
+
+        /* Treemap */
+        .treemap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            padding: 3px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            min-height: 200px;
+        }
+        .treemap-item {
+            border-radius: var(--radius-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0.4rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            overflow: hidden;
+            min-height: 50px;
+        }
+        .treemap-item:hover { filter: brightness(0.92); transform: scale(1.02); z-index: 2; }
+        .treemap-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+        }
+        .treemap-count {
+            font-size: 0.58rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Quick wins */
+        .win-item {
+            display: flex; align-items: flex-start; gap: 0.8rem;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .win-item:last-child { border-bottom: none; }
+        .win-impact {
+            width: 50px; flex-shrink: 0;
+            text-align: center;
+        }
+        .win-impact .wi-num {
+            font-size: 1.1rem; font-weight: 900;
+        }
+        .win-impact .wi-label {
+            font-size: 0.55rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.04em;
+            color: var(--text-muted);
+        }
+        .win-detail h4 {
+            font-size: 0.82rem; font-weight: 700; color: var(--text);
+            margin-bottom: 0.2rem;
+        }
+        .win-detail p {
+            font-size: 0.75rem; color: var(--text-secondary); line-height: 1.6;
+        }
+        .win-effort {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            font-size: 0.62rem; font-weight: 800;
+            padding: 2px 7px; border-radius: 100px;
+            margin-top: 0.3rem;
+        }
+        .effort-easy { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+        .effort-medium { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+        .effort-hard { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+
+        /* Export preview */
+        .export-preview {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xs);
+            padding: 1rem;
+            margin-top: 0.8rem;
+            font-family: 'SF Mono','Consolas',monospace;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre;
+            line-height: 1.6;
+        }
+
+        /* Timeline */
+        .timeline-bar-container { margin-top: 0.8rem; }
+        .tl-row {
+            display: flex; align-items: center; gap: 0.6rem;
+            margin-bottom: 0.4rem;
+        }
+        .tl-label {
+            width: 90px; text-align: right;
+            font-size: 0.72rem; font-weight: 700;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+        .tl-bar {
+            flex: 1; height: 22px;
+            background: var(--bg);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .tl-fill {
+            height: 100%;
+            border-radius: 5px;
+            display: flex; align-items: center; padding-left: 8px;
+            font-size: 0.65rem; font-weight: 700; color: #fff;
+            min-width: fit-content;
+        }
+
+        /* ===== CHECKLIST ===== */
+        .checklist { list-style: none; }
+        .checklist li {
+            display: flex; align-items: flex-start; gap: 0.7rem;
+            padding: 0.7rem 0.8rem;
+            border-bottom: 1px solid var(--border-light);
+            border-radius: var(--radius-xs);
+            transition: background 0.1s;
+        }
+        .checklist li:hover { background: var(--bg-hover); }
+        .checklist li:last-child { border-bottom: none; }
+        .checklist input[type="checkbox"] {
+            width: 18px; height: 18px; flex-shrink: 0;
+            accent-color: var(--accent);
+            cursor: pointer;
+            margin-top: 2px;
+        }
+        .checklist .cl-text { flex: 1; }
+        .checklist .cl-title {
+            font-size: 0.82rem; font-weight: 700; color: var(--text);
+            transition: all 0.2s;
+        }
+        .checklist .cl-desc {
+            font-size: 0.72rem; color: var(--text-muted); margin-top: 0.15rem; line-height: 1.5;
+        }
+        .checklist li.done .cl-title {
+            text-decoration: line-through; color: var(--text-muted);
+        }
+        .cl-progress {
+            display: flex; align-items: center; gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .cl-progress-bar {
+            flex: 1; height: 8px; background: var(--bg);
+            border-radius: 100px; overflow: hidden;
+        }
+        .cl-progress-fill {
+            height: 100%; border-radius: 100px;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            transition: width 0.4s;
+        }
+        .cl-progress-text {
+            font-size: 0.78rem; font-weight: 800; color: var(--accent);
+            white-space: nowrap;
+        }
+
+        /* ===== DONUT ===== */
+        .donut-container {
+            display: flex; align-items: center; gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .donut-svg { width: 160px; height: 160px; }
+        .donut-legend { flex: 1; min-width: 150px; }
+        .donut-legend-item {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.25rem 0; font-size: 0.75rem;
+        }
+        .donut-dot {
+            width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0;
+        }
+        .donut-legend-label { color: var(--text-secondary); flex: 1; }
+        .donut-legend-value { font-weight: 800; color: var(--text); }
+
+        /* ===== GROUPED VIEW ===== */
+        .group-section {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+        .group-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.1s;
+        }
+        .group-header:hover { background: var(--bg-hover); }
+        .group-header h4 {
+            font-size: 0.82rem; font-weight: 700; color: var(--text);
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .group-header .g-count {
+            font-size: 0.65rem; font-weight: 800;
+            padding: 2px 8px; border-radius: 100px;
+            background: var(--accent-bg); color: var(--accent);
+        }
+        .group-header .g-arrow {
+            font-size: 0.65rem; color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+        .group-section.open .g-arrow { transform: rotate(180deg); }
+        .group-body {
+            display: none;
+            padding: 0 1rem 0.5rem;
+            max-height: 300px; overflow-y: auto;
+        }
+        .group-section.open .group-body { display: block; }
+        .group-url {
+            display: block;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-decoration: none;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .group-url:hover { text-decoration: underline; }
+        .group-url:last-child { border-bottom: none; }
+
+        /* ===== ADVANCED SEARCH ===== */
+        .search-help {
+            font-size: 0.68rem; color: var(--text-muted); margin-top: 0.3rem;
+            line-height: 1.5;
+        }
+        .search-help code {
+            background: var(--accent-bg); color: var(--accent);
+            padding: 0 4px; border-radius: 3px; font-size: 0.65rem; font-weight: 600;
+        }
+
+        /* ===== NEW ANALYSIS ===== */
+        .keyword-cloud {
+            display: flex; flex-wrap: wrap; gap: 0.4rem;
+            padding: 0.5rem 0;
+        }
+        .kw-tag {
+            padding: 0.3rem 0.7rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            background: var(--accent-bg);
+            color: var(--accent);
+            border: 1px solid rgba(79,70,229,0.15);
+            cursor: pointer;
+            transition: all 0.12s;
+        }
+        .kw-tag:hover { background: var(--accent); color: #fff; }
+        .kw-tag .kw-count {
+            font-size: 0.6rem;
+            opacity: 0.7;
+            margin-left: 0.2rem;
+        }
+
+        .compare-cols {
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr;
+            gap: 0;
+            align-items: stretch;
+        }
+        .compare-side {
+            padding: 1.2rem;
+            border-radius: var(--radius-sm);
+        }
+        .compare-before { background: var(--red-bg); border: 1px solid var(--red-border); }
+        .compare-after { background: var(--green-bg); border: 1px solid var(--green-border); }
+        .compare-arrow {
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: var(--text-muted);
+        }
+        .compare-side h4 {
+            font-size: 0.75rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 0.04em;
+            margin-bottom: 0.8rem;
+        }
+        .compare-before h4 { color: var(--red); }
+        .compare-after h4 { color: var(--green); }
+        .compare-stat {
+            display: flex; justify-content: space-between;
+            padding: 0.35rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            font-size: 0.78rem;
+        }
+        .compare-stat:last-child { border-bottom: none; }
+        .compare-stat .cs-label { color: var(--text-secondary); }
+        .compare-stat .cs-value { font-weight: 800; }
+
+        .suspicious-list {
+            max-height: 250px; overflow-y: auto;
+        }
+        .sus-item {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.45rem 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.78rem;
+        }
+        .sus-item:last-child { border-bottom: none; }
+        .sus-tag {
+            font-size: 0.6rem; font-weight: 800; padding: 2px 7px;
+            border-radius: 100px; flex-shrink: 0;
+        }
+        .sus-url {
+            flex: 1; overflow: hidden; text-overflow: ellipsis;
+            white-space: nowrap; color: var(--text-secondary);
+        }
+
+        .url-len-chart { margin-top: 0.5rem; }
+
+        /* Print report */
+        @media print {
+            header, .tabs-bar, .pagination, .btn-primary, .btn-secondary,
+            .btn-view, .btn-filter-audit, .filters-row, #tab-sitemap,
+            #tab-tools, .tutorial-header .arrow { display: none !important; }
+            body { background: #fff !important; }
+            .tab-content { display: block !important; }
+            .card, .a-card, .audit-summary, .concept-card, .tutorial {
+                break-inside: avoid;
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+            .tutorial-body { display: block !important; }
+            .container { max-width: 100% !important; }
+        }
+
+        /* ===== LOADING ===== */
+        .loading { text-align: center; padding: 6rem; color: var(--text-muted); }
+        .spinner {
+            display: inline-block;
+            width: 32px; height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.65s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .header-inner { flex-direction: column; gap: 0.8rem; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .audit-grid { grid-template-columns: 1fr; }
+            .filter-input { min-width: 100%; }
+            .plan-grid { grid-template-columns: 1fr !important; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-inner">
+            <div class="header-left">
+                <div class="logo-icon">SA</div>
+                <div class="header-title">
+                    <h1>Sitemap Audit</h1>
+                    <p id="site-name">Cargando...</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <span class="header-tag tag-live"><span class="dot"></span> Analisis activo</span>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema" id="theme-btn">&#9790;</button>
+            </div>
+        </div>
+    </header>
+
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <div>Cargando y procesando sitemap...</div>
+    </div>
+
+    <div class="container" id="content" style="display:none;">
+        <div class="stats-row" id="stats"></div>
+
+        <div class="tabs-bar">
+            <button class="tab-btn active" onclick="switchTab('sitemap')">Sitemap</button>
+            <button class="tab-btn" onclick="switchTab('audit')">Auditoria SEO</button>
+            <button class="tab-btn" onclick="switchTab('guide')">Guia de Solucion</button>
+            <button class="tab-btn" onclick="switchTab('tools')">Herramientas</button>
+            <button class="tab-btn" onclick="switchTab('progress')">Progreso</button>
+        </div>
+
+        <div id="tab-sitemap" class="tab-content active">
+            <div class="card">
+                <div class="card-title">Distribucion por Prioridad</div>
+                <div id="priority-chart"></div>
+            </div>
+
+            <div class="filters-row">
+                <input type="text" class="filter-input" id="search" placeholder="Buscar URL... (soporta regex y -excluir)" oninput="applyFilters()">
+                <select class="filter-select" id="priorityFilter" onchange="applyFilters()">
+                    <option value="">Todas las prioridades</option>
+                </select>
+                <select class="filter-select" id="freqFilter" onchange="applyFilters()">
+                    <option value="">Todas las frecuencias</option>
+                </select>
+                <button class="btn-secondary" onclick="toggleView()" id="view-toggle-btn" style="padding:0.55rem 0.8rem;">Vista agrupada</button>
+                <span class="filter-count" id="filterCount"></span>
+            </div>
+            <div class="search-help" id="search-help" style="margin-top:-0.5rem;margin-bottom:0.8rem;display:none;">
+                Busqueda avanzada: <code>restauracion</code> busca texto | <code>-telefono</code> excluye | <code>/regex/</code> expresion regular | Combina: <code>restauracion -telefono</code>
+            </div>
+            <div id="grouped-view" style="display:none;margin-bottom:1.5rem;"></div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th onclick="sortBy('index')"># <span class="sort-icon" id="sort-index"></span></th>
+                            <th onclick="sortBy('loc')">URL <span class="sort-icon" id="sort-loc"></span></th>
+                            <th onclick="sortBy('lastmod')">Modificacion <span class="sort-icon" id="sort-lastmod"></span></th>
+                            <th onclick="sortBy('changefreq')">Frecuencia <span class="sort-icon" id="sort-changefreq"></span></th>
+                            <th onclick="sortBy('priority')">Prioridad <span class="sort-icon" id="sort-priority"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+
+            <div class="pagination" id="pagination"></div>
+        </div>
+
+        <div id="tab-audit" class="tab-content">
+            <div class="audit-summary" id="audit-summary"></div>
+            <div class="audit-grid" id="audit-grid"></div>
+        </div>
+
+        <!-- TAB: Guia -->
+        <div id="tab-guide" class="tab-content">
+            <div class="guide-section">
+
+                <div class="guide-hero">
+                    <h2>Guia completa para solucionar los problemas</h2>
+                    <p>Aqui te explicamos que significa cada problema detectado, si es bueno o malo, y como solucionarlo paso a paso en tu WordPress con Rank Math.</p>
+                </div>
+
+                <!-- Health score -->
+                <div class="card" id="health-card" style="text-align:center;margin-bottom:1.5rem;">
+                    <div class="card-title">Puntuacion de salud del sitemap</div>
+                    <div id="health-score"></div>
+                </div>
+
+                <!-- Conceptos clave -->
+                <div class="card" style="margin-bottom:1.5rem;">
+                    <div class="card-title">Conceptos clave</div>
+                    <div class="concept-grid" style="margin-bottom:0;">
+
+                        <div class="concept-card">
+                            <div class="icon-circle" style="background:var(--yellow-bg);color:var(--yellow);">&#9889;</div>
+                            <h3>Que son los "Impactos"?</h3>
+                            <p>Los impactos son el <strong>numero de veces que se activa una redireccion</strong>. Cada vez que alguien (un usuario o Google) visita una URL antigua que tiene redireccion 301, se suma 1 impacto.</p>
+                            <div class="good-bad">
+                                <div class="gb-box gb-good">
+                                    <strong>Bien si...</strong>
+                                    Son bajos y van disminuyendo con el tiempo. Significa que los enlaces antiguos se estan actualizando.
+                                </div>
+                                <div class="gb-box gb-bad">
+                                    <strong>Mal si...</strong>
+                                    Son altos y siguen subiendo. Significa que hay muchos enlaces rotos apuntando a URLs antiguas (como tus 382.000+).
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="concept-card">
+                            <div class="icon-circle" style="background:var(--red-bg);color:var(--red);">&#128270;</div>
+                            <h3>Que es el Crawl Budget?</h3>
+                            <p>Es el <strong>numero de paginas que Google rastrea en tu web cada dia</strong>. Google tiene un limite. Si lo "gasta" en URLs redirigidas o duplicadas, tus paginas importantes tardan mas en indexarse.</p>
+                            <div class="good-bad">
+                                <div class="gb-box gb-good">
+                                    <strong>Bien</strong>
+                                    Google rastrea solo paginas utiles y las indexa rapido.
+                                </div>
+                                <div class="gb-box gb-bad">
+                                    <strong>Mal</strong>
+                                    Google pierde tiempo en redirecciones y duplicados, tus paginas nuevas tardan en aparecer.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="concept-card">
+                            <div class="icon-circle" style="background:var(--blue-bg);color:var(--blue);">&#128279;</div>
+                            <h3>Que es una redireccion 301?</h3>
+                            <p>Es una instruccion que dice: "esta pagina se ha movido permanentemente a otra URL". El navegador redirige automaticamente. El problema es cuando la URL antigua <strong>sigue en el sitemap</strong>.</p>
+                            <div class="good-bad">
+                                <div class="gb-box gb-good">
+                                    <strong>Bien</strong>
+                                    Tener la redireccion configurada. Protege de errores 404.
+                                </div>
+                                <div class="gb-box gb-bad">
+                                    <strong>Mal</strong>
+                                    Que la URL redirigida siga en el sitemap. Google la rastreara cada vez innecesariamente.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="concept-card">
+                            <div class="icon-circle" style="background:var(--green-bg);color:var(--green);">&#128203;</div>
+                            <h3>Que es un Sitemap?</h3>
+                            <p>Es un archivo XML que <strong>le dice a Google que paginas existen</strong> en tu web. Solo debe contener URLs finales, activas y utiles. Nunca URLs redirigidas, duplicadas o con errores.</p>
+                            <div class="good-bad">
+                                <div class="gb-box gb-good">
+                                    <strong>Sitemap limpio</strong>
+                                    Solo URLs activas, sin duplicados, sin redirecciones. Google lo agradece.
+                                </div>
+                                <div class="gb-box gb-bad">
+                                    <strong>Sitemap sucio</strong>
+                                    URLs rotas, duplicadas, redirigidas... Google pierde confianza en tu sitemap.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Tutoriales paso a paso -->
+                <div class="card" style="margin-bottom:1.5rem;padding:1.5rem 1.5rem 0.5rem;">
+                    <div class="card-title" style="margin-bottom:1.2rem;">Tutoriales paso a paso</div>
+                </div>
+
+                <!-- Tutorial 1: Redirecciones -->
+                <div class="tutorial open" onclick="toggleTutorial(this, event)">
+                    <div class="tutorial-header">
+                        <h3>
+                            <span class="t-badge" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);">CRITICO</span>
+                            Eliminar URLs redirigidas del sitemap
+                        </h3>
+                        <span class="arrow">&#9660;</span>
+                    </div>
+                    <div class="tutorial-body">
+                        <div class="note-box note-danger" style="margin-bottom:1rem;">
+                            <strong>Por que es urgente?</strong> Tienes URLs como <code>/restauracion/*</code> con <strong>382.000+ impactos</strong>. Eso significa que Google y los usuarios han activado esa redireccion 382.000 veces. Cada impacto es un rastreo desperdiciado de Google y una peticion extra a tu servidor.
+                        </div>
+                        <div class="step">
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <h4>Accede a Rank Math en WordPress</h4>
+                                <div class="step-path">WordPress Admin <span class="sep">&rsaquo;</span> Rank Math <span class="sep">&rsaquo;</span> Titulos y Meta <span class="sep">&rsaquo;</span> Tipos de contenido</div>
+                                <p>Busca los Custom Post Types (CPT) llamados "Restauracion" y "Alojamientos". Estos son los que generan las URLs <code>/restauracion/nombre-restaurante</code>.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                <h4>Desactiva el sitemap para esos CPT</h4>
+                                <p>En cada CPT, busca la opcion <strong>"Incluir en el Sitemap"</strong> y ponla en <strong>No</strong>. Esto evitara que Rank Math incluya esas URLs en el sitemap automaticamente.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                <h4>Pasa los posts a borrador</h4>
+                                <div class="step-path">WordPress Admin <span class="sep">&rsaquo;</span> Entradas (o el CPT) <span class="sep">&rsaquo;</span> Buscar "restauracion"</div>
+                                <p>Si los posts originales siguen como "Publicado", Rank Math los incluira igualmente. Selecciona todos y cambialos a <strong>Borrador</strong> con la accion masiva.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">4</div>
+                            <div class="step-content">
+                                <h4>Regenera el sitemap</h4>
+                                <p>Visita <code>https://www.turismodealmeria.org/sitemap_index.xml</code> en tu navegador. Rank Math lo regenera automaticamente. Verifica que ya no aparecen las URLs de <code>/restauracion/</code>.</p>
+                            </div>
+                        </div>
+                        <div class="note-box note-info" style="margin-top:0.5rem;">
+                            <strong>Resultado esperado:</strong> Los impactos dejaran de crecer inmediatamente. Google dejara de rastrear esas URLs. En unas semanas, los impactos deberian estabilizarse y eventualmente las URLs desindexarse.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tutorial 2: Idiomas -->
+                <div class="tutorial" onclick="toggleTutorial(this, event)">
+                    <div class="tutorial-header">
+                        <h3>
+                            <span class="t-badge" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);">CRITICO</span>
+                            Limpiar redirecciones en idiomas (/de/, /fr/, /en/)
+                        </h3>
+                        <span class="arrow">&#9660;</span>
+                    </div>
+                    <div class="tutorial-body">
+                        <div class="note-box note-danger" style="margin-bottom:1rem;">
+                            <strong>Por que triplica el problema?</strong> Si <code>/restauracion/bar-xyz</code> tiene redireccion, las versiones <code>/de/restauracion/bar-xyz</code>, <code>/fr/restauracion/bar-xyz</code> y <code>/en/restauracion/bar-xyz</code> tambien se redirigen. Son 4 impactos por cada visita en lugar de 1.
+                        </div>
+                        <div class="step">
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <h4>Identifica tu plugin de traduccion</h4>
+                                <p>Mira si usas <strong>WPML</strong>, <strong>Polylang</strong> o <strong>TranslatePress</strong>. Ve a <code>Plugins &rsaquo; Plugins instalados</code> y busca cual tienes.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                <h4>Elimina las traducciones de los CPT redirigidos</h4>
+                                <p>En tu plugin de traduccion, busca las traducciones del CPT "Restauracion" y "Alojamientos" en aleman, frances e ingles. <strong>Eliminalas</strong> o ponlas en borrador.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                <h4>Crea redirecciones para los patrones de idioma</h4>
+                                <div class="step-path">Rank Math <span class="sep">&rsaquo;</span> Redirecciones <span class="sep">&rsaquo;</span> Agregar nueva</div>
+                                <p>Crea estas reglas con tipo <strong>"Expresion regular"</strong>:</p>
+                                <div class="note-box note-info" style="margin-top:0.4rem;">
+                                    <code>/de/restauracion/(.*)</code> &rarr; <code>/de/prepara-tu-viaje/donde-comer</code><br>
+                                    <code>/fr/restauracion/(.*)</code> &rarr; <code>/fr/prepara-tu-viaje/donde-comer</code><br>
+                                    <code>/en/restauracion/(.*)</code> &rarr; <code>/en/prepara-tu-viaje/donde-comer</code><br>
+                                    (Repite lo mismo para <code>alojamiento</code> &rarr; <code>donde-dormir</code>)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tutorial 3: Spam -->
+                <div class="tutorial" onclick="toggleTutorial(this, event)">
+                    <div class="tutorial-header">
+                        <h3>
+                            <span class="t-badge" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);">URGENTE</span>
+                            Investigar URLs sospechosas (/telefono/)
+                        </h3>
+                        <span class="arrow">&#9660;</span>
+                    </div>
+                    <div class="tutorial-body">
+                        <div class="note-box note-danger" style="margin-bottom:1rem;">
+                            <strong>Posible hackeo!</strong> URLs como <code>/telefono/anulacion-de-tarjetas-american-express</code> no tienen nada que ver con turismo. Esto es un patron tipico de <strong>SEO spam inyectado</strong> donde un atacante crea paginas en tu web para posicionar contenido fraudulento.
+                        </div>
+                        <div class="step">
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <h4>Verifica quien creo ese contenido</h4>
+                                <div class="step-path">WordPress Admin <span class="sep">&rsaquo;</span> Entradas <span class="sep">&rsaquo;</span> Buscar "telefono"</div>
+                                <p>Mira el autor y la fecha de creacion. Si no lo creaste tu, es contenido inyectado.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                <h4>Si es spam: elimina TODO el contenido</h4>
+                                <p>Selecciona todos los posts de <code>/telefono/</code> y envialos a la papelera. Luego vacia la papelera.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                <h4>Audita la seguridad</h4>
+                                <p>Si fue un hackeo:</p>
+                                <ul style="font-size:0.78rem;color:var(--text-secondary);padding-left:1.2rem;margin-top:0.3rem;line-height:1.8;">
+                                    <li>Cambia las contrasenas de TODOS los usuarios admin</li>
+                                    <li>Revisa plugins instalados - elimina los que no reconozcas</li>
+                                    <li>Instala <strong>Wordfence</strong> y ejecuta un escaneo completo</li>
+                                    <li>Actualiza WordPress, plugins y tema a la ultima version</li>
+                                    <li>Revisa usuarios: <code>Usuarios > Todos los usuarios</code> - elimina los sospechosos</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tutorial 4: Errores tipograficos -->
+                <div class="tutorial" onclick="toggleTutorial(this, event)">
+                    <div class="tutorial-header">
+                        <h3>
+                            <span class="t-badge" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);">CRITICO</span>
+                            Corregir URLs con errores tipograficos
+                        </h3>
+                        <span class="arrow">&#9660;</span>
+                    </div>
+                    <div class="tutorial-body">
+                        <div class="note-box note-warn" style="margin-bottom:1rem;">
+                            <strong>Que son?</strong> URLs como <code>/zrestauracion/</code>, <code>/talojamiento/</code> o <code>/trestauracion/</code> son versiones erroneas de las URLs reales. Probablemente se crearon durante una importacion o migracion de datos. Generan paginas 404 o contenido duplicado.
+                        </div>
+                        <div class="step">
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <h4>Busca los posts con slugs erroneos</h4>
+                                <div class="step-path">WordPress Admin <span class="sep">&rsaquo;</span> Entradas <span class="sep">&rsaquo;</span> Buscar "zrestauracion"</div>
+                                <p>Repite la busqueda con cada prefijo erroneo: <code>talojamiento</code>, <code>trestauracion</code>, etc.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                <h4>Elimina o corrige los posts</h4>
+                                <p>Si son duplicados de posts que ya existen con el slug correcto, <strong>eliminados</strong>. Si son unicos, edita el slug para corregirlo.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                <h4>Crea redirecciones 301</h4>
+                                <div class="step-path">Rank Math <span class="sep">&rsaquo;</span> Redirecciones <span class="sep">&rsaquo;</span> Agregar nueva</div>
+                                <p>Tipo: <strong>Expresion regular</strong>. Ejemplos:</p>
+                                <div class="note-box note-info" style="margin-top:0.4rem;">
+                                    <code>/zrestauracion/(.*)</code> &rarr; <code>/restauracion/$1</code><br>
+                                    <code>/talojamiento/(.*)</code> &rarr; <code>/alojamientos/$1</code><br>
+                                    <code>/trestauracion/(.*)</code> &rarr; <code>/restauracion/$1</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tutorial 5: Duplicados -->
+                <div class="tutorial" onclick="toggleTutorial(this, event)">
+                    <div class="tutorial-header">
+                        <h3>
+                            <span class="t-badge" style="background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border);">AVISO</span>
+                            Eliminar URLs duplicadas (trailing slash)
+                        </h3>
+                        <span class="arrow">&#9660;</span>
+                    </div>
+                    <div class="tutorial-body">
+                        <div class="note-box note-warn" style="margin-bottom:1rem;">
+                            <strong>Que pasa?</strong> La misma pagina aparece dos veces en el sitemap: <code>/playas/cabo-de-gata</code> y <code>/playas/cabo-de-gata/</code>. Para Google son dos URLs distintas con el mismo contenido = <strong>contenido duplicado</strong>. Divide la autoridad SEO entre las dos.
+                        </div>
+                        <div class="step">
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <h4>Configura la URL canonica</h4>
+                                <div class="step-path">WordPress Admin <span class="sep">&rsaquo;</span> Ajustes <span class="sep">&rsaquo;</span> Enlaces permanentes</div>
+                                <p>Simplemente haz clic en <strong>"Guardar cambios"</strong> sin modificar nada. Esto refresca las reglas de reescritura de WordPress y puede resolver inconsistencias.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                <h4>Fuerza trailing slash consistente</h4>
+                                <div class="step-path">Rank Math <span class="sep">&rsaquo;</span> Ajustes generales <span class="sep">&rsaquo;</span> Redirecciones</div>
+                                <p>Busca opciones de normalizacion de URLs. Si no existe, puedes anadir esto al <code>.htaccess</code> (con cuidado):</p>
+                                <div class="note-box note-info" style="margin-top:0.4rem;">
+                                    Para forzar barra final:<br>
+                                    <code>RewriteCond %{REQUEST_URI} !/$</code><br>
+                                    <code>RewriteRule ^(.*)$ /$1/ [R=301,L]</code>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                <h4>Arregla tu generador de sitemap</h4>
+                                <p>En el script Python que genera el sitemap, normaliza todas las URLs para que usen solo UNA variante (con o sin barra, pero siempre igual).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tutorial 6: Author pages -->
+                <div class="tutorial" onclick="toggleTutorial(this, event)">
+                    <div class="tutorial-header">
+                        <h3>
+                            <span class="t-badge" style="background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border);">AVISO</span>
+                            Ocultar paginas de autor
+                        </h3>
+                        <span class="arrow">&#9660;</span>
+                    </div>
+                    <div class="tutorial-body">
+                        <div class="note-box note-warn" style="margin-bottom:1rem;">
+                            <strong>Doble problema:</strong> Las paginas <code>/author/administrador</code> exponen nombres de usuario (riesgo de seguridad para ataques de fuerza bruta) y ademas son paginas con poco contenido que Google considera "thin content" y penaliza.
+                        </div>
+                        <div class="step">
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <h4>Desactiva archivos de autor</h4>
+                                <div class="step-path">Rank Math <span class="sep">&rsaquo;</span> Titulos y Meta <span class="sep">&rsaquo;</span> Autores</div>
+                                <p>Desactiva <strong>"Archivo de autor"</strong> y <strong>"Incluir en el Sitemap"</strong>. Esto redirige automaticamente las paginas de autor a la home.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tutorial 7: Better Search Replace -->
+                <div class="tutorial" onclick="toggleTutorial(this, event)">
+                    <div class="tutorial-header">
+                        <h3>
+                            <span class="t-badge" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border);">MEJORA</span>
+                            Buscar y reemplazar enlaces internos rotos
+                        </h3>
+                        <span class="arrow">&#9660;</span>
+                    </div>
+                    <div class="tutorial-body">
+                        <div class="note-box note-info" style="margin-bottom:1rem;">
+                            <strong>Para que?</strong> Aunque tengas redirecciones 301, cada enlace interno que apunta a la URL antigua genera un impacto. Si actualizas los enlaces directamente, eliminas los impactos de raiz.
+                        </div>
+                        <div class="step">
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <h4>Instala Better Search Replace</h4>
+                                <div class="step-path">WordPress Admin <span class="sep">&rsaquo;</span> Plugins <span class="sep">&rsaquo;</span> Anadir nuevo <span class="sep">&rsaquo;</span> Buscar "Better Search Replace"</div>
+                                <p>Instala y activa el plugin. Es gratuito y muy utilizado.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                <h4>Haz una busqueda en seco primero</h4>
+                                <div class="step-path">Herramientas <span class="sep">&rsaquo;</span> Better Search Replace</div>
+                                <p>Configuracion:</p>
+                                <ul style="font-size:0.78rem;color:var(--text-secondary);padding-left:1.2rem;margin-top:0.3rem;line-height:1.8;">
+                                    <li><strong>Buscar:</strong> <code>/restauracion/</code></li>
+                                    <li><strong>Reemplazar con:</strong> <code>/prepara-tu-viaje/donde-comer/</code></li>
+                                    <li><strong>Tablas:</strong> Selecciona todas</li>
+                                    <li><strong>Ejecutar en seco:</strong> SI (marcalo)</li>
+                                </ul>
+                                <p style="margin-top:0.4rem;">Esto te muestra cuantos reemplazos haria SIN hacer cambios reales.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                <h4>Ejecuta el reemplazo real</h4>
+                                <p>Si los resultados son correctos, desmarca "Ejecutar en seco" y haz clic en <strong>"Ejecutar Buscar/Reemplazar"</strong>. Repite para <code>/alojamientos/</code> &rarr; <code>/prepara-tu-viaje/donde-dormir/</code>.</p>
+                                <div class="note-box note-danger" style="margin-top:0.5rem;">
+                                    <strong>Haz backup antes!</strong> Exporta tu base de datos desde phpMyAdmin o con un plugin como UpdraftPlus antes de hacer reemplazos masivos.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen visual -->
+                <div class="card" style="margin-top:1.5rem;">
+                    <div class="card-title">Resumen: que pasa si no lo arreglas?</div>
+                    <div class="concept-grid" style="margin-bottom:0;">
+                        <div class="concept-card" style="border-left:3px solid var(--red);">
+                            <h3 style="color:var(--red);">Los impactos seguiran subiendo</h3>
+                            <p>Cada dia Google rastreara las URLs redirigidas. Con 382.000+ impactos ya acumulados en <code>/restauracion/</code>, eso es ~270 rastreos diarios desperdiciados solo en esa regla.</p>
+                        </div>
+                        <div class="concept-card" style="border-left:3px solid var(--red);">
+                            <h3 style="color:var(--red);">Tus paginas nuevas tardaran en indexarse</h3>
+                            <p>Google tiene un presupuesto limitado para tu web. Si lo gasta en URLs basura, tus noticias, eventos y contenido nuevo tardara mas en aparecer en los resultados de busqueda.</p>
+                        </div>
+                        <div class="concept-card" style="border-left:3px solid var(--yellow);">
+                            <h3 style="color:var(--yellow);">Carga extra en el servidor</h3>
+                            <p>Cada impacto es una peticion HTTP a tu servidor. 382.000 redirecciones son 382.000 peticiones que tu servidor procesa sin que nadie vea contenido real.</p>
+                        </div>
+                        <div class="concept-card" style="border-left:3px solid var(--yellow);">
+                            <h3 style="color:var(--yellow);">Contenido duplicado penaliza SEO</h3>
+                            <p>Con URLs duplicadas (trailing slash), Google no sabe cual version es la "oficial". Divide la autoridad entre ambas y ninguna posiciona bien.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- TAB: Herramientas -->
+        <div id="tab-tools" class="tab-content">
+            <div style="padding:1.25rem 0 2rem;">
+
+                <!-- Quick wins -->
+                <div class="card" style="margin-bottom:1.25rem;">
+                    <div class="card-title">Victorias rapidas - Mayor impacto con menor esfuerzo</div>
+                    <div id="quick-wins"></div>
+                </div>
+
+                <div class="tools-grid">
+
+                    <!-- URL Status Checker -->
+                    <div class="tool-card">
+                        <h3>Verificador de estado HTTP</h3>
+                        <p class="tool-desc">Comprueba el codigo de respuesta (200, 301, 404) de una muestra de URLs del sitemap para ver cuales estan activas, redirigidas o rotas.</p>
+                        <div class="btn-group">
+                            <button class="btn-primary" onclick="runUrlChecker()" id="btn-checker">Verificar 20 URLs aleatorias</button>
+                        </div>
+                        <div id="checker-progress" style="display:none;">
+                            <div class="progress-bar"><div class="progress-fill" id="checker-fill" style="width:0%"></div></div>
+                            <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.4rem;" id="checker-status">Verificando...</p>
+                        </div>
+                        <div class="check-results" id="checker-results"></div>
+                    </div>
+
+                    <!-- Treemap -->
+                    <div class="tool-card">
+                        <h3>Mapa visual del sitio</h3>
+                        <p class="tool-desc">Visualizacion proporcional de las secciones de tu web. Las areas mas grandes consumen mas crawl budget. Haz clic en una seccion para filtrar.</p>
+                        <div id="treemap-container"></div>
+                    </div>
+
+                    <!-- Export clean sitemap -->
+                    <div class="tool-card">
+                        <h3>Exportar sitemap limpio</h3>
+                        <p class="tool-desc">Genera un nuevo sitemap XML eliminando automaticamente URLs redirigidas, duplicadas, con typos, spam, author y paginaciones.</p>
+                        <div class="btn-group">
+                            <button class="btn-primary" onclick="exportCleanSitemap()">Generar sitemap limpio</button>
+                            <button class="btn-secondary" onclick="exportCSV()">Exportar CSV</button>
+                        </div>
+                        <div id="export-stats" style="margin-top:0.8rem;"></div>
+                        <div id="export-preview" style="display:none;">
+                            <div class="export-preview" id="export-content"></div>
+                            <button class="btn-secondary" style="margin-top:0.5rem;" onclick="downloadExport()">Descargar XML</button>
+                        </div>
+                    </div>
+
+                    <!-- Content timeline -->
+                    <div class="tool-card">
+                        <h3>Timeline de contenido</h3>
+                        <p class="tool-desc">Distribucion de URLs por fecha de ultima modificacion. Ayuda a identificar contenido obsoleto que podria necesitar actualizacion o eliminacion.</p>
+                        <div id="timeline-chart"></div>
+                    </div>
+
+                </div>
+
+                <!-- URL depth distribution -->
+                <div class="card">
+                    <div class="card-title">Distribucion de profundidad de URL</div>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:1rem;">Google recomienda que las paginas importantes esten a maximo 3 clics de la home. Cada nivel de profundidad reduce la autoridad SEO que recibe la pagina.</p>
+                    <div id="depth-chart"></div>
+                </div>
+
+                <div class="tools-grid" style="margin-top:1.25rem;">
+
+                    <!-- URL Length Analysis -->
+                    <div class="tool-card">
+                        <h3>Analisis de longitud de URL</h3>
+                        <p class="tool-desc">Google recomienda URLs cortas y descriptivas. Las URLs mayores de 75 caracteres son dificiles de leer y pueden ser truncadas en resultados de busqueda.</p>
+                        <div id="url-length-chart"></div>
+                        <div id="url-length-worst" style="margin-top:0.8rem;"></div>
+                    </div>
+
+                    <!-- Keyword analysis -->
+                    <div class="tool-card">
+                        <h3>Palabras clave en URLs</h3>
+                        <p class="tool-desc">Las palabras mas frecuentes en los slugs de tu sitemap. Util para entender la tematica de tu contenido y detectar patrones inesperados.</p>
+                        <div id="keyword-cloud"></div>
+                    </div>
+
+                    <!-- Suspicious patterns -->
+                    <div class="tool-card">
+                        <h3>Patrones sospechosos de WordPress</h3>
+                        <p class="tool-desc">URLs con sufijos como -2, -3, -2-2 que WordPress crea automaticamente cuando hay slugs duplicados. Suelen ser contenido duplicado accidental.</p>
+                        <div id="suspicious-patterns"></div>
+                    </div>
+
+                    <!-- Hreflang validator -->
+                    <div class="tool-card">
+                        <h3>Validador de traducciones (hreflang)</h3>
+                        <p class="tool-desc">Cruza las URLs de cada idioma para detectar paginas que existen en un idioma pero no en otro. Las traducciones incompletas afectan al SEO internacional.</p>
+                        <div id="hreflang-results"></div>
+                    </div>
+
+                </div>
+
+                <!-- Before/After comparison -->
+                <div class="card" style="margin-top:1.25rem;">
+                    <div class="card-title">Comparativa: Antes vs Despues de limpiar</div>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:1.2rem;">Simulacion de como quedaria tu sitemap si aplicas todas las correcciones recomendadas.</p>
+                    <div id="comparison"></div>
+                </div>
+
+                <!-- Donut charts -->
+                <div class="tools-grid" style="margin-top:1.25rem;">
+                    <div class="tool-card">
+                        <h3>Distribucion de problemas</h3>
+                        <p class="tool-desc">Desglose visual de los tipos de problemas detectados en tu sitemap.</p>
+                        <div id="donut-problems"></div>
+                    </div>
+                    <div class="tool-card">
+                        <h3>Estructura del sitio (donut)</h3>
+                        <p class="tool-desc">Proporcion de cada seccion principal en el sitemap.</p>
+                        <div id="donut-structure"></div>
+                    </div>
+                </div>
+
+                <!-- Robots.txt checker -->
+                <div class="card" style="margin-top:1.25rem;">
+                    <div class="card-title">Verificador de robots.txt</div>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:1rem;">Comprueba si tu archivo robots.txt referencia correctamente al sitemap y no bloquea secciones importantes.</p>
+                    <div class="btn-group" style="margin-bottom:0.8rem;">
+                        <button class="btn-primary" onclick="checkRobotsTxt()">Verificar robots.txt</button>
+                    </div>
+                    <div id="robots-results"></div>
+                </div>
+
+                <!-- Print report -->
+                <div class="card" style="margin-top:1.25rem;text-align:center;">
+                    <div class="card-title">Generar informe</div>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:1rem;">Genera un informe imprimible con todos los resultados de la auditoria, la guia de solucion y las metricas. Perfecto para compartir con tu equipo.</p>
+                    <div class="btn-group" style="justify-content:center;">
+                        <button class="btn-primary" onclick="printReport()">Imprimir / Guardar como PDF</button>
+                        <button class="btn-secondary" onclick="exportFullReport()">Descargar informe HTML</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB: Progreso -->
+        <div id="tab-progress" class="tab-content">
+            <div style="padding:1.25rem 0 2rem;">
+                <div class="card">
+                    <div class="card-title">Checklist de correcciones</div>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:1rem;">Marca las tareas que ya has completado. El progreso se guarda automaticamente en tu navegador.</p>
+                    <div class="cl-progress" id="cl-progress">
+                        <div class="cl-progress-bar"><div class="cl-progress-fill" id="cl-fill" style="width:0%"></div></div>
+                        <span class="cl-progress-text" id="cl-text">0%</span>
+                    </div>
+                    <ul class="checklist" id="checklist"></ul>
+                    <div style="margin-top:1rem;text-align:right;">
+                        <button class="btn-secondary" onclick="resetChecklist()" style="font-size:0.72rem;padding:0.4rem 0.8rem;">Reiniciar progreso</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allUrls = [];
+        let filteredUrls = [];
+        let currentPage = 1;
+        const perPage = 50;
+        let currentSort = { key: 'index', dir: 'asc' };
+        let groupedViewActive = false;
+
+        async function loadSitemap() {
+            try {
+                const response = await fetch('sitemap_www_turismodealmeria_org.xml');
+                const text = await response.text();
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(text, 'text/xml');
+                const urls = xml.querySelectorAll('url');
+                urls.forEach((url, i) => {
+                    allUrls.push({
+                        index: i + 1,
+                        loc: url.querySelector('loc')?.textContent || '',
+                        lastmod: url.querySelector('lastmod')?.textContent || '',
+                        changefreq: url.querySelector('changefreq')?.textContent || '',
+                        priority: parseFloat(url.querySelector('priority')?.textContent || '0')
+                    });
+                });
+                const seen = new Set();
+                const unique = [];
+                allUrls.forEach(u => { const n = u.loc.replace(/\/$/, ''); if (!seen.has(n)) { seen.add(n); unique.push(u); } });
+                document.getElementById('site-name').textContent = 'turismodealmeria.org';
+                renderStats(unique);
+                populateFilters();
+                filteredUrls = [...allUrls];
+                renderTable();
+                renderPagination();
+                runAudit();
+                renderHealthScore();
+                renderToolsTab();
+                renderChecklist();
+                renderDonuts();
+                initTheme();
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                setTimeout(animateCounters, 100);
+            } catch (e) {
+                document.getElementById('loading').innerHTML =
+                    `<p style="color:var(--red);">Error: ${e.message}</p>
+                     <p style="margin-top:0.5rem;color:var(--text-muted);">Abre con Live Server</p>`;
+            }
+        }
+
+        function renderStats(unique) {
+            const priorities = {};
+            allUrls.forEach(u => { priorities[u.priority] = (priorities[u.priority] || 0) + 1; });
+            const top = Object.entries(priorities).sort((a, b) => b[1] - a[1])[0];
+            document.getElementById('stats').innerHTML = `
+                <div class="stat"><div class="stat-value">${allUrls.length.toLocaleString()}</div><div class="stat-label">URLs totales</div></div>
+                <div class="stat"><div class="stat-value">${unique.length.toLocaleString()}</div><div class="stat-label">URLs unicas</div></div>
+                <div class="stat"><div class="stat-value">${Object.keys(priorities).length}</div><div class="stat-label">Niveles prioridad</div></div>
+                <div class="stat"><div class="stat-value">${top ? top[0] : '-'}</div><div class="stat-label">Prioridad comun (${top ? top[1].toLocaleString() : 0})</div></div>
+            `;
+            const maxCount = Math.max(...Object.values(priorities));
+            const grads = ['linear-gradient(90deg,#059669,#34d399)','linear-gradient(90deg,#65a30d,#a3e635)','linear-gradient(90deg,#ca8a04,#facc15)','linear-gradient(90deg,#ea580c,#fb923c)','linear-gradient(90deg,#dc2626,#f87171)'];
+            const sorted = Object.entries(priorities).sort((a, b) => parseFloat(b[0]) - parseFloat(a[0]));
+            document.getElementById('priority-chart').innerHTML = sorted.map(([p, c], i) => {
+                const pct = (c / maxCount * 100).toFixed(1);
+                return `<div class="bar-row"><span class="bar-label">${p}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${grads[Math.min(i, grads.length-1)]}">${c.toLocaleString()}</div></div></div>`;
+            }).join('');
+        }
+
+        function populateFilters() {
+            const ps = [...new Set(allUrls.map(u => u.priority))].sort((a, b) => b - a);
+            const fs = [...new Set(allUrls.map(u => u.changefreq))].sort();
+            const pS = document.getElementById('priorityFilter');
+            ps.forEach(p => { pS.innerHTML += `<option value="${p}">${p}</option>`; });
+            const fS = document.getElementById('freqFilter');
+            fs.forEach(f => { if (f) fS.innerHTML += `<option value="${f}">${f}</option>`; });
+        }
+
+        function applyFilters() {
+            const raw = document.getElementById('search').value;
+            const p = document.getElementById('priorityFilter').value;
+            const f = document.getElementById('freqFilter').value;
+
+            // Show help on focus
+            document.getElementById('search-help').style.display = raw.length > 0 ? 'block' : 'none';
+
+            // Advanced search: parse includes, excludes, regex
+            const terms = raw.split(/\s+/).filter(Boolean);
+            const includes = [], excludes = [];
+            let regexFilter = null;
+            terms.forEach(t => {
+                if (t.startsWith('/') && t.endsWith('/') && t.length > 2) {
+                    try { regexFilter = new RegExp(t.slice(1, -1), 'i'); } catch {}
+                } else if (t.startsWith('-') && t.length > 1) {
+                    excludes.push(t.slice(1).toLowerCase());
+                } else {
+                    includes.push(t.toLowerCase());
+                }
+            });
+
+            filteredUrls = allUrls.filter(u => {
+                const loc = u.loc.toLowerCase();
+                if (regexFilter && !regexFilter.test(u.loc)) return false;
+                if (includes.length > 0 && !includes.every(t => loc.includes(t))) return false;
+                if (excludes.length > 0 && excludes.some(t => loc.includes(t))) return false;
+                if (p && u.priority !== parseFloat(p)) return false;
+                if (f && u.changefreq !== f) return false;
+                return true;
+            });
+            currentPage = 1;
+            applySorting(); renderTable(); renderPagination();
+            if (groupedViewActive) renderGroupedView();
+            document.getElementById('filterCount').textContent = `${filteredUrls.length.toLocaleString()} de ${allUrls.length.toLocaleString()}`;
+        }
+
+        function sortBy(key) {
+            if (currentSort.key === key) currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+            else { currentSort.key = key; currentSort.dir = 'asc'; }
+            applySorting(); renderTable(); updateSortIcons();
+        }
+        function applySorting() {
+            const { key, dir } = currentSort;
+            filteredUrls.sort((a, b) => { let va = a[key], vb = b[key]; if (typeof va === 'string') { va = va.toLowerCase(); vb = vb.toLowerCase(); } if (va < vb) return dir === 'asc' ? -1 : 1; if (va > vb) return dir === 'asc' ? 1 : -1; return 0; });
+        }
+        function updateSortIcons() {
+            document.querySelectorAll('.sort-icon').forEach(el => el.textContent = '');
+            const el = document.getElementById(`sort-${currentSort.key}`);
+            if (el) el.textContent = currentSort.dir === 'asc' ? '\u25B2' : '\u25BC';
+        }
+        function getBadge(p) { if (p >= 0.8) return 'badge-green'; if (p >= 0.5) return 'badge-yellow'; return 'badge-red'; }
+
+        function renderTable() {
+            const start = (currentPage - 1) * perPage;
+            const page = filteredUrls.slice(start, start + perPage);
+            document.getElementById('tbody').innerHTML = page.map(u => `
+                <tr>
+                    <td>${u.index}</td>
+                    <td class="url-cell"><a href="${u.loc}" target="_blank" title="${u.loc}">${u.loc}</a></td>
+                    <td>${u.lastmod}</td>
+                    <td>${u.changefreq}</td>
+                    <td><span class="badge ${getBadge(u.priority)}">${u.priority}</span></td>
+                </tr>`).join('');
+        }
+
+        function renderPagination() {
+            const tp = Math.ceil(filteredUrls.length / perPage);
+            if (tp <= 1) { document.getElementById('pagination').innerHTML = ''; return; }
+            let h = `<button onclick="goToPage(1)" ${currentPage===1?'disabled':''}>&laquo;</button>`;
+            h += `<button onclick="goToPage(${currentPage-1})" ${currentPage===1?'disabled':''}>&lsaquo;</button>`;
+            let s = Math.max(1, currentPage-3), e = Math.min(tp, currentPage+3);
+            if (s > 1) h += `<span>...</span>`;
+            for (let i = s; i <= e; i++) h += `<button class="${i===currentPage?'active':''}" onclick="goToPage(${i})">${i}</button>`;
+            if (e < tp) h += `<span>...</span>`;
+            h += `<button onclick="goToPage(${currentPage+1})" ${currentPage===tp?'disabled':''}>&rsaquo;</button>`;
+            h += `<button onclick="goToPage(${tp})" ${currentPage===tp?'disabled':''}>&raquo;</button>`;
+            h += `<span>Pag ${currentPage}/${tp}</span>`;
+            document.getElementById('pagination').innerHTML = h;
+        }
+        function goToPage(p) {
+            const tp = Math.ceil(filteredUrls.length / perPage);
+            if (p < 1 || p > tp) return;
+            currentPage = p; renderTable(); renderPagination();
+            window.scrollTo({ top: document.querySelector('.table-wrap').offsetTop - 80, behavior: 'smooth' });
+        }
+
+        function switchTab(t) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`tab-${t}`).classList.add('active');
+            document.querySelector(`.tab-btn[onclick="switchTab('${t}')"]`).classList.add('active');
+        }
+        function filterFromAudit(s) { switchTab('sitemap'); document.getElementById('search').value = s; applyFilters(); }
+
+        // ==================== THEME ====================
+        function initTheme() {
+            const saved = localStorage.getItem('sitemap-theme');
+            if (saved === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); document.getElementById('theme-btn').textContent = '\u2600'; }
+        }
+        function toggleTheme() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                document.getElementById('theme-btn').textContent = '\u263E';
+                localStorage.setItem('sitemap-theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('theme-btn').textContent = '\u2600';
+                localStorage.setItem('sitemap-theme', 'dark');
+            }
+        }
+
+        // ==================== GROUPED VIEW ====================
+        function toggleView() {
+            groupedViewActive = !groupedViewActive;
+            const btn = document.getElementById('view-toggle-btn');
+            const table = document.querySelector('.table-wrap');
+            const pag = document.getElementById('pagination');
+            const grouped = document.getElementById('grouped-view');
+            if (groupedViewActive) {
+                btn.textContent = 'Vista tabla';
+                table.style.display = 'none';
+                pag.style.display = 'none';
+                grouped.style.display = 'block';
+                renderGroupedView();
+            } else {
+                btn.textContent = 'Vista agrupada';
+                table.style.display = '';
+                pag.style.display = '';
+                grouped.style.display = 'none';
+            }
+        }
+        function renderGroupedView() {
+            const groups = {};
+            filteredUrls.forEach(u => {
+                try {
+                    const sec = '/' + (new URL(u.loc).pathname.split('/').filter(Boolean)[0] || '(raiz)');
+                    if (!groups[sec]) groups[sec] = [];
+                    groups[sec].push(u);
+                } catch {}
+            });
+            const sorted = Object.entries(groups).sort((a, b) => b[1].length - a[1].length);
+            document.getElementById('grouped-view').innerHTML = sorted.map(([sec, urls]) => `
+                <div class="group-section" onclick="this.classList.toggle('open')">
+                    <div class="group-header">
+                        <h4>${sec}/ <span class="g-count">${urls.length}</span></h4>
+                        <span class="g-arrow">&#9660;</span>
+                    </div>
+                    <div class="group-body">
+                        ${urls.slice(0, 50).map(u => `<a class="group-url" href="${u.loc}" target="_blank" title="${u.loc}">${new URL(u.loc).pathname}</a>`).join('')}
+                        ${urls.length > 50 ? `<div style="padding:0.3rem 0;font-size:0.72rem;color:var(--text-muted);">...y ${urls.length - 50} mas</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== CHECKLIST ====================
+        const checklistItems = [
+            { id: 'cl-cpt-sitemap', title: 'Desactivar sitemap para CPT Restauracion y Alojamientos', desc: 'Rank Math > Titulos y Meta > Tipos de contenido', priority: 'P1' },
+            { id: 'cl-cpt-draft', title: 'Pasar posts de CPTs redirigidos a borrador', desc: 'Entradas > filtrar por CPT > Accion masiva: Mover a borrador', priority: 'P1' },
+            { id: 'cl-author', title: 'Desactivar archivos de autor en Rank Math', desc: 'Rank Math > Titulos y Meta > Autores > Desactivar archivo y sitemap', priority: 'P1' },
+            { id: 'cl-telefono', title: 'Investigar y eliminar contenido /telefono/', desc: 'Verificar si es spam inyectado. Si lo es, eliminar y auditar seguridad', priority: 'P2' },
+            { id: 'cl-typos', title: 'Crear redirecciones 301 para slugs con errores', desc: '/zrestauracion/ > /restauracion/, /talojamiento/ > /alojamientos/, etc.', priority: 'P2' },
+            { id: 'cl-lang-redir', title: 'Eliminar traducciones de CPTs redirigidos', desc: 'En WPML/Polylang, borrar traducciones DE/FR/EN de restauracion y alojamientos', priority: 'P2' },
+            { id: 'cl-lang-301', title: 'Crear 301 para patrones de idioma', desc: '/de/restauracion/(.*) > /de/prepara-tu-viaje/donde-comer, etc.', priority: 'P2' },
+            { id: 'cl-permalink', title: 'Refrescar enlaces permanentes', desc: 'Ajustes > Enlaces permanentes > Guardar sin cambios', priority: 'P3' },
+            { id: 'cl-canonical', title: 'Verificar etiquetas rel=canonical', desc: 'Comprobar que cada pagina apunta a una sola variante de URL', priority: 'P3' },
+            { id: 'cl-hreflang', title: 'Verificar etiquetas hreflang entre idiomas', desc: 'Comprobar que las versiones ES/DE/FR/EN se referencian correctamente', priority: 'P3' },
+            { id: 'cl-bsr', title: 'Buscar y reemplazar enlaces internos', desc: 'Plugin Better Search Replace: /restauracion/ > /prepara-tu-viaje/donde-comer/', priority: 'P4' },
+            { id: 'cl-gsc', title: 'Enviar sitemap limpio a Google Search Console', desc: 'Subir el nuevo sitemap y monitorear errores de cobertura', priority: 'P4' },
+            { id: 'cl-wordfence', title: 'Instalar Wordfence y ejecutar escaneo', desc: 'Si se confirma spam inyectado, auditar seguridad completa', priority: 'P4' },
+        ];
+
+        function renderChecklist() {
+            const saved = JSON.parse(localStorage.getItem('sitemap-checklist') || '{}');
+            document.getElementById('checklist').innerHTML = checklistItems.map(item => {
+                const checked = saved[item.id] || false;
+                return `<li class="${checked ? 'done' : ''}">
+                    <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleCheck('${item.id}', this)">
+                    <div class="cl-text">
+                        <div class="cl-title"><span class="sus-tag" style="background:var(--accent-bg);color:var(--accent);margin-right:0.3rem;">${item.priority}</span>${item.title}</div>
+                        <div class="cl-desc">${item.desc}</div>
+                    </div>
+                </li>`;
+            }).join('');
+            updateCheckProgress();
+        }
+
+        function toggleCheck(id, el) {
+            const saved = JSON.parse(localStorage.getItem('sitemap-checklist') || '{}');
+            saved[id] = el.checked;
+            localStorage.setItem('sitemap-checklist', JSON.stringify(saved));
+            el.closest('li').classList.toggle('done', el.checked);
+            updateCheckProgress();
+        }
+
+        function updateCheckProgress() {
+            const saved = JSON.parse(localStorage.getItem('sitemap-checklist') || '{}');
+            const done = checklistItems.filter(i => saved[i.id]).length;
+            const pct = Math.round((done / checklistItems.length) * 100);
+            document.getElementById('cl-fill').style.width = pct + '%';
+            document.getElementById('cl-text').textContent = `${done}/${checklistItems.length} (${pct}%)`;
+        }
+
+        function resetChecklist() {
+            localStorage.removeItem('sitemap-checklist');
+            renderChecklist();
+        }
+
+        // ==================== DONUTS ====================
+        function renderDonuts() {
+            renderDonut('donut-problems', [
+                { label: 'Redirecciones 301', value: findRedirected().total, color: '#ef4444' },
+                { label: 'Redir. en idiomas', value: findLangRedirects().total, color: '#f97316' },
+                { label: 'Duplicadas', value: findDuplicates().count, color: '#eab308' },
+                { label: 'Spam/telefono', value: findSpam().total, color: '#dc2626' },
+                { label: 'Typos', value: findTypos().total, color: '#f43f5e' },
+                { label: 'Author', value: findAuthor().total, color: '#a855f7' },
+                { label: 'Paginacion', value: findPaginated().total, color: '#8b5cf6' },
+            ].filter(d => d.value > 0));
+
+            const pg = getPathGroups().slice(0, 8);
+            const topColors = ['#6366f1','#8b5cf6','#ec4899','#f97316','#eab308','#22c55e','#06b6d4','#3b82f6'];
+            renderDonut('donut-structure', pg.map((g, i) => ({
+                label: '/' + g.path + '/',
+                value: g.count,
+                color: topColors[i % topColors.length]
+            })));
+        }
+
+        function renderDonut(containerId, data) {
+            const total = data.reduce((s, d) => s + d.value, 0);
+            if (total === 0) { document.getElementById(containerId).innerHTML = '<p style="color:var(--text-muted);font-size:0.8rem;">Sin datos</p>'; return; }
+
+            const size = 160, cx = 80, cy = 80, r = 60, r2 = 38;
+            let cumulative = 0;
+            const paths = data.map(d => {
+                const pct = d.value / total;
+                const start = cumulative * 2 * Math.PI - Math.PI / 2;
+                cumulative += pct;
+                const end = cumulative * 2 * Math.PI - Math.PI / 2;
+                const largeArc = pct > 0.5 ? 1 : 0;
+                const x1 = cx + r * Math.cos(start), y1 = cy + r * Math.sin(start);
+                const x2 = cx + r * Math.cos(end), y2 = cy + r * Math.sin(end);
+                const x3 = cx + r2 * Math.cos(end), y3 = cy + r2 * Math.sin(end);
+                const x4 = cx + r2 * Math.cos(start), y4 = cy + r2 * Math.sin(start);
+                return `<path d="M${x1},${y1} A${r},${r} 0 ${largeArc} 1 ${x2},${y2} L${x3},${y3} A${r2},${r2} 0 ${largeArc} 0 ${x4},${y4} Z" fill="${d.color}" style="cursor:pointer;opacity:0.9;"><title>${d.label}: ${d.value.toLocaleString()} (${(pct*100).toFixed(1)}%)</title></path>`;
+            }).join('');
+
+            document.getElementById(containerId).innerHTML = `
+                <div class="donut-container">
+                    <svg class="donut-svg" viewBox="0 0 ${size} ${size}">
+                        ${paths}
+                        <text x="${cx}" y="${cy-4}" text-anchor="middle" font-size="16" font-weight="900" fill="var(--text)">${total > 999 ? (total/1000).toFixed(1)+'k' : total}</text>
+                        <text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="7" font-weight="700" fill="var(--text-muted)">TOTAL</text>
+                    </svg>
+                    <div class="donut-legend">
+                        ${data.map(d => `<div class="donut-legend-item">
+                            <span class="donut-dot" style="background:${d.color};"></span>
+                            <span class="donut-legend-label">${d.label}</span>
+                            <span class="donut-legend-value">${d.value.toLocaleString()}</span>
+                        </div>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==================== ROBOTS.TXT ====================
+        async function checkRobotsTxt() {
+            const el = document.getElementById('robots-results');
+            el.innerHTML = '<div style="color:var(--text-muted);font-size:0.8rem;">Cargando robots.txt...</div>';
+            try {
+                const res = await fetch('https://www.turismodealmeria.org/robots.txt');
+                if (!res.ok) throw new Error('No se pudo acceder (' + res.status + ')');
+                const text = await res.text();
+                const lines = text.split('\n');
+                const sitemapLines = lines.filter(l => /^sitemap:/i.test(l.trim()));
+                const disallowLines = lines.filter(l => /^disallow:/i.test(l.trim()));
+                const hasSitemap = sitemapLines.length > 0;
+                const blockedPaths = disallowLines.map(l => l.replace(/^disallow:\s*/i, '').trim()).filter(Boolean);
+
+                // Check if any important paths are blocked
+                const importantPaths = ['/prepara-tu-viaje/', '/evento/', '/lugar/', '/experiencia/', '/rutas/', '/playas/'];
+                const blockedImportant = importantPaths.filter(p => blockedPaths.some(bp => p.startsWith(bp) || bp === '/'));
+
+                el.innerHTML = `
+                    <div style="margin-bottom:0.8rem;">
+                        <div class="note-box ${hasSitemap ? 'note-info' : 'note-danger'}" style="margin-bottom:0.5rem;">
+                            <strong>${hasSitemap ? 'Sitemap referenciado' : 'Sitemap NO referenciado!'}</strong>
+                            ${hasSitemap ? sitemapLines.map(l => `<br><code style="font-size:0.72rem;">${l.trim()}</code>`).join('') : '<br>Anade <code>Sitemap: https://www.turismodealmeria.org/sitemap_index.xml</code> a tu robots.txt'}
+                        </div>
+                        ${blockedImportant.length > 0 ? `
+                            <div class="note-box note-danger">
+                                <strong>Secciones importantes bloqueadas!</strong><br>
+                                ${blockedImportant.map(p => `<code>${p}</code>`).join(', ')} estan siendo bloqueadas por Disallow.
+                            </div>` : `
+                            <div class="note-box note-info">
+                                <strong>OK:</strong> No se detectan bloqueos en secciones importantes del sitio.
+                            </div>`}
+                    </div>
+                    <details style="margin-top:0.5rem;">
+                        <summary style="font-size:0.75rem;font-weight:700;color:var(--accent);cursor:pointer;">Ver robots.txt completo</summary>
+                        <div class="export-preview" style="margin-top:0.4rem;">${text}</div>
+                    </details>
+                `;
+            } catch (e) {
+                el.innerHTML = `<div class="note-box note-warn"><strong>No se pudo acceder:</strong> ${e.message}. Esto puede ser por CORS. Verifica manualmente visitando <code>https://www.turismodealmeria.org/robots.txt</code></div>`;
+            }
+        }
+
+        // ==================== ANIMATED COUNTERS ====================
+        function animateCounters() {
+            document.querySelectorAll('.stat-value, .metric-num').forEach(el => {
+                const text = el.textContent;
+                const num = parseFloat(text.replace(/[^0-9.]/g, ''));
+                if (isNaN(num) || num === 0) return;
+                const suffix = text.replace(/[0-9.,]/g, '');
+                const duration = 800;
+                const start = performance.now();
+                const isFloat = text.includes('.');
+                function tick(now) {
+                    const elapsed = now - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.round(num * eased);
+                    el.textContent = (isFloat ? (num * eased).toFixed(1) : current.toLocaleString()) + suffix;
+                    if (progress < 1) requestAnimationFrame(tick);
+                }
+                el.textContent = '0' + suffix;
+                requestAnimationFrame(tick);
+            });
+        }
+
+        // ==================== TOOLS ====================
+        function renderToolsTab() {
+            renderTreemap();
+            renderQuickWins();
+            renderTimeline();
+            renderDepthChart();
+            renderUrlLengthAnalysis();
+            renderKeywordCloud();
+            renderSuspiciousPatterns();
+            renderHreflangValidator();
+            renderComparison();
+        }
+
+        function renderTreemap() {
+            const groups = getPathGroups();
+            const total = groups.reduce((s, g) => s + g.count, 0);
+            const colors = ['#6366f1','#8b5cf6','#ec4899','#f43f5e','#f97316','#eab308','#22c55e','#14b8a6','#06b6d4','#3b82f6','#a855f7','#e11d48','#ea580c','#84cc16','#0891b2','#7c3aed','#db2777','#059669','#d97706','#4f46e5'];
+            let html = '<div class="treemap">';
+            groups.slice(0, 20).forEach((g, i) => {
+                const pct = (g.count / total * 100);
+                const width = Math.max(pct, 4);
+                const h = Math.max(50, Math.min(120, pct * 3));
+                const color = colors[i % colors.length];
+                html += `<div class="treemap-item" style="flex-basis:${width}%;height:${h}px;background:${color};" onclick="filterFromAudit('/${g.path}/')" title="/${g.path}/ - ${g.count} URLs (${pct.toFixed(1)}%)">
+                    <div class="treemap-label">/${g.path}/</div>
+                    <div class="treemap-count">${g.count}</div>
+                </div>`;
+            });
+            html += '</div>';
+            document.getElementById('treemap-container').innerHTML = html;
+        }
+
+        function renderQuickWins() {
+            const redir = findRedirected();
+            const langR = findLangRedirects();
+            const dup = findDuplicates();
+            const spam = findSpam();
+            const auth = findAuthor();
+            const typos = findTypos();
+            const pag = findPaginated();
+
+            const wins = [
+                { impact: redir.total + langR.total, label: 'URLs', title: 'Desactivar sitemap para CPTs redirigidos', desc: 'Quita Restauracion y Alojamientos del sitemap en Rank Math. Elimina de golpe todas las URLs redirigidas en todos los idiomas.', effort: 'easy', effortLabel: '2 min' },
+                { impact: dup.count, label: 'pares', title: 'Normalizar trailing slash', desc: 'Guarda Ajustes > Enlaces permanentes en WordPress para refrescar las reglas. Configura canonical consistente.', effort: 'easy', effortLabel: '1 min' },
+                { impact: auth.total, label: 'URLs', title: 'Desactivar archivos de autor', desc: 'En Rank Math > Titulos y Meta > Autores, desactiva el archivo y sitemap. Mejora seguridad y SEO.', effort: 'easy', effortLabel: '1 min' },
+                { impact: spam.total, label: 'URLs', title: 'Eliminar contenido spam /telefono/', desc: 'Busca en Entradas, elimina todo bajo /telefono/. Si fue hackeo, audita seguridad con Wordfence.', effort: 'medium', effortLabel: '15 min' },
+                { impact: typos.total, label: 'URLs', title: 'Corregir slugs con errores tipograficos', desc: 'Crea redirecciones 301 regex en Rank Math para /zrestauracion/, /talojamiento/, etc.', effort: 'medium', effortLabel: '10 min' },
+                { impact: pag.total, label: 'URLs', title: 'Filtrar URLs con paginacion', desc: 'Excluye URLs con ?upage= del sitemap. Modifica el generador para filtrar query strings.', effort: 'medium', effortLabel: '5 min' },
+            ].filter(w => w.impact > 0).sort((a, b) => {
+                const effortOrder = { easy: 0, medium: 1, hard: 2 };
+                const scoreA = b.impact / (effortOrder[a.effort] + 1);
+                const scoreB = a.impact / (effortOrder[b.effort] + 1);
+                return scoreA - scoreB;
+            });
+
+            document.getElementById('quick-wins').innerHTML = wins.map(w => `
+                <div class="win-item">
+                    <div class="win-impact">
+                        <div class="wi-num" style="color:${w.impact > 100 ? 'var(--red)' : w.impact > 20 ? 'var(--yellow)' : 'var(--green)'};">${w.impact > 999 ? (w.impact/1000).toFixed(1) + 'k' : w.impact}</div>
+                        <div class="wi-label">${w.label}</div>
+                    </div>
+                    <div class="win-detail">
+                        <h4>${w.title}</h4>
+                        <p>${w.desc}</p>
+                        <span class="win-effort effort-${w.effort}">${w.effortLabel}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTimeline() {
+            const dateMap = {};
+            allUrls.forEach(u => {
+                if (!u.lastmod) return;
+                const month = u.lastmod.substring(0, 7);
+                dateMap[month] = (dateMap[month] || 0) + 1;
+            });
+            const sorted = Object.entries(dateMap).sort((a, b) => a[0].localeCompare(b[0]));
+            if (sorted.length === 0) {
+                document.getElementById('timeline-chart').innerHTML = '<p style="font-size:0.8rem;color:var(--text-muted);">No hay datos de fecha de modificacion.</p>';
+                return;
+            }
+            const max = Math.max(...sorted.map(s => s[1]));
+            const colors = ['#6366f1','#8b5cf6','#a78bfa','#c4b5fd'];
+            document.getElementById('timeline-chart').innerHTML = '<div class="timeline-bar-container">' +
+                sorted.slice(-12).map(([month, count], i) => {
+                    const pct = (count / max * 100).toFixed(1);
+                    const color = colors[i % colors.length];
+                    return `<div class="tl-row">
+                        <span class="tl-label">${month}</span>
+                        <div class="tl-bar"><div class="tl-fill" style="width:${pct}%;background:${color};">${count.toLocaleString()}</div></div>
+                    </div>`;
+                }).join('') + '</div>';
+        }
+
+        function renderDepthChart() {
+            const depthMap = {};
+            allUrls.forEach(u => {
+                try {
+                    const d = new URL(u.loc).pathname.replace(/\/$/, '').split('/').filter(Boolean).length;
+                    depthMap[d] = (depthMap[d] || 0) + 1;
+                } catch {}
+            });
+            const sorted = Object.entries(depthMap).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+            const max = Math.max(...sorted.map(s => s[1]));
+            document.getElementById('depth-chart').innerHTML = sorted.map(([depth, count]) => {
+                const pct = (count / max * 100).toFixed(1);
+                const d = parseInt(depth);
+                let color = 'linear-gradient(90deg,#059669,#34d399)';
+                if (d >= 4) color = 'linear-gradient(90deg,#ca8a04,#facc15)';
+                if (d >= 5) color = 'linear-gradient(90deg,#ea580c,#fb923c)';
+                if (d >= 6) color = 'linear-gradient(90deg,#dc2626,#f87171)';
+                const label = d === 0 ? 'Raiz' : d === 1 ? '1 nivel' : `${d} niveles`;
+                return `<div class="bar-row">
+                    <span class="bar-label">${label}</span>
+                    <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color};">${count.toLocaleString()} URLs</div></div>
+                </div>`;
+            }).join('');
+        }
+
+        // URL Status Checker
+        let checkerAbort = null;
+        async function runUrlChecker() {
+            const btn = document.getElementById('btn-checker');
+            btn.disabled = true;
+            btn.textContent = 'Verificando...';
+            document.getElementById('checker-progress').style.display = 'block';
+            document.getElementById('checker-results').innerHTML = '';
+
+            // Pick 20 random URLs
+            const sample = [...allUrls].sort(() => Math.random() - 0.5).slice(0, 20);
+            const results = [];
+            let done = 0;
+
+            for (const u of sample) {
+                try {
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => controller.abort(), 5000);
+                    const res = await fetch(u.loc, { method: 'HEAD', mode: 'no-cors', signal: controller.signal });
+                    clearTimeout(timer);
+                    // no-cors always gives opaque response, status 0 = reachable
+                    results.push({ url: u.loc, status: res.status || 'OK', ok: true });
+                } catch (e) {
+                    results.push({ url: u.loc, status: e.name === 'AbortError' ? 'Timeout' : 'Error', ok: false });
+                }
+                done++;
+                document.getElementById('checker-fill').style.width = (done / sample.length * 100) + '%';
+                document.getElementById('checker-status').textContent = `${done}/${sample.length} verificadas...`;
+                renderCheckerResults(results);
+            }
+
+            document.getElementById('checker-status').textContent = `${done}/${sample.length} completadas`;
+            btn.disabled = false;
+            btn.textContent = 'Verificar otras 20 URLs';
+        }
+
+        function renderCheckerResults(results) {
+            document.getElementById('checker-results').innerHTML = results.map(r => {
+                let dotClass = 'dot-gray', statusText = r.status, statusColor = 'var(--text-muted)';
+                if (r.ok && (r.status === 0 || r.status === 'OK')) { dotClass = 'dot-green'; statusText = 'Accesible'; statusColor = 'var(--green)'; }
+                else if (r.status === 200) { dotClass = 'dot-green'; statusText = '200 OK'; statusColor = 'var(--green)'; }
+                else if (r.status === 301 || r.status === 302) { dotClass = 'dot-yellow'; statusText = r.status + ' Redir'; statusColor = 'var(--yellow)'; }
+                else if (r.status === 404) { dotClass = 'dot-red'; statusText = '404 No encontrado'; statusColor = 'var(--red)'; }
+                else if (r.status === 'Timeout') { dotClass = 'dot-red'; statusText = 'Timeout'; statusColor = 'var(--red)'; }
+                else if (r.status === 'Error') { dotClass = 'dot-red'; statusText = 'Error'; statusColor = 'var(--red)'; }
+                return `<div class="check-row">
+                    <span class="status-dot ${dotClass}"></span>
+                    <span class="check-url" title="${r.url}">${r.url}</span>
+                    <span class="check-status" style="color:${statusColor}">${statusText}</span>
+                </div>`;
+            }).join('');
+        }
+
+        // Export
+        let cleanXML = '';
+        function exportCleanSitemap() {
+            const badPatterns = [
+                /\.org\/restauracion\//i, /\.org\/alojamientos\//i,
+                /\.org\/telefono\//i, /\.org\/author\//i,
+                /\/zrestauracion/i, /\/talojamiento/i, /\/trestauracion/i,
+                /\/zplayas/i, /\/zmuseos/i, /\/trutas/i,
+                /[?&]upage=/i,
+                /\.org\/de\/restauracion/i, /\.org\/fr\/restauracion/i, /\.org\/en\/restauracion/i,
+                /\.org\/de\/alojamiento/i, /\.org\/fr\/alojamiento/i, /\.org\/en\/alojamiento/i,
+            ];
+
+            // Remove duplicates (trailing slash) and bad URLs
+            const seen = new Set();
+            const clean = [];
+            allUrls.forEach(u => {
+                const norm = u.loc.replace(/\/$/, '');
+                if (seen.has(norm)) return;
+                if (badPatterns.some(p => p.test(u.loc))) return;
+                seen.add(norm);
+                clean.push(u);
+            });
+
+            const removed = allUrls.length - clean.length;
+
+            // Build XML
+            cleanXML = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+            clean.forEach(u => {
+                cleanXML += `  <url>\n    <loc>${u.loc}</loc>\n`;
+                if (u.lastmod) cleanXML += `    <lastmod>${u.lastmod}</lastmod>\n`;
+                if (u.changefreq) cleanXML += `    <changefreq>${u.changefreq}</changefreq>\n`;
+                cleanXML += `    <priority>${u.priority}</priority>\n  </url>\n`;
+            });
+            cleanXML += `</urlset>`;
+
+            document.getElementById('export-stats').innerHTML = `
+                <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
+                    <div class="metric-box" style="flex:1;min-width:100px;"><div class="metric-num m-blue">${allUrls.length.toLocaleString()}</div><div class="metric-desc">Original</div></div>
+                    <div class="metric-box" style="flex:1;min-width:100px;"><div class="metric-num m-red">-${removed.toLocaleString()}</div><div class="metric-desc">Eliminadas</div></div>
+                    <div class="metric-box" style="flex:1;min-width:100px;"><div class="metric-num m-green">${clean.length.toLocaleString()}</div><div class="metric-desc">Limpio</div></div>
+                </div>
+            `;
+
+            document.getElementById('export-preview').style.display = 'block';
+            // Show first 20 lines
+            document.getElementById('export-content').textContent = cleanXML.split('\n').slice(0, 25).join('\n') + '\n... (' + clean.length + ' URLs en total)';
+        }
+
+        function downloadExport() {
+            if (!cleanXML) return;
+            const blob = new Blob([cleanXML], { type: 'application/xml' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'sitemap_limpio.xml';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        function exportCSV() {
+            let csv = 'URL,Ultima modificacion,Frecuencia,Prioridad\n';
+            allUrls.forEach(u => {
+                csv += `"${u.loc}","${u.lastmod}","${u.changefreq}",${u.priority}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'sitemap_urls.csv';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        // URL Length Analysis
+        function renderUrlLengthAnalysis() {
+            const ranges = [
+                { label: '0-30 chars', min: 0, max: 30, color: 'var(--green)' },
+                { label: '31-60 chars', min: 31, max: 60, color: 'var(--green)' },
+                { label: '61-75 chars', min: 61, max: 75, color: 'var(--yellow)' },
+                { label: '76-100 chars', min: 76, max: 100, color: 'var(--yellow)' },
+                { label: '101-150 chars', min: 101, max: 150, color: 'var(--red)' },
+                { label: '150+ chars', min: 151, max: 9999, color: 'var(--red)' },
+            ];
+            ranges.forEach(r => r.count = 0);
+            const long = [];
+            allUrls.forEach(u => {
+                const len = u.loc.length;
+                ranges.forEach(r => { if (len >= r.min && len <= r.max) r.count++; });
+                if (len > 100) long.push({ url: u.loc, len });
+            });
+            long.sort((a, b) => b.len - a.len);
+            const max = Math.max(...ranges.map(r => r.count));
+
+            document.getElementById('url-length-chart').innerHTML = ranges.map(r => {
+                const pct = max > 0 ? (r.count / max * 100).toFixed(1) : 0;
+                return `<div class="bar-row"><span class="bar-label" style="width:85px;font-size:0.72rem;">${r.label}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${r.color};">${r.count.toLocaleString()}</div></div></div>`;
+            }).join('');
+
+            if (long.length > 0) {
+                document.getElementById('url-length-worst').innerHTML = `
+                    <div style="font-size:0.72rem;font-weight:700;color:var(--red);margin-bottom:0.4rem;">URLs mas largas (${long.length} superan 100 chars):</div>
+                    <div class="suspicious-list">${long.slice(0, 8).map(u => `
+                        <div class="sus-item">
+                            <span class="sus-tag" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);">${u.len}ch</span>
+                            <span class="sus-url" title="${u.url}">${u.url}</span>
+                        </div>`).join('')}
+                        ${long.length > 8 ? `<div style="font-size:0.72rem;color:var(--text-muted);padding:0.3rem 0;">...y ${long.length - 8} mas</div>` : ''}
+                    </div>`;
+            }
+        }
+
+        // Keyword Cloud
+        function renderKeywordCloud() {
+            const stopwords = new Set(['de','del','la','el','las','los','en','y','a','por','con','para','un','una','com','org','www','https','http','tu','su','se','al','es','que','lo','le','2025','2026','2024','2023','2022']);
+            const words = {};
+            allUrls.forEach(u => {
+                try {
+                    const path = new URL(u.loc).pathname;
+                    path.split(/[\/\-_]+/).filter(Boolean).forEach(w => {
+                        w = w.toLowerCase();
+                        if (w.length < 3 || stopwords.has(w) || /^\d+$/.test(w)) return;
+                        words[w] = (words[w] || 0) + 1;
+                    });
+                } catch {}
+            });
+            const sorted = Object.entries(words).sort((a, b) => b[1] - a[1]).slice(0, 40);
+            const maxCount = sorted.length > 0 ? sorted[0][1] : 1;
+            const colors = ['#4f46e5','#7c3aed','#a855f7','#ec4899','#f43f5e','#f97316','#eab308','#22c55e','#06b6d4','#3b82f6'];
+
+            document.getElementById('keyword-cloud').innerHTML = `
+                <div class="keyword-cloud">
+                    ${sorted.map(([word, count], i) => {
+                        const size = 0.65 + (count / maxCount) * 0.5;
+                        const color = colors[i % colors.length];
+                        return `<span class="kw-tag" style="font-size:${size}rem;background:${color}11;color:${color};border-color:${color}33;" onclick="filterFromAudit('${word}')">${word}<span class="kw-count">${count}</span></span>`;
+                    }).join('')}
+                </div>`;
+        }
+
+        // Suspicious Patterns
+        function renderSuspiciousPatterns() {
+            const patterns = [
+                { regex: /-\d+\/?$/, label: 'Sufijo numerico (-2, -3)', tag: 'WP DUPL', desc: 'WordPress crea estos cuando hay slugs duplicados' },
+                { regex: /-\d+-\d+\/?$/, label: 'Doble sufijo (-2-2, -2-3)', tag: 'WP DUPL', desc: 'Duplicados de duplicados, muy sospechoso' },
+                { regex: /\/(page|pag|pagina)\/\d+/i, label: 'Paginacion en slug', tag: 'PAGIN', desc: 'Paginacion dentro de la URL en vez de query param' },
+                { regex: /\/feed\/?$/i, label: 'Feed RSS en sitemap', tag: 'FEED', desc: 'Feeds RSS no deberian estar en el sitemap' },
+                { regex: /\/attachment\//i, label: 'Attachment pages', tag: 'ATTACH', desc: 'Paginas de adjuntos de WordPress, sin valor SEO' },
+                { regex: /\/(wp-content|wp-admin|wp-includes)/i, label: 'Rutas internas WP', tag: 'WP SYS', desc: 'URLs de sistema de WordPress' },
+                { regex: /\/?\?.*=/, label: 'Query strings', tag: 'QUERY', desc: 'URLs con parametros que no deberian indexarse' },
+            ];
+            const results = [];
+            patterns.forEach(p => {
+                const matches = allUrls.filter(u => p.regex.test(u.loc));
+                if (matches.length > 0) {
+                    results.push({ ...p, count: matches.length, examples: matches.slice(0, 3) });
+                }
+            });
+
+            if (results.length === 0) {
+                document.getElementById('suspicious-patterns').innerHTML = '<div style="padding:0.8rem;background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--radius-xs);font-size:0.78rem;color:var(--green);font-weight:600;">No se detectaron patrones sospechosos de WordPress. Bien!</div>';
+                return;
+            }
+
+            document.getElementById('suspicious-patterns').innerHTML = `
+                <div class="suspicious-list">
+                    ${results.map(r => `
+                        <div style="margin-bottom:0.8rem;">
+                            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem;">
+                                <span class="sus-tag" style="background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border);">${r.tag}</span>
+                                <strong style="font-size:0.8rem;">${r.label}</strong>
+                                <span class="i-count ic-yellow">${r.count}</span>
+                            </div>
+                            <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:0.3rem;">${r.desc}</p>
+                            ${r.examples.map(u => `<div class="sus-item"><span class="sus-url" title="${u.loc}">${new URL(u.loc).pathname}</span></div>`).join('')}
+                            ${r.count > 3 ? `<div style="font-size:0.68rem;color:var(--text-muted);">...y ${r.count - 3} mas</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>`;
+        }
+
+        // Hreflang Validator
+        function renderHreflangValidator() {
+            const langPrefixes = [
+                { code: 'es', prefix: '', label: 'Espanol (principal)' },
+                { code: 'de', prefix: '/de', label: 'Aleman' },
+                { code: 'fr', prefix: '/fr', label: 'Frances' },
+                { code: 'en', prefix: '/en', label: 'Ingles' },
+            ];
+
+            // Extract paths per language
+            const langPaths = {};
+            langPrefixes.forEach(l => { langPaths[l.code] = new Set(); });
+
+            allUrls.forEach(u => {
+                try {
+                    const path = new URL(u.loc).pathname.replace(/\/$/, '');
+                    if (path.startsWith('/de/')) langPaths.de.add(path.replace(/^\/de/, ''));
+                    else if (path.startsWith('/fr/')) langPaths.fr.add(path.replace(/^\/fr/, ''));
+                    else if (path.startsWith('/en/')) langPaths.en.add(path.replace(/^\/en/, ''));
+                    else langPaths.es.add(path);
+                } catch {}
+            });
+
+            // Cross-check
+            const missing = {};
+            langPrefixes.forEach(l => { missing[l.code] = 0; });
+
+            // Check which ES pages don't have translations
+            const esPages = [...langPaths.es];
+            const missingDetails = [];
+            esPages.forEach(p => {
+                const langs = [];
+                if (!langPaths.de.has(p)) { missing.de++; langs.push('DE'); }
+                if (!langPaths.fr.has(p)) { missing.fr++; langs.push('FR'); }
+                if (!langPaths.en.has(p)) { missing.en++; langs.push('EN'); }
+                if (langs.length > 0 && langs.length < 3) {
+                    missingDetails.push({ path: p, missing: langs });
+                }
+            });
+
+            const totalES = langPaths.es.size;
+            const coverage = {};
+            langPrefixes.filter(l => l.code !== 'es').forEach(l => {
+                coverage[l.code] = totalES > 0 ? ((langPaths[l.code].size / totalES) * 100).toFixed(0) : 0;
+            });
+
+            document.getElementById('hreflang-results').innerHTML = `
+                <div style="margin-bottom:0.8rem;">
+                    ${langPrefixes.filter(l => l.code !== 'es').map(l => {
+                        const cov = coverage[l.code];
+                        const color = cov >= 80 ? 'var(--green)' : cov >= 50 ? 'var(--yellow)' : 'var(--red)';
+                        const bg = cov >= 80 ? 'var(--green-bg)' : cov >= 50 ? 'var(--yellow-bg)' : 'var(--red-bg)';
+                        return `<div class="bar-row" style="margin-bottom:0.6rem;">
+                            <span class="bar-label" style="width:60px;">${l.label.split(' ')[0]}</span>
+                            <div class="bar-track"><div class="bar-fill" style="width:${cov}%;background:${color};">${langPaths[l.code].size} de ${totalES} (${cov}%)</div></div>
+                        </div>`;
+                    }).join('')}
+                </div>
+                ${missingDetails.length > 0 ? `
+                    <div style="font-size:0.72rem;font-weight:700;color:var(--yellow);margin:0.5rem 0 0.3rem;">Paginas con traduccion parcial (${Math.min(missingDetails.length, 6)} ejemplos):</div>
+                    <div class="suspicious-list">
+                        ${missingDetails.slice(0, 6).map(d => `
+                            <div class="sus-item">
+                                <span class="sus-url">${d.path}</span>
+                                <span style="font-size:0.65rem;font-weight:700;color:var(--red);">Falta: ${d.missing.join(', ')}</span>
+                            </div>
+                        `).join('')}
+                    </div>` : '<div style="font-size:0.78rem;color:var(--green);font-weight:600;">Todas las paginas tienen traducciones en los 3 idiomas.</div>'}
+            `;
+        }
+
+        // Before/After Comparison
+        function renderComparison() {
+            const badPatterns = [
+                /\.org\/restauracion\//i, /\.org\/alojamientos\//i,
+                /\.org\/telefono\//i, /\.org\/author\//i,
+                /\/zrestauracion/i, /\/talojamiento/i, /\/trestauracion/i,
+                /\/zplayas/i, /\/zmuseos/i, /\/trutas/i,
+                /[?&]upage=/i,
+                /\.org\/de\/restauracion/i, /\.org\/fr\/restauracion/i, /\.org\/en\/restauracion/i,
+                /\.org\/de\/alojamiento/i, /\.org\/fr\/alojamiento/i, /\.org\/en\/alojamiento/i,
+            ];
+            const seen = new Set();
+            const clean = [];
+            allUrls.forEach(u => {
+                const norm = u.loc.replace(/\/$/, '');
+                if (seen.has(norm)) return;
+                if (badPatterns.some(p => p.test(u.loc))) return;
+                seen.add(norm);
+                clean.push(u);
+            });
+            const removed = allUrls.length - clean.length;
+            const dupsBefore = findDuplicates().count;
+            const avgLenBefore = Math.round(allUrls.reduce((s, u) => s + u.loc.length, 0) / allUrls.length);
+            const avgLenAfter = clean.length > 0 ? Math.round(clean.reduce((s, u) => s + u.loc.length, 0) / clean.length) : 0;
+
+            // Count sections before/after
+            const secBefore = new Set(); allUrls.forEach(u => { try { secBefore.add(new URL(u.loc).pathname.split('/').filter(Boolean)[0]); } catch {} });
+            const secAfter = new Set(); clean.forEach(u => { try { secAfter.add(new URL(u.loc).pathname.split('/').filter(Boolean)[0]); } catch {} });
+
+            const pctReduction = ((removed / allUrls.length) * 100).toFixed(1);
+
+            document.getElementById('comparison').innerHTML = `
+                <div class="compare-cols">
+                    <div class="compare-side compare-before">
+                        <h4>Ahora (con problemas)</h4>
+                        <div class="compare-stat"><span class="cs-label">URLs totales</span><span class="cs-value" style="color:var(--red);">${allUrls.length.toLocaleString()}</span></div>
+                        <div class="compare-stat"><span class="cs-label">Duplicadas</span><span class="cs-value" style="color:var(--red);">${dupsBefore.toLocaleString()}</span></div>
+                        <div class="compare-stat"><span class="cs-label">Redirigidas</span><span class="cs-value" style="color:var(--red);">${(findRedirected().total + findLangRedirects().total).toLocaleString()}</span></div>
+                        <div class="compare-stat"><span class="cs-label">Spam/errores</span><span class="cs-value" style="color:var(--red);">${(findSpam().total + findTypos().total).toLocaleString()}</span></div>
+                        <div class="compare-stat"><span class="cs-label">Secciones</span><span class="cs-value">${secBefore.size}</span></div>
+                        <div class="compare-stat"><span class="cs-label">Long. media URL</span><span class="cs-value">${avgLenBefore} chars</span></div>
+                    </div>
+                    <div class="compare-arrow">&rarr;</div>
+                    <div class="compare-side compare-after">
+                        <h4>Despues (limpio)</h4>
+                        <div class="compare-stat"><span class="cs-label">URLs totales</span><span class="cs-value" style="color:var(--green);">${clean.length.toLocaleString()}</span></div>
+                        <div class="compare-stat"><span class="cs-label">Duplicadas</span><span class="cs-value" style="color:var(--green);">0</span></div>
+                        <div class="compare-stat"><span class="cs-label">Redirigidas</span><span class="cs-value" style="color:var(--green);">0</span></div>
+                        <div class="compare-stat"><span class="cs-label">Spam/errores</span><span class="cs-value" style="color:var(--green);">0</span></div>
+                        <div class="compare-stat"><span class="cs-label">Secciones</span><span class="cs-value">${secAfter.size}</span></div>
+                        <div class="compare-stat"><span class="cs-label">Long. media URL</span><span class="cs-value">${avgLenAfter} chars</span></div>
+                    </div>
+                </div>
+                <div style="text-align:center;margin-top:1rem;padding:0.8rem;background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--radius-sm);">
+                    <span style="font-size:1.1rem;font-weight:900;color:var(--green);">-${pctReduction}%</span>
+                    <span style="font-size:0.78rem;color:var(--green);margin-left:0.4rem;font-weight:600;">Reduccion de ${removed.toLocaleString()} URLs innecesarias</span>
+                </div>
+            `;
+        }
+
+        // Print / Export report
+        function printReport() {
+            window.print();
+        }
+
+        function exportFullReport() {
+            const clone = document.documentElement.cloneNode(true);
+            // Remove scripts
+            clone.querySelectorAll('script').forEach(s => s.remove());
+            // Show all tabs
+            clone.querySelectorAll('.tab-content').forEach(t => t.style.display = 'block');
+            // Remove buttons
+            clone.querySelectorAll('.btn-primary, .btn-secondary, .btn-view, .btn-filter-audit, .tabs-bar, .pagination, .filters-row').forEach(el => el.remove());
+
+            const html = '<!DOCTYPE html>' + clone.outerHTML;
+            const blob = new Blob([html], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'informe_sitemap_turismodealmeria.html';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        // ==================== GUIDE ====================
+        function toggleTutorial(el, e) {
+            if (e.target.closest('a, code, .note-box')) return;
+            el.classList.toggle('open');
+        }
+
+        function renderHealthScore() {
+            const dup = findDuplicates(), redir = findRedirected(), typos = findTypos(),
+                  spam = findSpam(), auth = findAuthor(), pag = findPaginated(), langR = findLangRedirects();
+            const totalIssues = redir.total + typos.total + dup.count + spam.total + auth.total + pag.total + langR.total;
+            const ratio = totalIssues / allUrls.length;
+            // Score: 100 = perfect, 0 = terrible
+            let score = Math.max(0, Math.round((1 - ratio) * 100));
+            let color, label, bg, border;
+            if (score >= 80) { color = 'var(--green)'; bg = 'var(--green-bg)'; border = 'var(--green-border)'; label = 'Bueno'; }
+            else if (score >= 50) { color = 'var(--yellow)'; bg = 'var(--yellow-bg)'; border = 'var(--yellow-border)'; label = 'Necesita mejoras'; }
+            else { color = 'var(--red)'; bg = 'var(--red-bg)'; border = 'var(--red-border)'; label = 'Critico'; }
+
+            document.getElementById('health-score').innerHTML = `
+                <div class="score-ring" style="background:${bg};border:3px solid ${border};">
+                    <div class="score-num" style="color:${color};">${score}</div>
+                    <div class="score-label" style="color:${color};">${label}</div>
+                </div>
+                <p style="font-size:0.82rem;color:var(--text-secondary);max-width:500px;margin:0 auto;line-height:1.6;">
+                    ${score >= 80
+                        ? 'Tu sitemap esta en buen estado. Hay pocos problemas que resolver.'
+                        : score >= 50
+                        ? 'Tu sitemap tiene problemas que afectan al SEO. Sigue los tutoriales de abajo para solucionarlos.'
+                        : 'Tu sitemap tiene problemas serios. <strong style="color:var(--red)">' + totalIssues.toLocaleString() + ' URLs problematicas</strong> de ' + allUrls.length.toLocaleString() + ' totales (' + (ratio * 100).toFixed(0) + '%). Sigue los tutoriales de abajo por orden de prioridad.'}
+                </p>
+            `;
+        }
+
+        // ==================== AUDIT ====================
+        function runAudit() {
+            const dup = findDuplicates(), redir = findRedirected(), typos = findTypos(),
+                  lang = findLangUrls(), langR = findLangRedirects(), depth = findDeep(),
+                  spam = findSpam(), auth = findAuthor(), pag = findPaginated(),
+                  cb = calcBudget(redir, typos, dup, spam, auth, langR);
+            const total = redir.total + typos.total + dup.count + depth.length + spam.total + auth.total + pag.total + langR.total;
+
+            document.getElementById('audit-summary').innerHTML = `
+                <h2><span class="bar"></span> Resumen de Auditoria</h2>
+                <div class="metrics-grid">
+                    <div class="metric-box"><div class="metric-num ${total>100?'m-red':total>20?'m-yellow':'m-green'}">${total.toLocaleString()}</div><div class="metric-desc">Problemas</div></div>
+                    <div class="metric-box"><div class="metric-num m-red">${redir.total.toLocaleString()}</div><div class="metric-desc">Redirecciones</div></div>
+                    <div class="metric-box"><div class="metric-num m-yellow">${dup.count.toLocaleString()}</div><div class="metric-desc">Duplicadas</div></div>
+                    <div class="metric-box"><div class="metric-num m-red">${(typos.total+spam.total).toLocaleString()}</div><div class="metric-desc">Problematicas</div></div>
+                    <div class="metric-box"><div class="metric-num m-blue">${lang.total.toLocaleString()}</div><div class="metric-desc">Idiomas</div></div>
+                    <div class="metric-box"><div class="metric-num m-red">${langR.total.toLocaleString()}</div><div class="metric-desc">Redir. idiomas</div></div>
+                </div>
+                <div class="crawl-box">
+                    <h4>Impacto en Crawl Budget</h4>
+                    <p>De <strong>${allUrls.length.toLocaleString()}</strong> URLs, <strong style="color:var(--red)">${cb.wasted.toLocaleString()} (${cb.wastedPct}%)</strong> son desperdicio. Utiles: <strong style="color:var(--green)">${cb.useful.toLocaleString()} (${cb.usefulPct}%)</strong></p>
+                    <div class="crawl-track"><div class="crawl-good" style="width:${cb.usefulPct}%"></div><div class="crawl-bad" style="width:${cb.wastedPct}%"></div></div>
+                    <div class="crawl-labels"><span class="good">${cb.usefulPct}% utiles</span><span class="bad">${cb.wastedPct}% desperdicio</span></div>
+                </div>`;
+
+            let h = '';
+
+            h += auditCard('critical', 'URLs con redireccion 301 en el sitemap', 'Tienen redireccion pero siguen indexadas. Cada rastreo suma impacto.', redir.groups.map(g => li(g.from+' &rarr; '+g.to, g.count, 'red', g.filterTerm)).join(''), `<div class="act-box"><h4>Solucion Rank Math</h4><ol>
+                <li><code>Rank Math > Titulos y Meta > Tipos de contenido</code></li>
+                <li>Desactiva sitemap para CPT Restauracion y Alojamientos</li>
+                <li>Pasa posts a <strong>borrador</strong></li>
+                <li>Visita <code>/sitemap_index.xml</code> para regenerar</li></ol></div>
+                <div class="act-box"><h4>SQL de verificacion</h4><p><code>SELECT ID, post_title, post_status, post_type FROM wp_posts WHERE post_type IN ('restauracion','alojamientos') AND post_status = 'publish';</code></p></div>`);
+
+            if (langR.total > 0) h += auditCard('critical', 'Redirecciones en idiomas', 'URLs redirigidas bajo /de/, /fr/, /en/ TRIPLICAN los impactos.', langR.groups.map(g => li(g.prefix+' ('+g.label+')', g.count, 'red', g.filterTerm)).join(''), `<div class="act-box"><h4>Solucion</h4><ol>
+                <li>Elimina traducciones de CPT redirigidos en WPML/Polylang</li>
+                <li>Crea 301 regex en Rank Math:<br><code>/de/restauracion/(.*)</code> &rarr; <code>/de/prepara-tu-viaje/donde-comer</code><br><code>/fr/restauracion/(.*)</code> &rarr; <code>/fr/prepara-tu-viaje/donde-comer</code><br><code>/en/restauracion/(.*)</code> &rarr; <code>/en/prepara-tu-viaje/donde-comer</code></li></ol></div>`);
+
+            if (spam.total > 0) h += auditCard('critical', 'URLs sospechosas / posible spam', 'Contenido bajo /telefono/ no relacionado con turismo. Posible inyeccion.', spam.groups.map(g => li(g.prefix, g.count, 'red', g.filterTerm)).join(''), `<div class="act-box"><h4>URGENTE</h4><ol>
+                <li>Verifica si <code>/telefono/</code> fue creado por ti o un bot</li>
+                <li>"Anulacion de tarjetas" es tipico <strong>spam inyectado</strong></li>
+                <li>Si no es tuyo: elimina, revisa plugins, cambia contrasenas</li>
+                <li>SQL: <code>SELECT ID, post_title FROM wp_posts WHERE post_name LIKE '%telefono%';</code></li></ol></div>`);
+
+            if (typos.total > 0) h += auditCard('critical', 'Errores tipograficos en URLs', 'Slugs erroneos por migracion. Generan 404 o contenido duplicado.', typos.groups.map(g => li(g.prefix+' &rarr; "'+g.likelyCorrect+'"', g.count, 'red', g.filterTerm)).join(''), `<div class="act-box"><h4>Solucion</h4><ol>
+                <li>Elimina/corrige posts con slugs erroneos</li>
+                <li>Crea 301 regex en <code>Rank Math > Redirecciones</code>:<br>${typos.groups.map(g=>`<code>/${g.filterTerm}/(.*)</code> &rarr; <code>/${g.likelyCorrect}/$1</code>`).join('<br>')}</li></ol></div>`);
+
+            if (auth.total > 0) h += auditCard('warning', 'Paginas de autor', 'Exponen nombres de usuario. Riesgo seguridad + sin valor SEO.', auth.items.map(u => `<li><span class="i-path">${new URL(u.loc).pathname}</span><span class="i-right"><button class="btn-view" onclick="filterFromAudit('author/')">Ver</button></span></li>`).join(''), `<div class="act-box"><h4>Solucion</h4><ol><li><code>Rank Math > Titulos y Meta > Autores</code></li><li>Desactiva archivo y sitemap de autores</li></ol></div>`);
+
+            if (pag.total > 0) h += auditCard('warning', 'URLs con paginacion (?upage=)', 'Query strings de paginacion crean duplicados en el sitemap.', `<li><span class="i-path">?upage=1, ?upage=2, etc.</span><span class="i-right"><span class="i-count ic-yellow">${pag.total}</span><button class="btn-view" onclick="filterFromAudit('upage=')">Ver</button></span></li>`, `<div class="act-box"><h4>Solucion</h4><ol><li>Filtra URLs con <code>?</code> en tu generador</li><li>Google Search Console: marca <code>upage</code> como no representativo</li></ol></div>`);
+
+            h += auditCard('warning', 'URLs duplicadas (trailing slash)', 'Misma pagina con y sin / final. Diluye autoridad.', `<li><span class="i-path">/ejemplo y /ejemplo/</span><span class="i-count ic-yellow">${dup.count.toLocaleString()} pares</span></li>`, `<div class="act-box"><h4>Solucion</h4><ol><li><code>Rank Math > Ajustes generales</code> - Strip trailing slash</li><li>Verifica <code>rel=canonical</code></li><li><code>Settings > Permalinks</code> - guardar para refrescar</li></ol></div>`);
+
+            h += auditCard('info', 'URLs en otros idiomas', 'Incluyen secciones redirigidas que heredan problemas.', lang.groups.map(g => li(`${g.lang} (${g.label}) - ${g.redirectedCount} con redir.`, g.count, 'blue', g.filterTerm)).join(''), `<div class="act-box"><h4>Verificaciones</h4><ol><li>Traducciones con contenido real (no vacias)</li><li>Etiquetas <code>hreflang</code> correctas</li><li>Revisar <code>/de/visitas-guiada/</code> (posible typo de <code>visitas-guiadas</code>)</li></ol></div>`);
+
+            if (depth.length > 0) h += auditCard('warning', 'Profundidad excesiva (&gt;5 niveles)', 'URLs profundas dificultan el rastreo de Google.', depth.slice(0,10).map(u => `<li><span class="i-path" title="${u.loc}">${u.path}</span><span class="i-count ic-yellow">${u.depth}</span></li>`).join('') + (depth.length > 10 ? `<li><span class="i-path" style="color:var(--text-muted)">...y ${depth.length-10} mas</span></li>` : ''), '');
+
+            const pg = getPathGroups();
+            h += `<div class="a-card a-success"><span class="sev-tag" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">ESTRUCTURA</span><h3>Sitio por secciones</h3><p class="desc">Distribucion por seccion principal.</p><ul class="ilist">${pg.slice(0,20).map(g => li('/'+g.path+'/', g.count, 'blue', '/'+g.path+'/')).join('')}</ul></div>`;
+
+            // Plan de accion
+            h += `<div class="a-card a-info" style="grid-column:1/-1;"><span class="sev-tag sev-info">PLAN</span><h3>Plan de accion prioritario</h3><p class="desc">Pasos ordenados por impacto.</p>
+                <div class="plan-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0.7rem;">
+                    <div class="act-box"><h4>P1 - Quitar del sitemap</h4><ol><li>CPTs: Desactivar sitemap para Restauracion, Alojamientos, Telefono</li><li>Autores: Desactivar en Rank Math</li><li>Paginaciones: Filtrar <code>?upage=</code></li></ol></div>
+                    <div class="act-box"><h4>P2 - Limpiar contenido</h4><ol><li>/telefono/: Verificar spam, eliminar</li><li>Typos: /zrestauracion/, /talojamiento/ etc.</li><li>Posts de CPTs redirigidos a borrador</li></ol></div>
+                    <div class="act-box"><h4>P3 - Estructura</h4><ol><li>Trailing slash: <code>Settings > Permalinks</code></li><li>Canonicals: Verificar <code>rel=canonical</code></li><li>Hreflang entre idiomas</li></ol></div>
+                    <div class="act-box"><h4>P4 - Search & Replace</h4><ol><li>Plugin <strong>Better Search Replace</strong></li><li><code>/restauracion/</code> &rarr; <code>/prepara-tu-viaje/donde-comer/</code></li><li><code>/alojamientos/</code> &rarr; <code>/prepara-tu-viaje/donde-dormir/</code></li><li>Modo seco primero</li></ol></div>
+                </div></div>`;
+
+            document.getElementById('audit-grid').innerHTML = h;
+        }
+
+        // Card builder
+        function auditCard(sev, title, desc, listHtml, actionHtml) {
+            const cls = sev === 'critical' ? 'a-critical' : sev === 'warning' ? 'a-warning' : 'a-info';
+            const tag = sev === 'critical' ? 'sev-critical' : sev === 'warning' ? 'sev-warning' : 'sev-info';
+            const label = sev === 'critical' ? 'CRITICO' : sev === 'warning' ? 'AVISO' : 'INFO';
+            return `<div class="a-card ${cls}"><span class="sev-tag ${tag}">${label}</span><h3>${title}</h3><p class="desc">${desc}</p><ul class="ilist">${listHtml}</ul>${actionHtml}</div>`;
+        }
+        function li(text, count, color, filter) {
+            return `<li><span class="i-path">${text}</span><span class="i-right"><span class="i-count ic-${color}">${count}</span><button class="btn-view" onclick="filterFromAudit('${filter}')">Ver</button></span></li>`;
+        }
+
+        // ==================== HELPERS ====================
+        function findDuplicates() { const m = {}; allUrls.forEach(u => { const n = u.loc.replace(/\/$/,''); m[n] = (m[n]||0)+1; }); return { count: Object.values(m).filter(c => c > 1).length }; }
+
+        function findRedirected() {
+            const ps = [
+                { pattern: /\.org\/restauracion\//i, from: '/restauracion/*', to: '/prepara-tu-viaje/donde-comer', filterTerm: '/restauracion/' },
+                { pattern: /\.org\/alojamientos\//i, from: '/alojamientos/*', to: '/prepara-tu-viaje/donde-dormir', filterTerm: '/alojamientos/' },
+            ];
+            const g = []; let t = 0;
+            ps.forEach(p => { const c = allUrls.filter(u => p.pattern.test(u.loc)).length; if (c) { t += c; g.push({...p, count: c}); } });
+            return { total: t, groups: g };
+        }
+
+        function findLangRedirects() {
+            const ps = [
+                { pattern: /\.org\/de\/restauracion/i, prefix: '/de/restauracion/', label: 'DE - Restauracion', filterTerm: '/de/restauracion' },
+                { pattern: /\.org\/fr\/restauracion/i, prefix: '/fr/restauracion/', label: 'FR - Restauracion', filterTerm: '/fr/restauracion' },
+                { pattern: /\.org\/en\/restauracion/i, prefix: '/en/restauracion/', label: 'EN - Restauracion', filterTerm: '/en/restauracion' },
+                { pattern: /\.org\/de\/alojamiento/i, prefix: '/de/alojamiento/', label: 'DE - Alojamiento', filterTerm: '/de/alojamiento' },
+                { pattern: /\.org\/fr\/alojamiento/i, prefix: '/fr/alojamiento/', label: 'FR - Alojamiento', filterTerm: '/fr/alojamiento' },
+                { pattern: /\.org\/en\/alojamiento/i, prefix: '/en/alojamiento/', label: 'EN - Alojamiento', filterTerm: '/en/alojamiento' },
+            ];
+            const g = []; let t = 0;
+            ps.forEach(p => { const c = allUrls.filter(u => p.pattern.test(u.loc)).length; if (c) { t += c; g.push({...p, count: c}); } });
+            return { total: t, groups: g };
+        }
+
+        function findSpam() {
+            const ps = [{ pattern: /\.org\/telefono\//i, prefix: '/telefono/ (spam SEO)', filterTerm: '/telefono/' }];
+            const g = []; let t = 0;
+            ps.forEach(p => { const c = allUrls.filter(u => p.pattern.test(u.loc)).length; if (c) { t += c; g.push({...p, count: c}); } });
+            return { total: t, groups: g };
+        }
+
+        function findAuthor() { const items = allUrls.filter(u => /\.org\/author\//i.test(u.loc)); return { total: items.length, items }; }
+        function findPaginated() { return { total: allUrls.filter(u => /[?&]upage=/i.test(u.loc)).length }; }
+
+        function findTypos() {
+            const ps = [
+                { pattern: /\/zrestauracion/i, prefix: '/zrestauracion/', likelyCorrect: 'restauracion', filterTerm: 'zrestauracion' },
+                { pattern: /\/talojamiento/i, prefix: '/talojamiento/', likelyCorrect: 'alojamientos', filterTerm: 'talojamiento' },
+                { pattern: /\/trestauracion/i, prefix: '/trestauracion/', likelyCorrect: 'restauracion', filterTerm: 'trestauracion' },
+                { pattern: /\/zplayas/i, prefix: '/zplayas/', likelyCorrect: 'playas', filterTerm: 'zplayas' },
+                { pattern: /\/zmuseos/i, prefix: '/zmuseos/', likelyCorrect: 'museos', filterTerm: 'zmuseos' },
+                { pattern: /\/trutas/i, prefix: '/trutas/', likelyCorrect: 'rutas', filterTerm: 'trutas' },
+                { pattern: /\/visitas-guiada\//i, prefix: '/visitas-guiada/', likelyCorrect: 'visitas-guiadas', filterTerm: 'visitas-guiada/' },
+            ];
+            const g = []; let t = 0;
+            ps.forEach(p => { const c = allUrls.filter(u => p.pattern.test(u.loc)).length; if (c) { t += c; g.push({...p, count: c}); } });
+            return { total: t, groups: g };
+        }
+
+        function findLangUrls() {
+            const ls = [
+                { pattern: /\.org\/de\//i, lang: '/de/', label: 'Aleman', filterTerm: '.org/de/', rp: /\/(restauracion|alojamiento)\//i },
+                { pattern: /\.org\/fr\//i, lang: '/fr/', label: 'Frances', filterTerm: '.org/fr/', rp: /\/(restauracion|alojamiento)\//i },
+                { pattern: /\.org\/en\//i, lang: '/en/', label: 'Ingles', filterTerm: '.org/en/', rp: /\/(restauracion|alojamiento)\//i },
+            ];
+            const g = []; let t = 0;
+            ls.forEach(l => { const ms = allUrls.filter(u => l.pattern.test(u.loc)); if (ms.length) { t += ms.length; g.push({...l, count: ms.length, redirectedCount: ms.filter(u => l.rp.test(u.loc)).length}); } });
+            return { total: t, groups: g };
+        }
+
+        function findDeep() {
+            return allUrls.map(u => { try { const p = new URL(u.loc).pathname; return {loc:u.loc,path:p,depth:p.replace(/\/$/,'').split('/').filter(Boolean).length}; } catch{return null;} }).filter(u => u && u.depth > 5).sort((a,b) => b.depth - a.depth);
+        }
+
+        function getPathGroups() {
+            const g = {};
+            allUrls.forEach(u => { try { const p = new URL(u.loc).pathname.split('/').filter(Boolean)[0]||'(raiz)'; g[p]=(g[p]||0)+1; } catch{} });
+            return Object.entries(g).map(([p,c]) => ({path:p,count:c})).sort((a,b) => b.count-a.count);
+        }
+
+        function calcBudget(r, t, d, s, a, lr) {
+            const w = r.total+t.total+d.count+s.total+a.total+lr.total, u = Math.max(0, allUrls.length-w);
+            return { wasted:w, useful:u, wastedPct:((w/allUrls.length)*100).toFixed(1), usefulPct:((u/allUrls.length)*100).toFixed(1) };
+        }
+
+        loadSitemap();
+    </script>
+</body>
+</html>
