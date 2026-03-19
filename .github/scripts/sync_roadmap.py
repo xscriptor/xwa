@@ -32,6 +32,7 @@ import json
 import re
 import subprocess
 import sys
+import time
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -105,13 +106,51 @@ def parse_roadmap(path: Path) -> list[Task]:
 
 # ── GitHub CLI helpers ───────────────────────────────────────────────────────
 
-def gh(args: list[str], repo: str | None = None) -> str:
-    """Run a gh CLI command and return stdout."""
+def _is_transient_gh_error(stderr: str) -> bool:
+    """Detect transient GH API/CLI errors worth retrying."""
+    text = stderr.lower()
+    transient_markers = [
+        "could not resolve to a node",
+        "not found",
+        "timed out",
+        "timeout",
+        "connection reset",
+        "temporarily unavailable",
+        "secondary rate limit",
+        "http 502",
+        "http 503",
+        "http 504",
+    ]
+    return any(marker in text for marker in transient_markers)
+
+
+def gh(args: list[str], repo: str | None = None, retries: int = 3) -> str:
+    """Run a gh CLI command and return stdout, retrying transient failures."""
     cmd = ["gh"] + args
     if repo:
         cmd += ["--repo", repo]
-    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    return result.stdout.strip()
+
+    delay_seconds = 1.0
+    for attempt in range(retries + 1):
+        result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+        if result.returncode == 0:
+            return result.stdout.strip()
+
+        can_retry = attempt < retries and _is_transient_gh_error(result.stderr)
+        if can_retry:
+            time.sleep(delay_seconds)
+            delay_seconds *= 2
+            continue
+
+        raise subprocess.CalledProcessError(
+            result.returncode,
+            cmd,
+            output=result.stdout,
+            stderr=result.stderr,
+        )
+
+    # Unreachable, but keeps type-checkers happy.
+    raise RuntimeError("Unexpected gh execution state")
 
 
 def get_issue(number: int, repo: str | None) -> dict:
@@ -315,8 +354,18 @@ def main() -> None:
 
                 # If the task is already done, close the issue immediately
                 if task.state == TaskState.DONE:
-                    close_issue(issue_num, args.repo)
-                    print(f"  closed #{issue_num} (already done)")
+                    try:
+                        close_issue(issue_num, args.repo)
+                        print(f"  closed #{issue_num} (already done)")
+                    except subprocess.CalledProcessError as e:
+                        # Do not fail the whole sync for a transient close error.
+                        # Phase 2 will try to reconcile state again.
+                        err = (e.stderr or "").strip() if hasattr(e, "stderr") else str(e)
+                        print(
+                            f"  warning: could not close #{issue_num} now; "
+                            f"will retry in sync phase ({err})",
+                            file=sys.stderr,
+                        )
 
                 task.issue_number = issue_num
                 update_roadmap_line(
