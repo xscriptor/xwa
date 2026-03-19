@@ -7,6 +7,7 @@ from core.models.scan_results import (
     AccessibilityResults, StructureResults
 )
 from core.modules.security import run_security_analysis
+from core.modules.security import run_security_snapshot
 from core.modules.sitemap import run_sitemap_analysis
 from core.modules.accessibility import run_accessibility_analysis
 from core.modules.structure import run_structure_analysis
@@ -37,15 +38,23 @@ scan_progress = {}
 
 
 async def fetch_page_html(session: aiohttp.ClientSession, url: str) -> dict:
-    """Fetch HTML content from a URL for accessibility analysis."""
+    """Fetch HTML content and headers from a URL for per-page analysis."""
     try:
         async with session.get(url, timeout=aiohttp.ClientTimeout(total=8)) as response:
             if response.status == 200:
+                content_type = response.headers.get("Content-Type", "")
+                if "text/html" not in content_type:
+                    return {"url": url, "html": None, "headers": {}, "ok": False}
                 html = await response.text()
-                return {"url": url, "html": html, "ok": True}
+                return {
+                    "url": url,
+                    "html": html,
+                    "headers": dict(response.headers),
+                    "ok": True,
+                }
     except Exception:
         pass
-    return {"url": url, "html": None, "ok": False}
+    return {"url": url, "html": None, "headers": {}, "ok": False}
 
 
 async def batch_fetch_html(urls: list, max_concurrent: int = 5) -> list:
@@ -96,17 +105,46 @@ def sync_core_execution(url: str, session: Session, scan_id: int):
         scan_progress[scan_id] = "Running Structure Analysis..."
         main_structure = run_structure_analysis(html_content, url)
 
-        # Per-URL accessibility: sample up to 15 crawled URLs
+        # Per-URL analysis: sample up to 25 discovered URLs
         per_url_accessibility = []
+        per_url_seo = []
+        per_url_security = []
+        per_url_structure = []
         crawled_urls = sitemap_results.get("all_urls", [])
-        sample_urls = [u for u in crawled_urls if u != url][:15]
+        sample_urls = [u for u in crawled_urls if u != url][:25]
         if sample_urls:
-            scan_progress[scan_id] = f"Running Accessibility on {len(sample_urls)} sub-pages..."
+            scan_progress[scan_id] = f"Running per-link analysis on {len(sample_urls)} sub-pages..."
             page_results = asyncio.run(batch_fetch_html(sample_urls))
             for page in page_results:
                 if page["ok"] and page["html"]:
-                    a11y = run_accessibility_analysis(page["html"], page["url"])
+                    page_html = page["html"]
+                    page_url = page["url"]
+
+                    # Accessibility per URL
+                    a11y = run_accessibility_analysis(page_html, page_url)
                     per_url_accessibility.append(a11y)
+
+                    # SEO per URL (no robots check here to keep performance stable)
+                    per_url_seo.append({
+                        "url": page_url,
+                        "standard_meta": extract_standard_meta_tags(page_html),
+                        "social_meta": extract_social_meta_tags(page_html),
+                        "structured_data": extract_structured_data(page_html),
+                        "link_tags": extract_link_tags(page_html),
+                        "headings": analyze_headings(page_html),
+                        "image_alts": analyze_image_alts(page_html),
+                        "text_ratio": analyze_text_ratio(page_html),
+                        "canonical": extract_canonical(page_html),
+                    })
+
+                    # Security snapshot per URL
+                    per_url_security.append(
+                        run_security_snapshot(page_url, page.get("headers", {}), page_html)
+                    )
+
+                    # Structure per URL
+                    per_url_structure.append(run_structure_analysis(page_html, page_url))
+
 
         scan_progress[scan_id] = "Formatting Final Report..."
 
@@ -122,16 +160,21 @@ def sync_core_execution(url: str, session: Session, scan_id: int):
                 image_alts=alts,
                 text_ratio=ratio,
                 canonical=canonical,
-                robots_txt=robots
+                robots_txt=robots,
+                per_url=per_url_seo,
             ),
             sitemap=SitemapResults(**sitemap_results),
-            security=SecurityResults(**security_results),
+            security=SecurityResults(
+                **security_results,
+                per_url=per_url_security,
+            ),
             accessibility=AccessibilityResults(
                 main_page=main_accessibility,
                 per_url=per_url_accessibility
             ),
             structure=StructureResults(
-                main_page=main_structure
+                main_page=main_structure,
+                per_url=per_url_structure,
             )
         )
 

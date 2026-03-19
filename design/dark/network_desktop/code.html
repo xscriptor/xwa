@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CYBER_AUDIT_PROTOCOL // NETWORK_ANALYSIS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=Fira+Code:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-highest": "#353534",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#313030",
+                        "surface-tint": "#2ae500",
+                        "secondary-fixed": "#6ff6ff",
+                        "on-primary-fixed": "#022100",
+                        "on-secondary-fixed-variant": "#004f53",
+                        "secondary-container": "#00f1fd",
+                        "on-primary-fixed-variant": "#095300",
+                        "primary-fixed-dim": "#2ae500",
+                        "on-surface": "#e5e2e1",
+                        "surface-dim": "#131313",
+                        "on-error": "#690005",
+                        "secondary": "#dcfdff",
+                        "on-secondary-container": "#006a6f",
+                        "on-tertiary-container": "#835900",
+                        "primary-container": "#39ff14",
+                        "on-tertiary-fixed-variant": "#614000",
+                        "on-surface-variant": "#baccb0",
+                        "surface-container": "#201f1f",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#00dce6",
+                        "tertiary": "#fff8f4",
+                        "on-tertiary-fixed": "#281800",
+                        "tertiary-container": "#ffd79e",
+                        "error-container": "#93000a",
+                        "surface": "#131313",
+                        "on-primary-container": "#107100",
+                        "on-secondary-fixed": "#002022",
+                        "background": "#131313",
+                        "primary": "#efffe3",
+                        "tertiary-fixed-dim": "#ffba43",
+                        "surface-container-lowest": "#0e0e0e",
+                        "primary-fixed": "#79ff5b",
+                        "on-secondary": "#00373a",
+                        "surface-container-high": "#2a2a2a",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffddaf",
+                        "inverse-primary": "#106e00",
+                        "surface-variant": "#353534",
+                        "on-primary": "#053900",
+                        "on-tertiary": "#432c00",
+                        "on-background": "#e5e2e1",
+                        "surface-bright": "#3a3939",
+                        "inverse-surface": "#e5e2e1",
+                        "outline": "#85967c",
+                        "outline-variant": "#3c4b35"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["Fira Code"]
+                    },
+                    borderRadius: { "DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scanline-overlay {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+        .clip-path-custom {
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+        }
+        .matrix-text {
+            text-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container overflow-hidden h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-neutral-950/80 backdrop-blur-md flex justify-between items-center w-full px-6 py-3 border-b border-neutral-800 font-['Space_Grotesk'] tracking-tighter uppercase">
+<div class="flex items-center gap-8">
+<div class="text-xl font-black text-lime-400 drop-shadow-[0_0_8px_rgba(57,255,20,0.5)]">CYBER_AUDIT_PROTOCOL</div>
+<nav class="hidden md:flex gap-6 text-xs font-bold">
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">STRUCTURE</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">SITEMAPS</a>
+<a class="text-lime-400 border-b-2 border-lime-400 pb-1" href="#">NETWORK</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">COMPLIANCE</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">SOCIAL</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">STACK</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:block relative">
+<input class="bg-neutral-900 border-none text-xs font-mono text-lime-400 focus:ring-1 focus:ring-lime-400 py-1 px-3 w-48" placeholder="SEARCH_NODE..." type="text"/>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 text-sm">search</span>
+</div>
+<div class="flex gap-3 text-neutral-400">
+<button class="hover:bg-lime-400/10 hover:text-lime-400 p-1 transition-colors"><span class="material-symbols-outlined" data-icon="terminal">terminal</span></button>
+<button class="hover:bg-lime-400/10 hover:text-lime-400 p-1 transition-colors"><span class="material-symbols-outlined" data-icon="settings">settings</span></button>
+<button class="hover:bg-lime-400/10 hover:text-lime-400 p-1 transition-colors"><span class="material-symbols-outlined" data-icon="logout">logout</span></button>
+</div>
+<div class="w-8 h-8 bg-neutral-800 border border-lime-400/30 overflow-hidden">
+<img alt="OPERATOR_01_AVATAR" class="w-full h-full object-cover grayscale brightness-150" data-alt="Cyberpunk operator avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBubFs6vydtMS5uZDrD6OvRRVWlzVWvSAVrBEozws8l6krMaylvpS1pdMQLta3v_A17-hn7WwBqkSHBXg-wYf7JEuj8YPhVRwDfQvGqbvrVwRmEp7W_kxBa2CBMmnjZ2QfwK5gpxB_yfIZmjgidEqWpmUI218FzAiLSxQkeKyGr6FRx0Lz6h0l_0qZKk6pwg3X0Hwl50M51SwBkCbNkYf49iMk68Mb86Zfl6xlhnKPzoFlhceJJY4aD5BxHs9927CMmIk6XF4bJJ2M"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 pt-14 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col pt-16 w-64 bg-neutral-900 border-r border-neutral-800 z-40 hidden md:flex">
+<div class="px-6 py-4 border-b border-neutral-800 mb-4">
+<div class="text-lime-400 font-bold font-mono text-sm">AUDIT_v2.0</div>
+<div class="text-[10px] text-neutral-500 font-mono tracking-widest uppercase">STATUS: ENCRYPTED</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-neutral-400 flex items-center gap-3 px-6 py-3 hover:bg-neutral-800 transition-transform hover:translate-x-1 font-mono text-xs uppercase" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="dashboard">dashboard</span> DASHBOARD
+                </a>
+<a class="text-neutral-400 flex items-center gap-3 px-6 py-3 hover:bg-neutral-800 transition-transform hover:translate-x-1 font-mono text-xs uppercase" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="radar">radar</span> SCAN_ENGINE
+                </a>
+<a class="bg-lime-400 text-black font-bold flex items-center gap-3 px-6 py-3 clip-path-custom font-mono text-xs uppercase" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span> THREAT_INTEL
+                </a>
+<a class="text-neutral-400 flex items-center gap-3 px-6 py-3 hover:bg-neutral-800 transition-transform hover:translate-x-1 font-mono text-xs uppercase" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="analytics">analytics</span> REPORTS
+                </a>
+<a class="text-neutral-400 flex items-center gap-3 px-6 py-3 hover:bg-neutral-800 transition-transform hover:translate-x-1 font-mono text-xs uppercase" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span> SYSTEM_LOGS
+                </a>
+<a class="text-neutral-400 flex items-center gap-3 px-6 py-3 hover:bg-neutral-800 transition-transform hover:translate-x-1 font-mono text-xs uppercase" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="lock">lock</span> VAULT
+                </a>
+</nav>
+<div class="p-4 bg-surface-container-low border-t border-neutral-800">
+<button class="w-full bg-primary-container text-on-primary-container py-2 text-xs font-black uppercase tracking-tighter hover:brightness-125 active:scale-95 transition-all">
+                    INITIATE_DEEP_SCAN
+                </button>
+</div>
+<div class="p-2 flex gap-2 border-t border-neutral-800">
+<a class="flex-1 text-center py-2 text-neutral-500 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help">help</span>
+</a>
+<a class="flex-1 text-center py-2 text-neutral-500 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="description">description</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 overflow-y-auto bg-surface-dim relative">
+<div class="scanline-overlay absolute inset-0 z-0 opacity-20 pointer-events-none"></div>
+<div class="relative z-10 p-6 space-y-6">
+<!-- Page Header / Meta HUD -->
+<div class="flex justify-between items-end border-b border-neutral-800 pb-4">
+<div>
+<h1 class="font-headline text-4xl font-extrabold tracking-tighter text-on-surface uppercase italic">Network_Traffic_Intercept</h1>
+<p class="font-mono text-xs text-secondary-fixed opacity-70 mt-1">SOURCE: 192.168.1.44 // SESSION_ID: AZ-9921-X</p>
+</div>
+<div class="flex gap-4 font-mono text-[10px] items-center">
+<div class="text-right">
+<div class="text-neutral-500 uppercase">Latency</div>
+<div class="text-lime-400 font-bold">14ms AVG</div>
+</div>
+<div class="h-8 w-px bg-neutral-800"></div>
+<div class="text-right">
+<div class="text-neutral-500 uppercase">Requests</div>
+<div class="text-cyan-400 font-bold">142 TOTAL</div>
+</div>
+</div>
+</div>
+<!-- Waterfall & Real-time Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Real-time Traffic Stream (Left column) -->
+<div class="lg:col-span-4 space-y-4">
+<div class="bg-surface-container p-4 border-l-4 border-lime-400">
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-headline text-sm font-bold uppercase tracking-widest text-lime-400">Live_Stream_Data</h2>
+<span class="bg-lime-400 text-black text-[9px] px-1 font-bold animate-pulse">ACTIVE_RECV</span>
+</div>
+<div class="font-mono text-[10px] space-y-2 max-h-[500px] overflow-hidden opacity-80">
+<div class="flex gap-2">
+<span class="text-neutral-600">[12:04:11]</span>
+<span class="text-cyan-400">GET</span>
+<span class="text-on-surface truncate">/api/v1/auth/handshake</span>
+<span class="text-lime-400 ml-auto">200</span>
+</div>
+<div class="flex gap-2">
+<span class="text-neutral-600">[12:04:11]</span>
+<span class="text-cyan-400">POST</span>
+<span class="text-on-surface truncate">/telemetry/report_batch</span>
+<span class="text-lime-400 ml-auto">201</span>
+</div>
+<div class="flex gap-2">
+<span class="text-neutral-600">[12:04:12]</span>
+<span class="text-amber-400">GET</span>
+<span class="text-on-surface truncate">/assets/scripts/bundle.js</span>
+<span class="text-neutral-400 ml-auto">304</span>
+</div>
+<div class="flex gap-2 bg-lime-400/5 py-0.5">
+<span class="text-neutral-600">[12:04:12]</span>
+<span class="text-cyan-400">WSS</span>
+<span class="text-on-surface truncate">_CONNECTING_TO_SOCKET_NODE_04</span>
+<span class="text-lime-400 ml-auto">UP</span>
+</div>
+<div class="flex gap-2">
+<span class="text-neutral-600">[12:04:13]</span>
+<span class="text-red-400">GET</span>
+<span class="text-on-surface truncate">/favicon-32x32.png</span>
+<span class="text-red-400 ml-auto">404</span>
+</div>
+<div class="flex gap-2">
+<span class="text-neutral-600">[12:04:14]</span>
+<span class="text-cyan-400">GET</span>
+<span class="text-on-surface truncate">/api/v1/user/settings</span>
+<span class="text-lime-400 ml-auto">200</span>
+</div>
+<!-- Repeat of matrix-like data stream -->
+<div class="flex gap-2 opacity-50">
+<span class="text-neutral-600">[12:04:15]</span>
+<span class="text-cyan-400">GET</span>
+<span class="text-on-surface truncate">/api/v1/config/geo</span>
+<span class="text-lime-400 ml-auto">200</span>
+</div>
+<div class="flex gap-2 opacity-30">
+<span class="text-neutral-600">[12:04:16]</span>
+<span class="text-cyan-400">POST</span>
+<span class="text-on-surface truncate">/logs/sync</span>
+<span class="text-lime-400 ml-auto">200</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 space-y-4">
+<h3 class="font-headline text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Protocol_Distribution</h3>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between text-[10px] font-mono mb-1">
+<span class="text-on-surface">HTTP/3 (QUIC)</span>
+<span class="text-lime-400">62%</span>
+</div>
+<div class="h-1.5 w-full bg-neutral-800 flex">
+<div class="h-full bg-lime-400 w-[62%]"></div>
+<div class="h-full bg-lime-400/20 w-[1%] animate-pulse"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] font-mono mb-1">
+<span class="text-on-surface">HTTP/2</span>
+<span class="text-cyan-400">31%</span>
+</div>
+<div class="h-1.5 w-full bg-neutral-800">
+<div class="h-full bg-cyan-400 w-[31%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] font-mono mb-1">
+<span class="text-on-surface">HTTP/1.1</span>
+<span class="text-neutral-500">7%</span>
+</div>
+<div class="h-1.5 w-full bg-neutral-800">
+<div class="h-full bg-neutral-600 w-[7%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Waterfall Chart (Right column) -->
+<div class="lg:col-span-8 space-y-4">
+<div class="bg-surface-container border border-neutral-800 overflow-hidden">
+<div class="bg-neutral-900 px-4 py-2 flex items-center justify-between border-b border-neutral-800">
+<span class="font-mono text-[10px] text-lime-400">NETWORK_WATERFALL_SEQUENCE_v1.2</span>
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-lime-400"></div>
+<div class="w-2 h-2 rounded-full bg-neutral-700"></div>
+<div class="w-2 h-2 rounded-full bg-neutral-700"></div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-mono text-[10px]">
+<thead>
+<tr class="bg-surface-container-highest/50 text-neutral-400 border-b border-neutral-800">
+<th class="px-4 py-2 font-medium">NAME</th>
+<th class="px-2 py-2 font-medium">STATUS</th>
+<th class="px-2 py-2 font-medium">TYPE</th>
+<th class="px-2 py-2 font-medium">SIZE</th>
+<th class="px-2 py-2 font-medium">TIME</th>
+<th class="px-4 py-2 font-medium w-64">WATERFALL</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-800/50">
+<!-- Row 1 -->
+<tr class="hover:bg-lime-400/5 group">
+<td class="px-4 py-2 text-on-surface truncate max-w-[150px]">index.html</td>
+<td class="px-2 py-2 text-lime-400">200</td>
+<td class="px-2 py-2 text-neutral-500">document</td>
+<td class="px-2 py-2 text-neutral-300">12.4 kB</td>
+<td class="px-2 py-2 text-cyan-400 font-bold">42ms</td>
+<td class="px-4 py-2">
+<div class="relative w-full h-2 bg-neutral-800/50">
+<div class="absolute left-0 top-0 h-full bg-lime-400 w-4 shadow-[0_0_8px_rgba(57,255,20,0.5)]"></div>
+<div class="absolute left-4 top-0 h-full bg-cyan-400 w-8"></div>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-lime-400/5 group">
+<td class="px-4 py-2 text-on-surface truncate max-w-[150px]">style.min.css</td>
+<td class="px-2 py-2 text-lime-400">200</td>
+<td class="px-2 py-2 text-neutral-500">stylesheet</td>
+<td class="px-2 py-2 text-neutral-300">45.1 kB</td>
+<td class="px-2 py-2 text-cyan-400 font-bold">112ms</td>
+<td class="px-4 py-2">
+<div class="relative w-full h-2 bg-neutral-800/50">
+<div class="absolute left-12 top-0 h-full bg-lime-400 w-10 shadow-[0_0_8px_rgba(57,255,20,0.5)]"></div>
+<div class="absolute left-[88px] top-0 h-full bg-cyan-400 w-16"></div>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-lime-400/5 group">
+<td class="px-4 py-2 text-on-surface truncate max-w-[150px]">core-lib.js</td>
+<td class="px-2 py-2 text-lime-400">200</td>
+<td class="px-2 py-2 text-neutral-500">script</td>
+<td class="px-2 py-2 text-neutral-300">288 kB</td>
+<td class="px-2 py-2 text-cyan-400 font-bold">340ms</td>
+<td class="px-4 py-2">
+<div class="relative w-full h-2 bg-neutral-800/50">
+<div class="absolute left-24 top-0 h-full bg-lime-400 w-16 shadow-[0_0_8px_rgba(57,255,20,0.5)]"></div>
+<div class="absolute left-[160px] top-0 h-full bg-cyan-400 w-32"></div>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-lime-400/5 group">
+<td class="px-4 py-2 text-on-surface truncate max-w-[150px]">api/v1/auth</td>
+<td class="px-2 py-2 text-lime-400">200</td>
+<td class="px-2 py-2 text-neutral-500">fetch</td>
+<td class="px-2 py-2 text-neutral-300">1.2 kB</td>
+<td class="px-2 py-2 text-cyan-400 font-bold">88ms</td>
+<td class="px-4 py-2">
+<div class="relative w-full h-2 bg-neutral-800/50">
+<div class="absolute left-40 top-0 h-full bg-lime-400 w-24 shadow-[0_0_8px_rgba(57,255,20,0.5)]"></div>
+<div class="absolute left-[256px] top-0 h-full bg-cyan-400 w-4"></div>
+</div>
+</td>
+</tr>
+<!-- Row 5 (Delayed/Error) -->
+<tr class="bg-red-900/10 group">
+<td class="px-4 py-2 text-red-400 truncate max-w-[150px]">tracker.js</td>
+<td class="px-2 py-2 text-red-500">TIMEOUT</td>
+<td class="px-2 py-2 text-neutral-500">script</td>
+<td class="px-2 py-2 text-neutral-300">0 B</td>
+<td class="px-2 py-2 text-red-400 font-bold">5000ms</td>
+<td class="px-4 py-2">
+<div class="relative w-full h-2 bg-neutral-800/50">
+<div class="absolute left-[200px] top-0 h-full bg-red-500 w-32 animate-pulse"></div>
+</div>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-lime-400/5 group">
+<td class="px-4 py-2 text-on-surface truncate max-w-[150px]">hero-bg.webp</td>
+<td class="px-2 py-2 text-lime-400">200</td>
+<td class="px-2 py-2 text-neutral-500">image</td>
+<td class="px-2 py-2 text-neutral-300">1.4 MB</td>
+<td class="px-2 py-2 text-cyan-400 font-bold">890ms</td>
+<td class="px-4 py-2">
+<div class="relative w-full h-2 bg-neutral-800/50">
+<div class="absolute left-[120px] top-0 h-full bg-lime-400 w-8 shadow-[0_0_8px_rgba(57,255,20,0.5)]"></div>
+<div class="absolute left-[152px] top-0 h-full bg-cyan-400 w-40"></div>
+</div>
+</td>
+</tr>
+<!-- Row 7 -->
+<tr class="hover:bg-lime-400/5 group">
+<td class="px-4 py-2 text-on-surface truncate max-w-[150px]">fonts/space.woff2</td>
+<td class="px-2 py-2 text-neutral-400">304</td>
+<td class="px-2 py-2 text-neutral-500">font</td>
+<td class="px-2 py-2 text-neutral-300">140 B</td>
+<td class="px-2 py-2 text-cyan-400 font-bold">12ms</td>
+<td class="px-4 py-2">
+<div class="relative w-full h-2 bg-neutral-800/50">
+<div class="absolute left-[60px] top-0 h-full bg-neutral-400 w-2"></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Legend HUD -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-low p-3 flex items-center gap-3">
+<div class="w-3 h-3 bg-lime-400"></div>
+<div class="font-mono text-[9px] text-neutral-400">DNS / CONNECT / TTFB</div>
+</div>
+<div class="bg-surface-container-low p-3 flex items-center gap-3">
+<div class="w-3 h-3 bg-cyan-400"></div>
+<div class="font-mono text-[9px] text-neutral-400">CONTENT DOWNLOAD</div>
+</div>
+<div class="bg-surface-container-low p-3 flex items-center gap-3">
+<div class="w-3 h-3 bg-red-500"></div>
+<div class="font-mono text-[9px] text-neutral-400">STALLED / BLOCKING</div>
+</div>
+<div class="bg-surface-container-low p-3 flex items-center gap-3">
+<div class="w-3 h-3 bg-neutral-400"></div>
+<div class="font-mono text-[9px] text-neutral-400">CACHED (DISK/MEM)</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Metrics / Transaction Log -->
+<div class="bg-surface-container-highest p-4 flex flex-wrap gap-8 items-center border-t border-lime-400/30">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-lime-400" data-icon="cloud_download">cloud_download</span>
+<div>
+<div class="text-[9px] text-neutral-400 uppercase">Transfer Size</div>
+<div class="text-xs font-mono font-bold">2.44 MB</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-cyan-400" data-icon="timer">timer</span>
+<div>
+<div class="text-[9px] text-neutral-400 uppercase">TTFB (Median)</div>
+<div class="text-xs font-mono font-bold text-cyan-400">22.4 ms</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-400" data-icon="security">security</span>
+<div>
+<div class="text-[9px] text-neutral-400 uppercase">TLS Handshake</div>
+<div class="text-xs font-mono font-bold text-amber-400">v1.3 (ChaCha20)</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-lime-400" data-icon="dynamic_feed">dynamic_feed</span>
+<div>
+<div class="text-[9px] text-neutral-400 uppercase">Compression</div>
+<div class="text-xs font-mono font-bold">Brotli (88% Saved)</div>
+</div>
+</div>
+<div class="ml-auto flex gap-4">
+<button class="bg-neutral-800 text-[10px] font-mono px-4 py-2 hover:bg-neutral-700 uppercase border border-neutral-700">Export_HAR</button>
+<button class="bg-lime-400 text-black text-[10px] font-mono font-bold px-4 py-2 hover:brightness-125 uppercase">Flush_Cache</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Mobile Nav Anchor -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-neutral-900 border-t border-neutral-800 flex justify-around p-3 z-50">
+<button class="text-lime-400 flex flex-col items-center">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[8px] font-mono">DASH</span>
+</button>
+<button class="text-neutral-500 flex flex-col items-center">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+<span class="text-[8px] font-mono">SCAN</span>
+</button>
+<button class="text-neutral-500 flex flex-col items-center">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="text-[8px] font-mono">INTEL</span>
+</button>
+<button class="text-neutral-500 flex flex-col items-center">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="text-[8px] font-mono">LOGS</span>
+</button>
+</nav>
+</body></html>

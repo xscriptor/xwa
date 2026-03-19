@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getReport, openProgressStream, triggerScan } from "@/lib/api";
+import type { ScanReport } from "@/lib/types";
+import { type ReportTabKey } from "@/lib/navigation";
 import "./ReportDashboard.css";
 import OverviewTab from "./tabs/OverviewTab";
 import SeoTab from "./tabs/SeoTab";
@@ -8,34 +11,35 @@ import SecurityTab from "./tabs/SecurityTab";
 import SitemapTab from "./tabs/SitemapTab";
 import AccessibilityTab from "./tabs/AccessibilityTab";
 import StructureTab from "./tabs/StructureTab";
+import PerformanceTab from "./tabs/PerformanceTab";
+import ContentTab from "./tabs/ContentTab";
+import LinksTab from "./tabs/LinksTab";
+import NetworkTab from "./tabs/NetworkTab";
+import ComplianceTab from "./tabs/ComplianceTab";
+import SocialTab from "./tabs/SocialTab";
+import StackTab from "./tabs/StackTab";
 
-interface ScanReport {
-  target_url: string;
-  scan_timestamp: string;
-  seo: any;
-  sitemap: any;
-  security: any;
-  accessibility: any;
-  structure: any;
-}
-
-type TabKey = "overview" | "seo" | "security" | "sitemap" | "accessibility" | "structure";
+type TabKey = ReportTabKey;
 
 function computeHealthScore(r: ScanReport): number {
   let s = 100;
+  const missingAlt = r.seo.image_alts?.missing_alt || 0;
+  const cookieIssues = r.security.cookies?.issues?.length || 0;
+  const exposedPaths = r.security.sensitive_paths_found?.length || 0;
+  const brokenLinks = r.sitemap.broken_links?.length || 0;
   if (!r.seo.standard_meta?.title) s -= 10;
   if (!r.seo.standard_meta?.description) s -= 10;
   if (r.seo.headings?.missing_h1) s -= 8;
   if (r.seo.headings?.multiple_h1) s -= 5;
-  if ((r.seo.image_alts?.missing_alt || 0) > 0) s -= Math.min(r.seo.image_alts.missing_alt * 2, 10);
+  if (missingAlt > 0) s -= Math.min(missingAlt * 2, 10);
   if (!r.seo.canonical) s -= 5;
   if (!r.seo.robots_txt?.presence) s -= 3;
   s -= (r.security.headers?.missing_headers?.length || 0) * 3;
   if (!r.security.ssl?.valid) s -= 15;
   if (r.security.ssl?.is_expired) s -= 10;
-  if ((r.security.cookies?.issues?.length || 0) > 0) s -= Math.min(r.security.cookies.issues.length * 2, 10);
-  if ((r.security.sensitive_paths_found?.length || 0) > 0) s -= r.security.sensitive_paths_found.length * 5;
-  if ((r.sitemap.broken_links?.length || 0) > 0) s -= Math.min(r.sitemap.broken_links.length * 2, 15);
+  if (cookieIssues > 0) s -= Math.min(cookieIssues * 2, 10);
+  if (exposedPaths > 0) s -= exposedPaths * 5;
+  if (brokenLinks > 0) s -= Math.min(brokenLinks * 2, 15);
   const a11y = r.accessibility?.main_page?.summary;
   if (a11y) s -= Math.min((a11y.errors || 0) * 3 + (a11y.warnings || 0), 15);
   const struct = r.structure?.main_page?.summary;
@@ -45,54 +49,60 @@ function computeHealthScore(r: ScanReport): number {
 
 function collectWarnings(r: ScanReport): string[] {
   const w: string[] = [];
+  const missingAlt = r.seo.image_alts?.missing_alt || 0;
+  const missingHeaders = r.security.headers?.missing_headers?.length || 0;
+  const exposedPaths = r.security.sensitive_paths_found?.length || 0;
+  const cookieIssues = r.security.cookies?.issues?.length || 0;
+  const brokenLinks = r.sitemap.broken_links?.length || 0;
   if (!r.seo.standard_meta?.title) w.push("Page title is missing");
   if (!r.seo.standard_meta?.description) w.push("Meta description is missing");
   if (r.seo.headings?.missing_h1) w.push("No H1 tag found");
   if (r.seo.headings?.multiple_h1) w.push("Multiple H1 tags");
-  if ((r.seo.image_alts?.missing_alt || 0) > 0) w.push(`${r.seo.image_alts.missing_alt} image(s) missing alt`);
+  if (missingAlt > 0) w.push(`${missingAlt} image(s) missing alt`);
   if (!r.seo.canonical) w.push("No canonical URL");
   if (!r.seo.robots_txt?.presence) w.push("robots.txt not found");
   if (!r.security.ssl?.valid) w.push("SSL invalid/missing");
   if (r.security.ssl?.is_expired) w.push("SSL expired");
-  if ((r.security.headers?.missing_headers?.length || 0) > 0) w.push(`${r.security.headers.missing_headers.length} security header(s) missing`);
-  if ((r.security.sensitive_paths_found?.length || 0) > 0) w.push(`${r.security.sensitive_paths_found.length} sensitive path(s) exposed`);
-  if ((r.security.cookies?.issues?.length || 0) > 0) w.push(`${r.security.cookies.issues.length} cookie issue(s)`);
-  if ((r.sitemap.broken_links?.length || 0) > 0) w.push(`${r.sitemap.broken_links.length} broken link(s)`);
+  if (missingHeaders > 0) w.push(`${missingHeaders} security header(s) missing`);
+  if (exposedPaths > 0) w.push(`${exposedPaths} sensitive path(s) exposed`);
+  if (cookieIssues > 0) w.push(`${cookieIssues} cookie issue(s)`);
+  if (brokenLinks > 0) w.push(`${brokenLinks} broken link(s)`);
   const a11y = r.accessibility?.main_page;
+  const missingAriaLabels = a11y?.aria?.missing_labels || 0;
   if (a11y?.language && !a11y.language.has_lang) w.push("Missing html lang attribute");
   if (a11y?.language && !a11y.language.has_charset) w.push("Missing charset declaration");
-  if ((a11y?.aria?.missing_labels || 0) > 0) w.push(`${a11y.aria.missing_labels} element(s) missing ARIA label`);
+  if (missingAriaLabels > 0) w.push(`${missingAriaLabels} element(s) missing ARIA label`);
   const struct = r.structure?.main_page;
-  if (struct?.summary?.total_issues > 0) w.push(`${struct.summary.total_issues} structure issue(s) found`);
+  const structIssues = struct?.summary?.total_issues || 0;
+  if (structIssues > 0) w.push(`${structIssues} structure issue(s) found`);
   if (struct?.semantic && !struct.semantic.has_main) w.push("Missing <main> landmark");
   return w;
 }
 
-export default function ReportDashboard({ scanId }: { scanId: string }) {
+export default function ReportDashboard({
+  scanId,
+  activeTab,
+}: {
+  scanId: string;
+  activeTab: TabKey;
+}) {
+
   const [status, setStatus] = useState("Connecting to engine...");
   const [isCompleted, setIsCompleted] = useState(false);
   const [reportData, setReportData] = useState<ScanReport | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<TabKey>("overview");
 
   const handleQuickScan = async (targetUrl: string) => {
     try {
-      const res = await fetch("http://localhost:8000/api/scan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: targetUrl })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        window.location.href = `/reports/${data.scan_id}`;
-      }
+      const data = await triggerScan(targetUrl);
+      window.location.href = `/reports/${data.scan_id}/overview`;
     } catch (err) {
       console.error("Scan trigger failed", err);
     }
   };
 
   useEffect(() => {
-    const es = new EventSource(`http://localhost:8000/api/progress/${scanId}`);
+    const es = openProgressStream(scanId);
     es.onmessage = (event) => {
       const s = event.data;
       setStatus(s);
@@ -105,11 +115,13 @@ export default function ReportDashboard({ scanId }: { scanId: string }) {
 
   useEffect(() => {
     if (isCompleted && !error) {
-      fetch(`http://localhost:8000/api/reports/${scanId}`)
-        .then(r => r.json())
+      getReport<ScanReport>(scanId)
         .then(data => {
-          if (data.status === "In Progress") setIsCompleted(false);
-          else setReportData(data);
+          if ("status" in data) {
+            if (data.status === "In Progress") setIsCompleted(false);
+          } else {
+            setReportData(data as ScanReport);
+          }
         })
         .catch(() => setError("Failed to load report data"));
     }
@@ -117,7 +129,7 @@ export default function ReportDashboard({ scanId }: { scanId: string }) {
 
   if (error) {
     return (
-      <div className="dashboard-container">
+      <div className="dashboard-layout">
         <div className="glass-panel error-panel"><h2>SCAN_FAILED</h2><p>{error}</p></div>
       </div>
     );
@@ -125,12 +137,14 @@ export default function ReportDashboard({ scanId }: { scanId: string }) {
 
   if (!isCompleted || !reportData) {
     return (
-      <div className="dashboard-container loading-state">
-        <div className="glass-panel loader-panel">
-          <div className="pulse-ring"></div>
-          <h2>ANALYSIS_IN_PROGRESS</h2>
-          <p className="status-text">{status}</p>
-          <div className="progress-bar"><div className="progress-fill indeterminate"></div></div>
+      <div className="dashboard-layout">
+        <div className="loading-state">
+          <div className="glass-panel loader-panel">
+            <div className="pulse-ring"><span className="loader-x">X</span></div>
+            <h2 style={{ fontFamily: 'var(--font-headline)', fontWeight: 700, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '-0.02em' }}>ANALYSIS_IN_PROGRESS</h2>
+            <p className="status-text">{status}</p>
+            <div className="progress-bar"><div className="progress-fill indeterminate"></div></div>
+          </div>
         </div>
       </div>
     );
@@ -139,56 +153,50 @@ export default function ReportDashboard({ scanId }: { scanId: string }) {
   const healthScore = computeHealthScore(reportData);
   const warnings = collectWarnings(reportData);
 
-  const tabs: { key: TabKey; label: string }[] = [
-    { key: "overview", label: "Overview" },
-    { key: "seo", label: "SEO" },
-    { key: "security", label: "Security" },
-    { key: "sitemap", label: "Sitemap" },
-    { key: "accessibility", label: "A11y" },
-    { key: "structure", label: "Structure" },
-  ];
-
   return (
-    <div className="dashboard-container fade-in">
-      <header className="dashboard-header glass-panel">
-        <div>
-          <h1>// {reportData.target_url}</h1>
-          <p className="scan-time">{new Date(reportData.scan_timestamp).toLocaleString()}</p>
-        </div>
-        <div className="header-actions">
-          <a href={`http://localhost:8000/api/export/md/${scanId}`} className="btn-secondary" download>.md</a>
-          <a href={`http://localhost:8000/api/export/jsonc/${scanId}`} className="btn-primary" download>.jsonc</a>
-        </div>
-      </header>
+    <div className="dashboard-layout">
+      <div className="dashboard-main">
+        <div className="scan-lines-overlay"></div>
 
-      <div className="tab-nav glass-panel">
-        {tabs.map(t => (
-          <button
-            key={t.key}
-            className={`tab-btn ${activeTab === t.key ? "active" : ""}`}
-            onClick={() => setActiveTab(t.key)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
+        {/* Header */}
+        <header className="dashboard-header">
+          <div>
+            <div className="header-module">TARGET_MODULE: {activeTab.toUpperCase()}_CORE</div>
+            <h1 className="header-title">
+              {reportData.target_url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+            </h1>
+          </div>
+          <div className="header-right">
+            <div className="header-score">{healthScore}%</div>
+            <div className="header-score-label">HEALTH_SCORE</div>
+          </div>
+        </header>
 
-      <div className="tab-content">
-        {activeTab === "overview" && (
-          <OverviewTab
-            seo={reportData.seo}
-            security={reportData.security}
-            sitemap={reportData.sitemap}
-            accessibility={reportData.accessibility}
-            healthScore={healthScore}
-            warnings={warnings}
-          />
-        )}
-        {activeTab === "seo" && <SeoTab seo={reportData.seo} />}
-        {activeTab === "security" && <SecurityTab security={reportData.security} />}
-        {activeTab === "sitemap" && <SitemapTab sitemap={reportData.sitemap} onQuickScan={handleQuickScan} />}
-        {activeTab === "accessibility" && <AccessibilityTab accessibility={reportData.accessibility} />}
-        {activeTab === "structure" && <StructureTab structure={reportData.structure} />}
+        {/* Tab Content */}
+        <div className="tab-content">
+          {activeTab === "overview" && (
+            <OverviewTab
+              seo={reportData.seo}
+              security={reportData.security}
+              sitemap={reportData.sitemap}
+              accessibility={reportData.accessibility}
+              healthScore={healthScore}
+              warnings={warnings}
+            />
+          )}
+          {activeTab === "seo" && <SeoTab seo={reportData.seo} />}
+          {activeTab === "security" && <SecurityTab security={reportData.security} />}
+          {activeTab === "sitemap" && <SitemapTab sitemap={reportData.sitemap} onQuickScan={handleQuickScan} />}
+          {activeTab === "accessibility" && <AccessibilityTab accessibility={reportData.accessibility} />}
+          {activeTab === "structure" && <StructureTab structure={reportData.structure} />}
+          {activeTab === "performance" && <PerformanceTab sitemap={reportData.sitemap} />}
+          {activeTab === "content" && <ContentTab seo={reportData.seo} sitemap={reportData.sitemap} structure={reportData.structure} />}
+          {activeTab === "links" && <LinksTab sitemap={reportData.sitemap} seo={reportData.seo} />}
+          {activeTab === "network" && <NetworkTab sitemap={reportData.sitemap} security={reportData.security} />}
+          {activeTab === "compliance" && <ComplianceTab security={reportData.security} accessibility={reportData.accessibility} seo={reportData.seo} />}
+          {activeTab === "social" && <SocialTab seo={reportData.seo} />}
+          {activeTab === "stack" && <StackTab security={reportData.security} sitemap={reportData.sitemap} />}
+        </div>
       </div>
     </div>
   );

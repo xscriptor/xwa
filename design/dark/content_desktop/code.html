@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CYBER_AUDIT_V1.0 - CONTENT_ANALYSIS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .scan-line {
+            background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 50%);
+            background-size: 100% 4px;
+        }
+        .glitch-border {
+            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #131313; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #39ff14; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#ffba43",
+                        "surface-tint": "#2ae500",
+                        "secondary-fixed-dim": "#00dce6",
+                        "inverse-on-surface": "#313030",
+                        "surface-bright": "#3a3939",
+                        "on-secondary": "#00373a",
+                        "primary": "#efffe3",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container-low": "#1c1b1b",
+                        "on-secondary-container": "#006a6f",
+                        "on-surface-variant": "#baccb0",
+                        "on-primary-fixed": "#022100",
+                        "on-tertiary-fixed": "#281800",
+                        "secondary-fixed": "#6ff6ff",
+                        "tertiary-container": "#ffd79e",
+                        "on-secondary-fixed-variant": "#004f53",
+                        "primary-container": "#39ff14",
+                        "on-tertiary-fixed-variant": "#614000",
+                        "background": "#131313",
+                        "surface": "#131313",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "surface-container": "#201f1f",
+                        "primary-fixed": "#79ff5b",
+                        "on-error": "#690005",
+                        "surface-dim": "#131313",
+                        "outline-variant": "#3c4b35",
+                        "on-tertiary-container": "#835900",
+                        "secondary": "#dcfdff",
+                        "tertiary-fixed": "#ffddaf",
+                        "surface-container-highest": "#353534",
+                        "secondary-container": "#00f1fd",
+                        "on-tertiary": "#432c00",
+                        "on-primary": "#053900",
+                        "primary-fixed-dim": "#2ae500",
+                        "on-surface": "#e5e2e1",
+                        "surface-variant": "#353534",
+                        "error-container": "#93000a",
+                        "tertiary": "#fff8f4",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary-fixed": "#002022",
+                        "on-primary-fixed-variant": "#095300",
+                        "inverse-primary": "#106e00",
+                        "on-background": "#e5e2e1",
+                        "on-primary-container": "#107100",
+                        "outline": "#85967c",
+                        "inverse-surface": "#e5e2e1"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface custom-scrollbar selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 h-16 bg-neutral-950/80 backdrop-blur-md dark:bg-black/80 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-lime-400" data-icon="terminal">terminal</span>
+<h1 class="font-['Space_Grotesk'] tracking-tighter uppercase text-xl font-bold text-lime-400 drop-shadow-[0_0_8px_rgba(57,255,20,0.6)]">CYBER_AUDIT_V1.0</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8 font-['Space_Grotesk'] tracking-tighter uppercase text-sm">
+<a class="text-neutral-500 hover:text-lime-300 transition-colors" href="#">DASHBOARD</a>
+<a class="text-lime-400 hover:text-lime-300 transition-colors" href="#">REPORTS</a>
+<a class="text-neutral-500 hover:text-lime-300 transition-colors" href="#">NETWORK</a>
+</nav>
+<div class="h-10 w-10 bg-neutral-800 flex items-center justify-center border border-lime-400/20">
+<span class="material-symbols-outlined text-lime-400" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<!-- NavigationDrawer -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 flex flex-col z-40 bg-neutral-900 dark:bg-neutral-950 border-r border-lime-400/10">
+<div class="p-4 border-b border-neutral-800">
+<p class="font-mono text-xs uppercase tracking-widest text-lime-400">AUDIT_CATEGORIES</p>
+<p class="font-mono text-[10px] text-neutral-500">SYSTEM_READY</p>
+</div>
+<nav class="flex-1 overflow-y-auto font-mono text-xs uppercase tracking-widest custom-scrollbar">
+<!-- Active item Content maps to Content -->
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="dashboard">dashboard</span> Overview
+            </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="speed">speed</span> Performance
+            </a>
+<a class="text-cyan-400 bg-cyan-950/30 border-l-2 border-cyan-400 py-3 px-4 flex items-center gap-3 translate-x-1" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span> Content
+            </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="search">search</span> SEO
+            </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="security">security</span> Security
+            </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="lan">lan</span> Network
+            </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="fact_check">fact_check</span> Compliance
+            </a>
+</nav>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 mt-16 p-8 h-[calc(100vh-64px)] overflow-y-auto bg-background scan-line">
+<!-- Dashboard Header -->
+<div class="flex justify-between items-end mb-12">
+<div>
+<p class="font-mono text-secondary-container text-xs mb-1 tracking-[0.3em]">ANALYSIS_TYPE: CONTENT_INTEGRITY</p>
+<h2 class="font-headline text-5xl font-black tracking-tighter text-on-surface italic">CORE_METRICS_V2.0</h2>
+</div>
+<div class="text-right">
+<p class="font-mono text-neutral-500 text-[10px] mb-2 uppercase">System_Health_Status</p>
+<div class="flex items-center gap-4">
+<div class="text-6xl font-headline font-bold text-primary-container drop-shadow-[0_0_15px_rgba(57,255,20,0.4)]">91%</div>
+<div class="h-12 w-[2px] bg-outline-variant/30"></div>
+<div class="text-left font-mono">
+<p class="text-xs text-primary-container uppercase">Optimal</p>
+<p class="text-[10px] text-neutral-500 uppercase">Latency: 14ms</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<!-- Readability Score -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-low border border-outline-variant/10 p-6 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 bg-surface-container-highest font-mono text-[9px] text-neutral-500">ID: READ_091</div>
+<h3 class="font-mono text-xs text-secondary-container mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="analytics">analytics</span>
+                    READABILITY_SCORE
+                </h3>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-end mb-2">
+<span class="text-4xl font-headline font-bold">88.4</span>
+<span class="text-[10px] font-mono text-neutral-500 mb-1">GRADE: B+</span>
+</div>
+<div class="h-2 w-full bg-neutral-800 flex gap-1">
+<div class="h-full bg-primary-container w-[88%] shadow-[0_0_8px_#39ff14]"></div>
+<div class="h-full bg-neutral-700 w-[12%]"></div>
+</div>
+<p class="mt-4 font-mono text-[10px] text-neutral-400 leading-relaxed uppercase">Text is accessible to 85% of standard users. Recommend reducing sentence complexity in legal modules.</p>
+</div>
+</div>
+<!-- Word Count Metrics -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-low border border-outline-variant/10 p-6 relative">
+<h3 class="font-mono text-xs text-secondary-container mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="format_list_numbered">format_list_numbered</span>
+                    VOLUME_METRICS
+                </h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-4">
+<p class="text-[9px] font-mono text-neutral-500 uppercase">Total_Words</p>
+<p class="text-2xl font-headline font-bold text-on-surface">42,891</p>
+</div>
+<div class="bg-surface-container-lowest p-4 border-l border-primary-container/20">
+<p class="text-[9px] font-mono text-neutral-500 uppercase">Avg_Per_Page</p>
+<p class="text-2xl font-headline font-bold text-on-surface">1,204</p>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-2 bg-primary-container/5 p-2">
+<span class="material-symbols-outlined text-primary-container text-xs" data-icon="trending_up">trending_up</span>
+<span class="font-mono text-[9px] text-primary-container uppercase">+12.4% From Last Scan</span>
+</div>
+</div>
+<!-- Duplication Check -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-low border border-outline-variant/10 p-6 relative">
+<h3 class="font-mono text-xs text-tertiary-fixed-dim mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="file_copy">file_copy</span>
+                    PLAGIARISM_SCAN
+                </h3>
+<div class="flex items-center gap-6">
+<div class="relative h-20 w-20 flex items-center justify-center">
+<svg class="absolute inset-0 transform -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#2a2a2a" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ffba43" stroke-dasharray="2, 100" stroke-width="3"></path>
+</svg>
+<span class="text-xl font-headline font-bold text-tertiary-fixed-dim">2%</span>
+</div>
+<div>
+<p class="font-mono text-xs text-on-surface uppercase mb-1">Low Risk Detected</p>
+<p class="font-mono text-[9px] text-neutral-500 uppercase">Internal: 1.2% | External: 0.8%</p>
+<button class="mt-3 font-mono text-[9px] text-tertiary-fixed-dim hover:underline uppercase">_VIEW_DUPLICATE_BLOCKS</button>
+</div>
+</div>
+</div>
+<!-- Keyword Density Heatmap (Bento Grid Style) -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-low border border-outline-variant/10 p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-mono text-xs text-secondary-container flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="grid_on">grid_on</span>
+                        KEYWORD_DENSITY_HEATMAP
+                    </h3>
+<div class="flex gap-2">
+<div class="h-3 w-3 bg-primary-container/20"></div>
+<div class="h-3 w-3 bg-primary-container/40"></div>
+<div class="h-3 w-3 bg-primary-container/60"></div>
+<div class="h-3 w-3 bg-primary-container/100 shadow-[0_0_8px_#39ff14]"></div>
+</div>
+</div>
+<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+<!-- Dynamic Grid Blocks -->
+<div class="aspect-square bg-primary-container/80 flex items-center justify-center group relative cursor-crosshair">
+<span class="font-mono text-[8px] text-on-primary font-bold opacity-0 group-hover:opacity-100 transition-opacity">CYBER</span>
+<div class="absolute inset-0 border border-primary-container group-hover:scale-110 transition-transform"></div>
+</div>
+<div class="aspect-square bg-primary-container/60"></div>
+<div class="aspect-square bg-primary-container/40"></div>
+<div class="aspect-square bg-primary-container/20"></div>
+<div class="aspect-square bg-primary-container/50"></div>
+<div class="aspect-square bg-primary-container/90 shadow-[0_0_10px_rgba(57,255,20,0.3)]"></div>
+<div class="aspect-square bg-primary-container/30"></div>
+<div class="aspect-square bg-primary-container/10"></div>
+<div class="aspect-square bg-primary-container/70"></div>
+<div class="aspect-square bg-primary-container/20"></div>
+<div class="aspect-square bg-primary-container/40"></div>
+<div class="aspect-square bg-primary-container/80"></div>
+<div class="aspect-square bg-primary-container/10"></div>
+<div class="aspect-square bg-primary-container/60"></div>
+<div class="aspect-square bg-primary-container/30"></div>
+<div class="aspect-square bg-primary-container/90"></div>
+<div class="aspect-square bg-primary-container/20"></div>
+<div class="aspect-square bg-primary-container/40"></div>
+<div class="aspect-square bg-primary-container/10"></div>
+<div class="aspect-square bg-primary-container/70"></div>
+<div class="aspect-square bg-primary-container/40"></div>
+<div class="aspect-square bg-primary-container/30"></div>
+<div class="aspect-square bg-primary-container/20"></div>
+<div class="aspect-square bg-primary-container/50"></div>
+</div>
+<div class="mt-6 flex flex-wrap gap-4 font-mono text-[10px]">
+<span class="px-2 py-1 bg-surface-container-highest border border-outline-variant/20 text-on-surface">"SECURITY" (4.2%)</span>
+<span class="px-2 py-1 bg-surface-container-highest border border-outline-variant/20 text-on-surface">"NETWORK" (3.8%)</span>
+<span class="px-2 py-1 bg-surface-container-highest border border-outline-variant/20 text-on-surface">"ENCRYPTION" (2.1%)</span>
+<span class="px-2 py-1 bg-surface-container-highest border border-outline-variant/20 text-neutral-500">_MORE...</span>
+</div>
+</div>
+<!-- Side Log/Status -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-highest border border-primary-container/10 p-6 flex flex-col">
+<h3 class="font-mono text-xs text-primary-container mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+                    LIVE_SCAN_FEED
+                </h3>
+<div class="flex-1 font-mono text-[10px] space-y-2 overflow-hidden opacity-80">
+<p class="text-neutral-500">[14:02:11] INITIALIZING CONTENT AGENT...</p>
+<p class="text-primary-container">[14:02:12] FETCHING DOM: /INDEX.HTML</p>
+<p class="text-neutral-500">[14:02:15] CALCULATING FLESH-KINCAID SCORE...</p>
+<p class="text-neutral-500">[14:02:18] COMPILING KEYWORD VECTOR...</p>
+<p class="text-secondary-container">[14:02:22] DETECTED SEMANTIC ENTITIES: 142</p>
+<p class="text-neutral-500">[14:02:25] CROSS-REFERENCING DB_DUPLICATES...</p>
+<p class="text-primary-container">[14:02:28] SCAN COMPLETE: 100% SUCCESS</p>
+</div>
+<button class="mt-6 w-full py-4 bg-primary-container text-on-primary-fixed font-headline font-bold uppercase tracking-widest hover:brightness-110 transition-all active:scale-[0.98]">
+                    RE-EXECUTE_FULL_SCAN
+                </button>
+</div>
+</div>
+<!-- Semantic Analysis Table -->
+<div class="bg-surface-container-low border border-outline-variant/10 overflow-hidden">
+<div class="p-6 border-b border-outline-variant/10 flex justify-between items-center">
+<h3 class="font-mono text-xs text-secondary-container uppercase">Top_Performing_Modules</h3>
+<div class="flex gap-4 font-mono text-[10px] text-neutral-500">
+<span>FILTER: ALL</span>
+<span>SORT: DESC</span>
+</div>
+</div>
+<table class="w-full font-mono text-xs">
+<thead>
+<tr class="text-neutral-500 uppercase text-left border-b border-outline-variant/5">
+<th class="p-4 font-medium">Resource_URI</th>
+<th class="p-4 font-medium">Relevance</th>
+<th class="p-4 font-medium">Sentiment</th>
+<th class="p-4 font-medium text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<tr class="hover:bg-primary-container/5 transition-colors group">
+<td class="p-4 text-on-surface">/services/encryption-v3</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="h-1.5 w-16 bg-neutral-800"><div class="h-full bg-secondary-container w-[94%]"></div></div>
+<span>94%</span>
+</div>
+</td>
+<td class="p-4 text-primary-container">NEUTRAL_POSITIVE</td>
+<td class="p-4 text-right">
+<span class="material-symbols-outlined text-neutral-500 group-hover:text-primary-container cursor-pointer" data-icon="open_in_new">open_in_new</span>
+</td>
+</tr>
+<tr class="hover:bg-primary-container/5 transition-colors group">
+<td class="p-4 text-on-surface">/docs/api-handshake</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="h-1.5 w-16 bg-neutral-800"><div class="h-full bg-secondary-container w-[82%]"></div></div>
+<span>82%</span>
+</div>
+</td>
+<td class="p-4 text-neutral-400">TECHNICAL_PURE</td>
+<td class="p-4 text-right">
+<span class="material-symbols-outlined text-neutral-500 group-hover:text-primary-container cursor-pointer" data-icon="open_in_new">open_in_new</span>
+</td>
+</tr>
+<tr class="hover:bg-primary-container/5 transition-colors group">
+<td class="p-4 text-on-surface">/blog/security-audit-2024</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="h-1.5 w-16 bg-neutral-800"><div class="h-full bg-secondary-container w-[76%]"></div></div>
+<span>76%</span>
+</div>
+</td>
+<td class="p-4 text-tertiary-fixed-dim">ALARMIST_WARN</td>
+<td class="p-4 text-right">
+<span class="material-symbols-outlined text-neutral-500 group-hover:text-primary-container cursor-pointer" data-icon="open_in_new">open_in_new</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<!-- BottomNavBar (Visible on Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 bg-neutral-950 border-t border-lime-400/10 shadow-[0_-4px_20px_rgba(0,0,0,0.8)] font-mono text-[10px] uppercase tracking-widest">
+<a class="flex flex-col items-center justify-center text-neutral-600" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="grid_view">grid_view</span>
+            Dashboard
+        </a>
+<a class="flex flex-col items-center justify-center text-neutral-600" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="radar">radar</span>
+            Scans
+        </a>
+<a class="flex flex-col items-center justify-center text-lime-400 drop-shadow-[0_0_5px_rgba(57,255,20,0.5)] bg-lime-950/20 px-4 h-full" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="assessment">assessment</span>
+            Reports
+        </a>
+<a class="flex flex-col items-center justify-center text-neutral-600" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
+            Settings
+        </a>
+</nav>
+<!-- Decorative HUD Elements -->
+<div class="fixed top-20 right-8 z-30 pointer-events-none opacity-20 hidden xl:block">
+<div class="w-32 h-32 border-2 border-primary-container border-dashed rounded-full animate-spin-slow flex items-center justify-center">
+<div class="w-24 h-24 border border-secondary-container rounded-full animate-pulse"></div>
+</div>
+<p class="font-mono text-[8px] text-primary-container mt-4 text-center tracking-widest">ENCRYPT_STREAM_ACTIVE</p>
+</div>
+</body></html>

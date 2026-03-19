@@ -17,6 +17,44 @@
   font-size: 1.1rem;
 }
 
+.reports-toolbar {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.selected-section-note {
+  margin-top: 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.delete-all-btn {
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fecaca;
+  background: rgba(239, 68, 68, 0.08);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.delete-all-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.16);
+}
+
+.delete-all-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .loader-container {
   display: flex;
   justify-content: center;
@@ -111,6 +149,32 @@
   color: white;
 }
 
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.delete-btn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fecaca;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.08);
+  padding: 0.38rem 0.65rem;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.delete-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.16);
+}
+
+.delete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
@@ -120,4 +184,14 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .reports-toolbar {
+    align-items: stretch;
+  }
+
+  .delete-all-btn {
+    width: 100%;
+  }
 }

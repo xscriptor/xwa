@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CYBER_AUDIT_V1.0 - Links Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#ffba43",
+                        "surface-tint": "#2ae500",
+                        "secondary-fixed-dim": "#00dce6",
+                        "inverse-on-surface": "#313030",
+                        "surface-bright": "#3a3939",
+                        "on-secondary": "#00373a",
+                        "primary": "#efffe3",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container-low": "#1c1b1b",
+                        "on-secondary-container": "#006a6f",
+                        "on-surface-variant": "#baccb0",
+                        "on-primary-fixed": "#022100",
+                        "on-tertiary-fixed": "#281800",
+                        "secondary-fixed": "#6ff6ff",
+                        "tertiary-container": "#ffd79e",
+                        "on-secondary-fixed-variant": "#004f53",
+                        "primary-container": "#39ff14",
+                        "on-tertiary-fixed-variant": "#614000",
+                        "background": "#131313",
+                        "surface": "#131313",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "surface-container": "#201f1f",
+                        "primary-fixed": "#79ff5b",
+                        "on-error": "#690005",
+                        "surface-dim": "#131313",
+                        "outline-variant": "#3c4b35",
+                        "on-tertiary-container": "#835900",
+                        "secondary": "#dcfdff",
+                        "tertiary-fixed": "#ffddaf",
+                        "surface-container-highest": "#353534",
+                        "secondary-container": "#00f1fd",
+                        "on-tertiary": "#432c00",
+                        "on-primary": "#053900",
+                        "primary-fixed-dim": "#2ae500",
+                        "on-surface": "#e5e2e1",
+                        "surface-variant": "#353534",
+                        "error-container": "#93000a",
+                        "tertiary": "#fff8f4",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary-fixed": "#002022",
+                        "on-primary-fixed-variant": "#095300",
+                        "inverse-primary": "#106e00",
+                        "on-background": "#e5e2e1",
+                        "on-primary-container": "#107100",
+                        "outline": "#85967c",
+                        "inverse-surface": "#e5e2e1"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["Roboto Mono"]
+                    },
+                    borderRadius: { "DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scan-line {
+            background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 50%);
+            background-size: 100% 4px;
+        }
+        .glitch-border {
+            position: relative;
+        }
+        .glitch-border::after {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            border: 1px solid rgba(57, 255, 20, 0.3);
+            pointer-events: none;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #131313; }
+        ::-webkit-scrollbar-thumb { background: #39ff14; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 h-16 bg-neutral-950/80 backdrop-blur-md dark:bg-black/80 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-lime-400" data-icon="terminal">terminal</span>
+<h1 class="font-['Space_Grotesk'] tracking-tighter uppercase text-xl font-bold text-lime-400 drop-shadow-[0_0_8px_rgba(57,255,20,0.6)]">CYBER_AUDIT_V1.0</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8 font-['Space_Grotesk'] tracking-tighter uppercase text-sm">
+<a class="text-neutral-500 hover:text-lime-300 transition-colors" href="#">DASHBOARD</a>
+<a class="text-lime-400" href="#">ANALYSIS</a>
+<a class="text-neutral-500 hover:text-lime-300 transition-colors" href="#">REPORTS</a>
+</nav>
+<div class="h-8 w-8 bg-surface-container-highest border border-primary-container/30 flex items-center justify-center overflow-hidden">
+<img alt="User Profile" data-alt="Cyberpunk stylized user profile avatar placeholder" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmArarqsQ_Ye3VHeqQTah09Xp-m2HFKSZGPiCVClrdBAm_rerT0q52UpqwDOBHA5WQhOd4Yfl9p9TrknxKQbUVTcmKwQjuFA7yW823g1dbe0P59PpQSd7F2PIdj7NgKYEMHJr8ONIelQGZY3YM8VPg3TdXJQPZOnlgvtsqS7thItRuM6PU7UcNCVwKpQv40GniakSPr8wlc4LVxclMfxr8-_rfeGq5fsc45G8e0T8LFODgDRCGvcGRfQpR-C7-aIArio8MH0zJpTA"/>
+</div>
+</div>
+</header>
+<!-- NavigationDrawer -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 flex flex-col z-40 bg-neutral-900 dark:bg-neutral-950 border-r border-lime-400/10 hidden md:flex">
+<div class="p-6 border-b border-neutral-800">
+<h2 class="font-mono text-xs uppercase tracking-widest text-lime-400">AUDIT_CATEGORIES</h2>
+<p class="font-mono text-[10px] text-neutral-500">SYSTEM_READY</p>
+</div>
+<nav class="flex-1 overflow-y-auto font-mono text-xs uppercase tracking-widest py-4">
+<!-- Navigation Items Mapping -->
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="dashboard">dashboard</span>Overview</a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="speed">speed</span>Performance</a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="search">search</span>SEO</a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="accessibility_new">accessibility_new</span>A11y</a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="account_tree">account_tree</span>Structure</a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="description">description</span>Content</a>
+<a class="text-cyan-400 bg-cyan-950/30 border-l-2 border-cyan-400 py-3 px-4 flex items-center gap-3 translate-x-1 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="link">link</span>Links</a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="lan">lan</span>Sitemaps</a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="security">security</span>Security</a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="lan">lan</span>Network</a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="fact_check">fact_check</span>Compliance</a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="share">share</span>Social</a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#"><span class="material-symbols-outlined text-sm" data-icon="layers">layers</span>Stack</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 mt-16 p-8 min-h-screen scan-line bg-surface-dim pb-32">
+<!-- Hero Header Sector -->
+<section class="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+<div class="space-y-2">
+<span class="font-mono text-secondary-container text-xs tracking-[0.3em]">MODULE_ID: 007_LINKS</span>
+<h2 class="font-headline text-5xl font-extrabold tracking-tighter uppercase leading-none">Hyperlink<br/>Architecture</h2>
+<div class="flex items-center gap-4 mt-4">
+<div class="bg-surface-container-high px-3 py-1 font-mono text-[10px] text-neutral-400 border-l border-primary-container">
+                        STATUS: CRITICAL_VULNERABILITY
+                    </div>
+<div class="bg-surface-container-high px-3 py-1 font-mono text-[10px] text-neutral-400 border-l border-secondary-container">
+                        LAST_SCAN: 2023-10-27T14:22:00Z
+                    </div>
+</div>
+</div>
+<!-- Global Score Gauge -->
+<div class="relative w-48 h-48 bg-surface-container-low p-2 flex flex-col items-center justify-center border border-neutral-800">
+<svg class="w-full h-full -rotate-90 transform" viewbox="0 0 100 100">
+<circle class="text-neutral-800" cx="50" cy="50" fill="transparent" r="45" stroke="currentColor" stroke-width="2"></circle>
+<circle class="text-tertiary-fixed-dim drop-shadow-[0_0_8px_rgba(255,176,0,0.4)]" cx="50" cy="50" fill="transparent" r="45" stroke="currentColor" stroke-dasharray="282.7" stroke-dashoffset="155.5" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline text-5xl font-black text-tertiary-fixed-dim leading-none">45%</span>
+<span class="font-mono text-[9px] tracking-widest text-neutral-500 mt-2 uppercase">Integrity_Score</span>
+</div>
+<div class="absolute bottom-[-10px] bg-tertiary-fixed-dim text-on-tertiary px-2 py-0.5 font-mono text-[10px] font-bold">
+                    FAIL_DETECTED
+                </div>
+</div>
+</section>
+<!-- Bento Grid Analysis -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Link Graph Visualization -->
+<div class="md:col-span-8 bg-surface-container border border-neutral-800 relative overflow-hidden h-[400px]">
+<div class="absolute top-0 left-0 w-full p-4 flex justify-between items-center bg-surface-container-highest/50 backdrop-blur-sm z-10">
+<span class="font-mono text-[10px] uppercase text-neutral-300">SITEMAP_VISUALIZATION_V2.0</span>
+<div class="flex gap-2">
+<div class="w-2 h-2 bg-primary-container animate-pulse"></div>
+<div class="w-2 h-2 bg-secondary-container"></div>
+</div>
+</div>
+<!-- Abstract Representation of Link Graph -->
+<div class="absolute inset-0 opacity-40">
+<img alt="Digital network graph" class="w-full h-full object-cover mix-blend-screen grayscale" data-alt="Abstract glowing network nodes and lines in a cyber grid" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiOcTCYhGjqr33BXyVZw-JVL_eCGMxQ6Od5Tpv_j8kyopK0XPkSgeYd-YA6UTk19Toq7xD9tZPEG2phaOQoT_YwF_1fik0X_8m_2ZUKsx-j1lLuwibhp7cStritT9p1QHlcXbgDHRb6MDEBEN0vuXbjTdkbT9sPebSTi1lr7KpGw1uXL31UMjkbunWNecuKiAfOq5nbf3o6mC8qladEwlyiEdTImqYpSCeDKvsqin2rZobLtSEVmhrrevp59pqh26lJ94PSyqKESE"/>
+</div>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-64 h-64 border border-secondary-container/20 rounded-full flex items-center justify-center">
+<div class="w-32 h-32 border border-secondary-container/40 rounded-full animate-ping"></div>
+<div class="absolute bg-secondary-container/10 p-4 border border-secondary-container shadow-[0_0_15px_rgba(0,243,255,0.3)]">
+<span class="font-mono text-xs text-secondary-container font-bold">ROOT_NODE</span>
+</div>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 font-mono text-[10px] text-secondary-container space-y-1">
+<p>&gt; MAPPING_CONNECTIONS...</p>
+<p>&gt; 1,422_NODES_IDENTIFIED</p>
+<p>&gt; 12_ORPHANED_PAGES</p>
+</div>
+</div>
+<!-- Distribution Stats -->
+<div class="md:col-span-4 grid grid-rows-2 gap-6">
+<!-- Internal vs External -->
+<div class="bg-surface-container-low border border-neutral-800 p-6 flex flex-col justify-between">
+<div>
+<h3 class="font-mono text-xs uppercase tracking-widest text-neutral-400 mb-6">Distribution_Stats</h3>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between font-mono text-[10px] uppercase">
+<span>Internal_Links</span>
+<span class="text-primary-container">72%</span>
+</div>
+<div class="h-2 bg-neutral-900 border border-neutral-800 flex">
+<div class="h-full bg-primary-container" style="width: 72%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-mono text-[10px] uppercase">
+<span>External_Links</span>
+<span class="text-secondary-container">28%</span>
+</div>
+<div class="h-2 bg-neutral-900 border border-neutral-800 flex">
+<div class="h-full bg-secondary-container" style="width: 28%"></div>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full py-2 bg-surface-container-highest border border-neutral-700 text-[10px] font-mono uppercase tracking-widest hover:bg-neutral-800 transition-colors">
+                        _DOWNLOAD_RAW_JSON
+                    </button>
+</div>
+<!-- Anchor Text Audit -->
+<div class="bg-surface-container-low border border-neutral-800 p-6">
+<h3 class="font-mono text-xs uppercase tracking-widest text-neutral-400 mb-4">Anchor_Text_Cloud</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-800 text-[9px] font-mono text-primary-container uppercase">Click Here (42)</span>
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-800 text-[9px] font-mono text-neutral-500 uppercase">Home (12)</span>
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-800 text-[9px] font-mono text-tertiary-fixed-dim uppercase">Learn More (38)</span>
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-800 text-[9px] font-mono text-neutral-500 uppercase">Contact (8)</span>
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-800 text-[9px] font-mono text-primary-container uppercase">Services (15)</span>
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-800 text-[9px] font-mono text-tertiary-fixed-dim uppercase">Download (24)</span>
+</div>
+<div class="mt-4 p-3 bg-tertiary-container/5 border-l-2 border-tertiary-fixed-dim">
+<p class="font-mono text-[9px] text-tertiary-fixed-dim leading-relaxed">
+                            WARNING: High density of generic anchor text detected. Potential SEO degradation in progress.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Broken Links Table Module -->
+<div class="md:col-span-12 bg-surface-container-low border border-neutral-800 overflow-hidden">
+<div class="bg-surface-container-highest p-4 flex justify-between items-center border-b border-neutral-800">
+<h3 class="font-mono text-xs uppercase tracking-widest text-on-surface">BROKEN_LINKS_REPT_001</h3>
+<div class="bg-error-container text-[10px] font-mono px-2 py-0.5 font-bold animate-pulse">
+                        12 CRITICAL ERRORS
+                    </div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-mono text-xs border-collapse">
+<thead>
+<tr class="bg-surface-container/30 border-b border-neutral-800">
+<th class="p-4 text-neutral-500 uppercase font-medium">Source_URI</th>
+<th class="p-4 text-neutral-500 uppercase font-medium">Target_URI</th>
+<th class="p-4 text-neutral-500 uppercase font-medium">Status</th>
+<th class="p-4 text-neutral-500 uppercase font-medium">Last_Seen</th>
+<th class="p-4 text-neutral-500 uppercase font-medium">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-800">
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="p-4 text-neutral-300">/services/cloud-security</td>
+<td class="p-4 text-tertiary-fixed-dim">/docs/whitepaper-v1.pdf</td>
+<td class="p-4"><span class="bg-error-container/20 text-tertiary-fixed-dim px-2 py-0.5 border border-tertiary-fixed-dim/20">404</span></td>
+<td class="p-4 text-neutral-500">2 min ago</td>
+<td class="p-4"><button class="text-primary-container underline underline-offset-4 hover:text-white">_REROUTE</button></td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="p-4 text-neutral-300">/about-us</td>
+<td class="p-4 text-tertiary-fixed-dim">/team/john-doe-legacy</td>
+<td class="p-4"><span class="bg-error-container/20 text-tertiary-fixed-dim px-2 py-0.5 border border-tertiary-fixed-dim/20">404</span></td>
+<td class="p-4 text-neutral-500">14 min ago</td>
+<td class="p-4"><button class="text-primary-container underline underline-offset-4 hover:text-white">_REROUTE</button></td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="p-4 text-neutral-300">/blog/securing-endpoints</td>
+<td class="p-4 text-tertiary-fixed-dim">https://partner-ext.io/api</td>
+<td class="p-4"><span class="bg-error-container/20 text-tertiary-fixed-dim px-2 py-0.5 border border-tertiary-fixed-dim/20">502</span></td>
+<td class="p-4 text-neutral-500">32 min ago</td>
+<td class="p-4"><button class="text-primary-container underline underline-offset-4 hover:text-white">_REROUTE</button></td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="p-4 text-neutral-300">/contact</td>
+<td class="p-4 text-tertiary-fixed-dim">/assets/v-card.zip</td>
+<td class="p-4"><span class="bg-error-container/20 text-tertiary-fixed-dim px-2 py-0.5 border border-tertiary-fixed-dim/20">404</span></td>
+<td class="p-4 text-neutral-500">1 hr ago</td>
+<td class="p-4"><button class="text-primary-container underline underline-offset-4 hover:text-white">_REROUTE</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-neutral-900/50 flex justify-center">
+<button class="text-neutral-500 text-[10px] uppercase font-mono tracking-widest hover:text-white">_VIEW_ALL_82_DISCONNECTED_ENTITIES</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile only) -->
+<footer class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 bg-neutral-950 border-t border-lime-400/10 shadow-[0_-4px_20px_rgba(0,0,0,0.8)]">
+<div class="flex flex-col items-center justify-center text-neutral-600 font-mono text-[10px] uppercase tracking-widest">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+            Dashboard
+        </div>
+<div class="flex flex-col items-center justify-center text-lime-400 drop-shadow-[0_0_5px_rgba(57,255,20,0.5)] bg-lime-950/20 px-4 h-full font-mono text-[10px] uppercase tracking-widest scale-95 duration-75">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+            Scans
+        </div>
+<div class="flex flex-col items-center justify-center text-neutral-600 font-mono text-[10px] uppercase tracking-widest">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+            Reports
+        </div>
+<div class="flex flex-col items-center justify-center text-neutral-600 font-mono text-[10px] uppercase tracking-widest">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+            Settings
+        </div>
+</footer>
+</body></html>

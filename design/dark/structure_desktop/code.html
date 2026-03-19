@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CYBER_AUDIT_PROTOCOL // STRUCTURE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-highest": "#353534",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#313030",
+                        "surface-tint": "#2ae500",
+                        "secondary-fixed": "#6ff6ff",
+                        "on-primary-fixed": "#022100",
+                        "on-secondary-fixed-variant": "#004f53",
+                        "secondary-container": "#00f1fd",
+                        "on-primary-fixed-variant": "#095300",
+                        "primary-fixed-dim": "#2ae500",
+                        "on-surface": "#e5e2e1",
+                        "surface-dim": "#131313",
+                        "on-error": "#690005",
+                        "secondary": "#dcfdff",
+                        "on-secondary-container": "#006a6f",
+                        "on-tertiary-container": "#835900",
+                        "primary-container": "#39ff14",
+                        "on-tertiary-fixed-variant": "#614000",
+                        "on-surface-variant": "#baccb0",
+                        "surface-container": "#201f1f",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#00dce6",
+                        "tertiary": "#fff8f4",
+                        "on-tertiary-fixed": "#281800",
+                        "tertiary-container": "#ffd79e",
+                        "error-container": "#93000a",
+                        "surface": "#131313",
+                        "on-primary-container": "#107100",
+                        "on-secondary-fixed": "#002022",
+                        "background": "#131313",
+                        "primary": "#efffe3",
+                        "tertiary-fixed-dim": "#ffba43",
+                        "surface-container-lowest": "#0e0e0e",
+                        "primary-fixed": "#79ff5b",
+                        "on-secondary": "#00373a",
+                        "surface-container-high": "#2a2a2a",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffddaf",
+                        "inverse-primary": "#106e00",
+                        "surface-variant": "#353534",
+                        "on-primary": "#053900",
+                        "on-tertiary": "#432c00",
+                        "on-background": "#e5e2e1",
+                        "surface-bright": "#3a3939",
+                        "inverse-surface": "#e5e2e1",
+                        "outline": "#85967c",
+                        "outline-variant": "#3c4b35"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .scan-lines {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+        .glitch-border {
+            position: relative;
+        }
+        .glitch-border::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 1px solid rgba(57, 255, 20, 0.3);
+            clip-path: polygon(0 0, 100% 0, 100% 10%, 95% 10%, 95% 90%, 100% 90%, 100% 100%, 0 100%);
+            pointer-events: none;
+        }
+        .node-line {
+            background: repeating-linear-gradient(90deg, transparent, transparent 4px, #39ff14 4px, #39ff14 8px);
+            height: 1px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-neutral-950/80 backdrop-blur-md flex justify-between items-center px-6 py-3 border-b border-neutral-800">
+<div class="flex items-center gap-8">
+<div class="text-xl font-black text-lime-400 drop-shadow-[0_0_8px_rgba(57,255,20,0.5)] font-headline tracking-tighter uppercase">
+                CYBER_AUDIT_PROTOCOL
+            </div>
+<nav class="hidden md:flex items-center gap-6 font-headline tracking-tighter uppercase text-xs">
+<a class="text-lime-400 border-b-2 border-lime-400 pb-1" href="#">STRUCTURE</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">SITEMAPS</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">NETWORK</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">COMPLIANCE</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">SOCIAL</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">STACK</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="absolute inset-y-0 left-3 flex items-center text-neutral-500">
+<span class="material-symbols-outlined text-sm">search</span>
+</span>
+<input class="bg-neutral-900 border-0 focus:ring-1 focus:ring-lime-400 text-[10px] font-mono w-64 pl-10 py-1 uppercase tracking-widest" placeholder="QUERY_TREE_NODE..." type="text"/>
+</div>
+<div class="flex gap-3">
+<button class="text-neutral-500 hover:bg-lime-400/10 hover:text-lime-400 p-1 transition-all active:scale-95 duration-75 brightness-125">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+</button>
+<button class="text-neutral-500 hover:bg-lime-400/10 hover:text-lime-400 p-1 transition-all active:scale-95 duration-75 brightness-125">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<img alt="OPERATOR_01_AVATAR" class="w-8 h-8 grayscale contrast-125 border border-lime-400/50" data-alt="Operator avatar silhouette in high contrast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxBNIKB7xx6k0x0wEoAUi6f1Zec9pHr5zVPnNWCjYF_jpNW8JlEM5BzdWcgTNrXseqIQp3VPXQ1rmrZidMVL0bvxnYxe6_m0wuCKTq-LrlzrepfatZLxJqtYFPc4xgRlK4HBzPnAcOEtZzMcl4X7ScpVf-iiS0jvH43QLsyOCwM2xRtZsGjnQU-adatGe-mo6aBZHLnpKZR9J3SkYydhmSLSz-WCYrpBzyV70U7DRJTMqjIXIL8_i2h7r9m0HxP2mfs6ejJDXJpCw"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 flex flex-col pt-16 bg-neutral-900 z-40 hidden md:flex border-r border-neutral-800">
+<div class="p-6">
+<div class="flex items-center gap-2 mb-1">
+<span class="w-2 h-2 bg-lime-400 animate-pulse"></span>
+<span class="text-lime-400 font-bold font-mono text-xs uppercase">AUDIT_v2.0</span>
+</div>
+<div class="text-[10px] text-neutral-500 font-mono tracking-tighter mb-6 uppercase">STATUS: ENCRYPTED</div>
+<button class="w-full bg-lime-400 text-black font-bold py-3 px-4 mb-8 font-mono text-xs hover:brightness-110 active:scale-95 transition-all text-left flex justify-between items-center group">
+                INITIATE_DEEP_SCAN
+                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<nav class="space-y-1 font-mono text-[10px] uppercase">
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 hover:translate-x-1 transition-transform group" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="dashboard">dashboard</span>
+                    DASHBOARD
+                </a>
+<a class="bg-lime-400 text-black font-bold flex items-center gap-3 px-4 py-3 clip-path-polygon-[0_0,_100%_0,_95%_100%,_0%_100%] ring-1 ring-lime-400" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="radar">radar</span>
+                    SCAN_ENGINE
+                </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 hover:translate-x-1 transition-transform group" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="security">security</span>
+                    THREAT_INTEL
+                </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 hover:translate-x-1 transition-transform group" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="analytics">analytics</span>
+                    REPORTS
+                </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 hover:translate-x-1 transition-transform group" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+                    SYSTEM_LOGS
+                </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 hover:translate-x-1 transition-transform group" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="lock">lock</span>
+                    VAULT
+                </a>
+</nav>
+</div>
+<div class="mt-auto p-6 border-t border-neutral-800">
+<nav class="space-y-1 font-mono text-[10px] uppercase">
+<a class="text-neutral-500 flex items-center gap-3 px-4 py-2 hover:text-lime-400 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+                    SUPPORT
+                </a>
+<a class="text-neutral-500 flex items-center gap-3 px-4 py-2 hover:text-lime-400 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span>
+                    DOCS
+                </a>
+</nav>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-0 md:ml-64 pt-16 h-screen flex flex-col bg-surface">
+<!-- Header Metrics -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-0 border-b border-neutral-800 bg-surface-container-low">
+<div class="p-4 border-r border-neutral-800">
+<div class="text-[10px] font-mono text-neutral-500 mb-1 uppercase tracking-widest">_NODE_COUNT</div>
+<div class="text-2xl font-headline font-bold text-lime-400">2,482 <span class="text-xs font-normal text-neutral-400 ml-2">ELEMENTS</span></div>
+</div>
+<div class="p-4 border-r border-neutral-800">
+<div class="text-[10px] font-mono text-neutral-500 mb-1 uppercase tracking-widest">_NESTING_DEPTH</div>
+<div class="text-2xl font-headline font-bold text-secondary-container">14 <span class="text-xs font-normal text-neutral-400 ml-2">LEVELS</span></div>
+</div>
+<div class="p-4 border-r border-neutral-800">
+<div class="text-[10px] font-mono text-neutral-500 mb-1 uppercase tracking-widest">_STRUCTURAL_ERRORS</div>
+<div class="text-2xl font-headline font-bold text-tertiary-fixed-dim">18 <span class="text-xs font-normal text-neutral-400 ml-2">CRITICAL</span></div>
+</div>
+<div class="p-4 bg-lime-400/5">
+<div class="text-[10px] font-mono text-lime-400 mb-1 uppercase tracking-widest">_AUDIT_STATUS</div>
+<div class="text-2xl font-headline font-bold text-lime-400 flex items-center gap-2">
+                    STABLE
+                    <span class="block w-2 h-2 rounded-full bg-lime-400 animate-pulse"></span>
+</div>
+</div>
+</section>
+<!-- Node Graph Visualizer -->
+<section class="flex-grow relative overflow-hidden bg-surface-dim p-8">
+<div class="scan-lines absolute inset-0 z-10 opacity-30"></div>
+<!-- Blueprint Grid Overlay -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#39ff14 0.5px, transparent 0.5px); background-size: 20px 20px;"></div>
+<!-- Visualization Canvas -->
+<div class="w-full h-full border border-neutral-800 relative bg-black/40 backdrop-blur-sm overflow-auto p-20 flex items-center justify-center">
+<!-- Simulated Node Tree -->
+<div class="relative flex items-center gap-24">
+<!-- Root Node -->
+<div class="relative group">
+<div class="w-32 h-32 bg-lime-400/10 border border-lime-400 flex items-center justify-center flex-col p-4 relative glitch-border cursor-pointer hover:bg-lime-400/20 transition-all">
+<span class="material-symbols-outlined text-lime-400 text-3xl mb-2" data-icon="account_tree">account_tree</span>
+<span class="text-[10px] font-mono text-lime-400 uppercase tracking-tighter">HTML_ROOT</span>
+<span class="absolute -top-2 -right-2 bg-lime-400 text-black text-[8px] font-bold px-1 uppercase">_v1.0</span>
+</div>
+<div class="absolute top-1/2 -right-24 w-24 node-line"></div>
+</div>
+<!-- Level 1 Nodes -->
+<div class="flex flex-col gap-32">
+<div class="relative group">
+<div class="w-24 h-24 bg-secondary-container/10 border border-secondary-container flex items-center justify-center flex-col p-2 relative cursor-pointer hover:bg-secondary-container/20 transition-all">
+<span class="material-symbols-outlined text-secondary-container text-xl mb-1" data-icon="description">description</span>
+<span class="text-[9px] font-mono text-secondary-container uppercase">HEAD</span>
+</div>
+<div class="absolute top-1/2 -right-24 w-24 node-line opacity-20"></div>
+</div>
+<div class="relative group">
+<div class="w-24 h-24 bg-lime-400/10 border border-lime-400 flex items-center justify-center flex-col p-2 relative cursor-pointer hover:bg-lime-400/20 transition-all shadow-[0_0_15px_rgba(57,255,20,0.1)]">
+<span class="material-symbols-outlined text-lime-400 text-xl mb-1" data-icon="grid_view">grid_view</span>
+<span class="text-[9px] font-mono text-lime-400 uppercase">BODY</span>
+</div>
+<div class="absolute top-1/2 -right-24 w-24 node-line"></div>
+<!-- Level 2 Nodes (Nested) -->
+<div class="absolute left-48 top-0 flex flex-col gap-12">
+<div class="w-20 h-20 border border-neutral-700 bg-neutral-900/50 flex items-center justify-center flex-col p-1 hover:border-lime-400 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-neutral-500 group-hover:text-lime-400 text-lg mb-1" data-icon="web">web</span>
+<span class="text-[8px] font-mono text-neutral-500 group-hover:text-lime-400 uppercase">HEADER</span>
+</div>
+<div class="w-20 h-20 border border-tertiary-fixed-dim bg-tertiary-fixed-dim/5 flex items-center justify-center flex-col p-1 cursor-pointer group">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-lg mb-1" data-icon="warning">warning</span>
+<span class="text-[8px] font-mono text-tertiary-fixed-dim uppercase">MAIN_ERR</span>
+<span class="absolute -bottom-1 -right-1 bg-tertiary-fixed-dim text-black text-[7px] px-1 font-bold">FAULT</span>
+</div>
+<div class="w-20 h-20 border border-neutral-700 bg-neutral-900/50 flex items-center justify-center flex-col p-1 hover:border-lime-400 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-neutral-500 group-hover:text-lime-400 text-lg mb-1" data-icon="bottom_panel_open">bottom_panel_open</span>
+<span class="text-[8px] font-mono text-neutral-500 group-hover:text-lime-400 uppercase">FOOTER</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- HUD Overlays -->
+<div class="absolute top-4 left-4 p-3 bg-neutral-900/80 border-l-2 border-lime-400 font-mono text-[9px] text-neutral-400">
+<div class="mb-1 text-lime-400">_VIEWPORT_DATA</div>
+<div>X: 142.02</div>
+<div>Y: 884.11</div>
+<div>ZOOM: 0.85x</div>
+</div>
+<div class="absolute bottom-4 right-4 p-4 bg-neutral-950/90 border border-neutral-800 w-64">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[10px] font-mono text-neutral-500 uppercase">Node_Analysis</span>
+<span class="material-symbols-outlined text-neutral-500 text-xs">close</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-[11px]">
+<span class="text-neutral-400 uppercase">Tag:</span>
+<span class="text-lime-400 font-mono">&lt;MAIN_CONTENT&gt;</span>
+</div>
+<div class="flex justify-between text-[11px]">
+<span class="text-neutral-400 uppercase">Depth:</span>
+<span class="text-white font-mono">08</span>
+</div>
+<div class="flex justify-between text-[11px]">
+<span class="text-neutral-400 uppercase">Child_Nodes:</span>
+<span class="text-white font-mono">142</span>
+</div>
+<div class="pt-2 border-t border-neutral-800">
+<div class="text-[9px] text-tertiary-fixed-dim font-mono mb-1">! WARNING: NESTING_EXCESSIVE</div>
+<div class="h-1 bg-neutral-800 w-full">
+<div class="h-full bg-tertiary-fixed-dim w-[85%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Terminal Logs -->
+<footer class="h-48 border-t border-neutral-800 bg-black p-4 font-mono overflow-y-auto">
+<div class="flex items-center gap-4 mb-4 pb-2 border-b border-neutral-900">
+<div class="text-[10px] text-lime-400 font-bold uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">terminal</span>
+                    LIVE_STRUCTURE_LOGS
+                </div>
+<div class="text-[10px] text-neutral-600 uppercase">BUFFER: 1024KB</div>
+<div class="ml-auto flex gap-4 text-[10px]">
+<span class="text-neutral-500 hover:text-white cursor-pointer">CLEAR</span>
+<span class="text-neutral-500 hover:text-white cursor-pointer">EXPORT</span>
+</div>
+</div>
+<div class="space-y-1 text-[11px]">
+<div class="flex gap-4">
+<span class="text-neutral-600">[14:02:11.23]</span>
+<span class="text-cyan-400">INFO</span>
+<span class="text-neutral-300">DOM_TREE_PARSING_INITIALIZED for host: audit-protocol.internal</span>
+</div>
+<div class="flex gap-4">
+<span class="text-neutral-600">[14:02:11.28]</span>
+<span class="text-lime-400">SUCCESS</span>
+<span class="text-neutral-300">Root &lt;html&gt; identified. Checksum validated.</span>
+</div>
+<div class="flex gap-4">
+<span class="text-neutral-600">[14:02:11.45]</span>
+<span class="text-tertiary-fixed-dim">WARN</span>
+<span class="text-neutral-300">Detected excessive depth at node #442 (Selector: div.nested-container &gt; section)</span>
+</div>
+<div class="flex gap-4">
+<span class="text-neutral-600">[14:02:11.88]</span>
+<span class="text-error">ERROR</span>
+<span class="text-neutral-300">Semantic mismatch: &lt;header&gt; nested inside &lt;footer&gt; at depth 12.</span>
+</div>
+<div class="flex gap-4">
+<span class="text-neutral-600">[14:02:12.01]</span>
+<span class="text-cyan-400">INFO</span>
+<span class="text-neutral-300">Mapping 2,482 elements to visualization engine...</span>
+</div>
+<div class="flex gap-4">
+<span class="text-neutral-600">[14:02:12.44]</span>
+<span class="text-lime-400">READY</span>
+<span class="text-neutral-300">Structure map finalized. Interaction layer active.</span>
+</div>
+<div class="flex gap-4 animate-pulse">
+<span class="text-neutral-600">[14:02:12.50]</span>
+<span class="text-white">_</span>
+<span class="text-neutral-500">AWAITING_OPERATOR_INPUT...</span>
+</div>
+</div>
+</footer>
+</main>
+<!-- Floating Action - Mobile Trigger Only -->
+<div class="md:hidden fixed bottom-6 right-6 z-50">
+<button class="bg-lime-400 text-black w-14 h-14 flex items-center justify-center shadow-[0_0_20px_rgba(57,255,20,0.4)]">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+</body></html>

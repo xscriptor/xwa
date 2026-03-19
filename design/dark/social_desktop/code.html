@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CYBER_AUDIT_PROTOCOL // SOCIAL_METADATA</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'Space Grotesk';
+            font-display: swap;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #131313;
+            color: #e5e2e1;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scan-line {
+            background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 50%);
+            background-size: 100% 4px;
+        }
+        .glitch-border {
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 95% 100%, 0 100%);
+        }
+        .crt-overlay {
+            background: radial-gradient(circle, transparent 0%, rgba(19, 19, 19, 0.4) 100%);
+            pointer-events: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-highest": "#353534",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#313030",
+                        "surface-tint": "#2ae500",
+                        "secondary-fixed": "#6ff6ff",
+                        "on-primary-fixed": "#022100",
+                        "on-secondary-fixed-variant": "#004f53",
+                        "secondary-container": "#00f1fd",
+                        "on-primary-fixed-variant": "#095300",
+                        "primary-fixed-dim": "#2ae500",
+                        "on-surface": "#e5e2e1",
+                        "surface-dim": "#131313",
+                        "on-error": "#690005",
+                        "secondary": "#dcfdff",
+                        "on-secondary-container": "#006a6f",
+                        "on-tertiary-container": "#835900",
+                        "primary-container": "#39ff14",
+                        "on-tertiary-fixed-variant": "#614000",
+                        "on-surface-variant": "#baccb0",
+                        "surface-container": "#201f1f",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#00dce6",
+                        "tertiary": "#fff8f4",
+                        "on-tertiary-fixed": "#281800",
+                        "tertiary-container": "#ffd79e",
+                        "error-container": "#93000a",
+                        "surface": "#131313",
+                        "on-primary-container": "#107100",
+                        "on-secondary-fixed": "#002022",
+                        "background": "#131313",
+                        "primary": "#efffe3",
+                        "tertiary-fixed-dim": "#ffba43",
+                        "surface-container-lowest": "#0e0e0e",
+                        "primary-fixed": "#79ff5b",
+                        "on-secondary": "#00373a",
+                        "surface-container-high": "#2a2a2a",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffddaf",
+                        "inverse-primary": "#106e00",
+                        "surface-variant": "#353534",
+                        "on-primary": "#053900",
+                        "on-tertiary": "#432c00",
+                        "on-background": "#e5e2e1",
+                        "surface-bright": "#3a3939",
+                        "inverse-surface": "#e5e2e1",
+                        "outline": "#85967c",
+                        "outline-variant": "#3c4b35"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface-dim selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 z-50 flex justify-between items-center w-full px-6 py-3 border-b border-neutral-800 bg-neutral-950/80 backdrop-blur-md">
+<div class="text-xl font-black text-lime-400 drop-shadow-[0_0_8px_rgba(57,255,20,0.5)] font-headline tracking-tighter uppercase">
+            CYBER_AUDIT_PROTOCOL
+        </div>
+<div class="hidden md:flex items-center gap-8 font-headline tracking-tighter uppercase text-xs">
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">STRUCTURE</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">SITEMAPS</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">NETWORK</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">COMPLIANCE</a>
+<a class="text-lime-400 border-b-2 border-lime-400 pb-1" href="#">SOCIAL</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">STACK</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-lime-400/10 hover:text-lime-400 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+</button>
+<button class="p-2 hover:bg-lime-400/10 hover:text-lime-400 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 bg-surface-container-highest border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="OPERATOR_01_AVATAR" class="w-full h-full object-cover grayscale brightness-125" data-alt="Cyberpunk operator pixelated profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZqFmhgs8qNog7ouG2cmF7yOAVmtSl0LdFFygBH6LhsdE4r_QBGbv0Lv4igsL1i2Wb5iOInaUX7hx2LKveT_4pHxF1scJautIJM63H5nHTZVR8_DgPr2wo2k25pkGl09zx1lHuAs6gd40QnhxOvGMVuaBIcFnACdrP4puIGmuX6pPW2lQ5toraVPy9g2RAbGGXCNnsf9yCVzR2pSRMNW41DINKdn7w2uokjWdpTNy4YTUfD8L2fJyEKZa5zepGySE5UZrjt6MCsVY"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 flex flex-col pt-16 bg-neutral-900 z-40 hidden lg:flex">
+<div class="px-6 py-8">
+<div class="font-headline font-bold text-lime-400 text-lg tracking-widest">AUDIT_v2.0</div>
+<div class="font-mono text-[10px] text-secondary-fixed uppercase opacity-70">STATUS: ENCRYPTED</div>
+</div>
+<div class="flex-1 space-y-1">
+<a class="text-neutral-400 flex items-center gap-3 px-6 py-3 hover:bg-neutral-800 font-mono text-xs uppercase hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="dashboard">dashboard</span>
+                DASHBOARD
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-6 py-3 hover:bg-neutral-800 font-mono text-xs uppercase hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="radar">radar</span>
+                SCAN_ENGINE
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-6 py-3 hover:bg-neutral-800 font-mono text-xs uppercase hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="security">security</span>
+                THREAT_INTEL
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-6 py-3 hover:bg-neutral-800 font-mono text-xs uppercase hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="analytics">analytics</span>
+                REPORTS
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-6 py-3 hover:bg-neutral-800 font-mono text-xs uppercase hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+                SYSTEM_LOGS
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-6 py-3 hover:bg-neutral-800 font-mono text-xs uppercase hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="lock">lock</span>
+                VAULT
+            </a>
+</div>
+<div class="p-6">
+<button class="w-full bg-lime-400 text-black font-bold flex items-center justify-center gap-3 px-4 py-3 font-headline text-xs tracking-tighter clip-path-polygon-[0_0,_100%_0,_95%_100%,_0%_100%] hover:brightness-125 transition-all">
+                INITIATE_DEEP_SCAN
+            </button>
+</div>
+<div class="border-t border-neutral-800 p-4 space-y-2">
+<a class="text-neutral-500 flex items-center gap-3 px-4 py-1 hover:text-neutral-200 font-mono text-[10px] uppercase" href="#">
+<span class="material-symbols-outlined text-xs" data-icon="help">help</span>
+                SUPPORT
+            </a>
+<a class="text-neutral-500 flex items-center gap-3 px-4 py-1 hover:text-neutral-200 font-mono text-[10px] uppercase" href="#">
+<span class="material-symbols-outlined text-xs" data-icon="description">description</span>
+                DOCS
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-20 p-6 min-h-screen scan-line relative">
+<div class="crt-overlay fixed inset-0 z-[1] opacity-20 pointer-events-none"></div>
+<!-- Header Section -->
+<header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="px-2 py-0.5 bg-primary-container text-on-primary-container font-mono text-[10px] font-bold">LIVE_AUDIT</span>
+<span class="text-neutral-500 font-mono text-[10px]">SRC: PROTOCOL_SOCIAL_009</span>
+</div>
+<h1 class="text-5xl font-black font-headline tracking-tighter text-on-surface uppercase mb-2">Social_Graph_Audit</h1>
+<p class="text-neutral-400 max-w-xl font-body leading-relaxed">Intercepting and validating cryptographic social tags, Open Graph meta-structures, and Twitter Card injection vectors for target URL.</p>
+</div>
+<div class="flex gap-2">
+<div class="bg-surface-container-low border border-outline-variant p-4 flex flex-col min-w-[140px]">
+<span class="font-mono text-[10px] text-secondary-fixed-dim uppercase mb-1">Total_Reach</span>
+<span class="text-3xl font-headline font-bold text-secondary-container">1.2M+</span>
+</div>
+<div class="bg-surface-container-low border border-outline-variant p-4 flex flex-col min-w-[140px]">
+<span class="font-mono text-[10px] text-tertiary-fixed-dim uppercase mb-1">Vulnerabilities</span>
+<span class="text-3xl font-headline font-bold text-tertiary-fixed-dim">03</span>
+</div>
+</div>
+</header>
+<!-- Main Bento Grid -->
+<div class="grid grid-cols-12 gap-6 relative z-10">
+<!-- Left Column: Previews -->
+<div class="col-span-12 xl:col-span-8 space-y-6">
+<!-- Open Graph Preview -->
+<div class="bg-surface-container border border-outline-variant overflow-hidden">
+<div class="bg-surface-container-highest px-4 py-2 flex justify-between items-center border-b border-outline-variant/30">
+<span class="font-mono text-[10px] font-bold text-primary-fixed uppercase tracking-widest flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary-container rounded-full"></span>
+                            PREVIEW_FACEBOOK_OG_v4.0
+                        </span>
+<div class="flex gap-2">
+<span class="w-2 h-2 bg-neutral-700"></span>
+<span class="w-2 h-2 bg-neutral-700"></span>
+</div>
+</div>
+<div class="p-8 grid md:grid-cols-2 gap-8 items-center">
+<div class="relative group">
+<div class="absolute -inset-1 bg-primary-container/20 blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+<div class="relative aspect-video bg-surface-container-lowest overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 transition-all duration-700" data-alt="Cyberpunk high tech blockchain abstract visual" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCih8tq5t4t7uDnZe11gjJaXFG4YeXhg0AUAOuRyJOS8BBlKj3Ok3NS8mYO7TgELHhUzC8lqjgAVTVQqS-Y4IDzzWeo3QmTQFz43ElObDUTwx-06FaxwRDtf505qOpCzyMJBonHVxN4lew6dlUo2lRpROzPnmJBWJHGgbCHyljSn_RzKZUIQ1s7BfvxljYRDX1QGxY__ZnGmYpoYT3sH5WxENZ5mLg92UlqnzQIeqo2VE8rUtQ64fg6B4lyAPM5OW0I9e9u_tj8Sbk"/>
+<div class="absolute top-2 left-2 bg-neutral-900/90 text-primary-container font-mono text-[8px] px-1 border border-primary-container/30">DIM: 1200x630</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="font-headline text-neutral-500 text-[10px] tracking-widest">OG_METADATA_EXTRACTED</div>
+<div class="space-y-3">
+<div>
+<label class="font-mono text-[9px] text-primary-container/60 block uppercase">og:title</label>
+<div class="font-headline font-bold text-xl uppercase leading-tight">Neural_Link Interface // Protocol Beta-01</div>
+</div>
+<div>
+<label class="font-mono text-[9px] text-primary-container/60 block uppercase">og:description</label>
+<p class="text-sm text-neutral-400 font-body">Deep-dive into the architectural ruins of the synthetic era. Auditing the next generation of decentralized autonomous networks.</p>
+</div>
+<div class="flex gap-4">
+<div>
+<label class="font-mono text-[9px] text-primary-container/60 block uppercase">og:type</label>
+<span class="text-xs font-mono">WEBSITE</span>
+</div>
+<div>
+<label class="font-mono text-[9px] text-primary-container/60 block uppercase">og:site_name</label>
+<span class="text-xs font-mono text-secondary-fixed">CYBER_AUDIT_PRO</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Twitter Card Preview -->
+<div class="bg-surface-container border border-outline-variant overflow-hidden">
+<div class="bg-surface-container-highest px-4 py-2 flex justify-between items-center border-b border-outline-variant/30">
+<span class="font-mono text-[10px] font-bold text-secondary-container uppercase tracking-widest flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-secondary-container rounded-full"></span>
+                            PREVIEW_TWITTER_SUMMARY_LARGE
+                        </span>
+<div class="text-[10px] font-mono text-neutral-500">X_PROTOCOL_VALIDATED</div>
+</div>
+<div class="p-8">
+<div class="max-w-xl mx-auto border border-outline-variant/30 bg-surface-container-lowest overflow-hidden group hover:border-secondary-container/50 transition-colors">
+<img class="w-full h-48 object-cover grayscale brightness-50 contrast-125 group-hover:brightness-75 transition-all" data-alt="Technical network circuitry background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALZHXxNxFrXZqKUTBNRpfDHpreis4rBbNhVH614SaVcy6u0Ajke09gSztkAqBlUBQfQQQfK8-fbaW66gHO3ocFFVt6t4madYGIVqEk-7mtNdulFFwSOc7pLEOOsmyuLsTdf468L3dvraZ13vk2_VOIxsFQ5iwNV6Mi_YwcH1ON23XjZwgkdolLYPeM91n6SI8UOHuzb56Y6YG4q2X9mIKG-qhhnuNpzsBEGvt3Vh1w9793JyG5e0M0QV7gUHeQ_B2Ev25fljM1Ycg"/>
+<div class="p-4 border-t border-outline-variant/30">
+<div class="text-neutral-500 font-mono text-[10px] mb-1">CYBERAUDIT.IO</div>
+<div class="font-headline font-bold text-lg mb-1">QUANTUM_DECRYPTION_LIVE</div>
+<div class="text-xs text-neutral-400 font-body line-clamp-2">Real-time analysis of the most complex encryption protocols currently surfacing in the darknet markets...</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Validation Log -->
+<div class="bg-surface-container border border-outline-variant">
+<div class="bg-surface-container-highest px-4 py-2 flex justify-between items-center border-b border-outline-variant/30">
+<span class="font-mono text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">VALIDATION_DIAGNOSTICS</span>
+</div>
+<div class="p-4 font-mono text-xs space-y-2">
+<div class="flex items-center gap-3 py-1 border-b border-outline-variant/10">
+<span class="text-primary-container">[PASS]</span>
+<span class="text-neutral-500">META_CHARSET_VALIDATED</span>
+<span class="ml-auto text-neutral-600">UTF-8</span>
+</div>
+<div class="flex items-center gap-3 py-1 border-b border-outline-variant/10">
+<span class="text-primary-container">[PASS]</span>
+<span class="text-neutral-500">OG_IMAGE_DIMENSIONS</span>
+<span class="ml-auto text-neutral-600">1200x630px</span>
+</div>
+<div class="flex items-center gap-3 py-1 border-b border-outline-variant/10">
+<span class="text-tertiary-fixed-dim">[WARN]</span>
+<span class="text-neutral-500">TWITTER_SITE_TAG_MISSING</span>
+<span class="ml-auto text-tertiary-fixed-dim">@HANDLE_NULL</span>
+</div>
+<div class="flex items-center gap-3 py-1 border-b border-outline-variant/10">
+<span class="text-primary-container">[PASS]</span>
+<span class="text-neutral-500">DESCRIPTION_LENGTH_AUDIT</span>
+<span class="ml-auto text-neutral-600">142 CHARS</span>
+</div>
+<div class="flex items-center gap-3 py-1">
+<span class="text-error">[FAIL]</span>
+<span class="text-neutral-500">CANONICAL_LINK_MISMATCH</span>
+<span class="ml-auto text-error">HTTPS_SEC_REQUIRED</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Stats & Meta -->
+<div class="col-span-12 xl:col-span-4 space-y-6">
+<!-- Share Counts -->
+<div class="bg-surface-container-high border border-outline-variant p-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary-container/5 blur-[80px]"></div>
+<div class="font-headline font-black text-xl mb-6 tracking-tighter uppercase border-l-4 border-secondary-container pl-4">Realtime_Signals</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center bg-blue-900/20 text-blue-400 border border-blue-400/30">
+<span class="material-symbols-outlined text-sm" data-icon="facebook">social_leaderboard</span>
+</div>
+<span class="font-mono text-xs uppercase">FACEBOOK</span>
+</div>
+<span class="font-headline font-bold text-lg">452,109</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center bg-sky-900/20 text-sky-400 border border-sky-400/30">
+<span class="material-symbols-outlined text-sm" data-icon="alternate_email">alternate_email</span>
+</div>
+<span class="font-mono text-xs uppercase">X_PLATFORM</span>
+</div>
+<span class="font-headline font-bold text-lg">891,022</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center bg-red-900/20 text-red-400 border border-red-400/30">
+<span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span>
+</div>
+<span class="font-mono text-xs uppercase">YOUTUBE</span>
+</div>
+<span class="font-headline font-bold text-lg">12,500</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center bg-neutral-800 text-neutral-100 border border-neutral-600/30">
+<span class="material-symbols-outlined text-sm" data-icon="share">share</span>
+</div>
+<span class="font-mono text-xs uppercase">REDDIT</span>
+</div>
+<span class="font-headline font-bold text-lg">34,182</span>
+</div>
+</div>
+<!-- Custom Scan Bar -->
+<div class="mt-8">
+<div class="flex justify-between font-mono text-[9px] mb-2">
+<span>REACH_CAPACITY_LOAD</span>
+<span class="text-primary-container">87.4%</span>
+</div>
+<div class="h-4 bg-surface-container-lowest flex gap-0.5 p-0.5 border border-outline-variant/30">
+<div class="h-full w-[10%] bg-primary-container shadow-[0_0_8px_#39FF14]"></div>
+<div class="h-full w-[10%] bg-primary-container shadow-[0_0_8px_#39FF14]"></div>
+<div class="h-full w-[10%] bg-primary-container shadow-[0_0_8px_#39FF14]"></div>
+<div class="h-full w-[10%] bg-primary-container shadow-[0_0_8px_#39FF14]"></div>
+<div class="h-full w-[10%] bg-primary-container shadow-[0_0_8px_#39FF14]"></div>
+<div class="h-full w-[10%] bg-primary-container shadow-[0_0_8px_#39FF14]"></div>
+<div class="h-full w-[10%] bg-primary-container shadow-[0_0_8px_#39FF14]"></div>
+<div class="h-full w-[10%] bg-primary-container shadow-[0_0_8px_#39FF14]"></div>
+<div class="h-full w-[7%] bg-primary-container/30"></div>
+<div class="h-full flex-1 bg-transparent"></div>
+</div>
+</div>
+</div>
+<!-- Tag Cloud / Raw Data -->
+<div class="bg-surface-container-low border border-outline-variant p-6">
+<div class="font-mono text-[10px] text-neutral-500 uppercase mb-4 tracking-tighter">RAW_TAG_HEURISTICS</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-700 font-mono text-[10px] text-primary-container">#NEURAL_PROTO</span>
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-700 font-mono text-[10px] text-secondary-fixed">#SYNTH_AUDIT</span>
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-700 font-mono text-[10px] text-neutral-400">#DECRYPT</span>
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-700 font-mono text-[10px] text-tertiary-fixed">#VULN_SCAN</span>
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-700 font-mono text-[10px] text-neutral-400">#METADATA</span>
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-700 font-mono text-[10px] text-primary-container">#OP_GRAPH</span>
+<span class="px-2 py-1 bg-neutral-900 border border-neutral-700 font-mono text-[10px] text-neutral-400">#CYBER_SEC</span>
+</div>
+</div>
+<!-- Quick Action Card -->
+<div class="bg-primary-container p-6 relative overflow-hidden group">
+<div class="relative z-10">
+<div class="text-black font-headline font-black text-2xl uppercase tracking-tighter mb-2 italic">FORCE_UPDATE</div>
+<p class="text-on-primary-container/80 text-xs font-medium mb-4">Trigger a manual scrape of social graphs across all nodes. Flushes CDN caches immediately.</p>
+<button class="w-full bg-black text-primary-container font-mono text-xs font-bold py-3 hover:bg-neutral-900 transition-colors uppercase">
+                            _PUSH_TO_NODES
+                        </button>
+</div>
+<!-- Glitch decoration -->
+<div class="absolute top-0 right-0 w-full h-full pointer-events-none overflow-hidden opacity-20">
+<div class="absolute top-2 right-4 text-4xl font-black italic text-black select-none">RE_SCAN</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Status Footer -->
+<div class="fixed bottom-0 left-0 lg:left-64 right-0 bg-neutral-950 border-t border-neutral-800 px-6 py-2 flex items-center justify-between text-[9px] font-mono z-50">
+<div class="flex items-center gap-6">
+<span class="text-primary-container">SYSTEM_STABLE_V2</span>
+<span class="text-neutral-500">IP: 192.168.1.254</span>
+<span class="text-neutral-500">LATENCY: 14MS</span>
+</div>
+<div class="flex items-center gap-4 text-neutral-500">
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500"></span> ACTIVE_SYNC</span>
+<span class="uppercase">Session_Expiry: 04:59:12</span>
+</div>
+</div>
+</main>
+<!-- FAB (Suppressed based on context: Details screen) -->
+<!-- SUPPRESSED -->
+</body></html>

@@ -12,6 +12,21 @@ import os
 
 router = APIRouter()
 
+
+def _delete_generated_export_files(scan_id: int) -> List[str]:
+    deleted_paths: List[str] = []
+    candidates = [
+        f"reports/scan_{scan_id}.md",
+        f"reports/scan_{scan_id}.jsonc",
+    ]
+
+    for path in candidates:
+        if os.path.exists(path):
+            os.remove(path)
+            deleted_paths.append(path)
+
+    return deleted_paths
+
 @router.get("/reports")
 def list_reports(skip: int = 0, limit: int = 20, db: Session = Depends(get_session)):
     """List recent scan history with pagination."""
@@ -80,3 +95,47 @@ def download_jsonc(scan_id: int, db: Session = Depends(get_session)):
     path = f"reports/scan_{scan_id}.jsonc"
     export_jsonc(scan.raw_results, path)
     return FileResponse(path, filename=f"xwa_scan_{scan_id}.jsonc")
+
+
+@router.delete("/reports/{scan_id}")
+def delete_report(scan_id: int, db: Session = Depends(get_session)):
+    """Delete a scan record and any generated export files for that scan."""
+    scan = db.get(ScanRecord, scan_id)
+    if not scan:
+        raise HTTPException(status_code=404, detail="Scan not found.")
+
+    deleted_files = _delete_generated_export_files(scan_id)
+    db.delete(scan)
+    db.commit()
+    scan_progress.pop(scan_id, None)
+
+    return {
+        "message": "Scan deleted successfully.",
+        "deleted_scan_id": scan_id,
+        "deleted_files": deleted_files,
+    }
+
+
+@router.delete("/reports")
+def delete_all_reports(db: Session = Depends(get_session)):
+    """Delete all stored scan records and their generated export files."""
+    scans = db.exec(select(ScanRecord)).all()
+    scan_ids = [scan.id for scan in scans if scan.id is not None]
+    deleted_files: List[str] = []
+
+    for scan_id in scan_ids:
+        deleted_files.extend(_delete_generated_export_files(scan_id))
+
+    for scan in scans:
+        db.delete(scan)
+
+    db.commit()
+
+    for scan_id in scan_ids:
+        scan_progress.pop(scan_id, None)
+
+    return {
+        "message": "All scans deleted successfully.",
+        "deleted_scan_ids": scan_ids,
+        "deleted_files": deleted_files,
+    }
