@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CYBER_AUDIT_V1.0 - A11Y_PROTOCOL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#ffba43",
+                        "surface-tint": "#2ae500",
+                        "secondary-fixed-dim": "#00dce6",
+                        "inverse-on-surface": "#313030",
+                        "surface-bright": "#3a3939",
+                        "on-secondary": "#00373a",
+                        "primary": "#efffe3",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container-low": "#1c1b1b",
+                        "on-secondary-container": "#006a6f",
+                        "on-surface-variant": "#baccb0",
+                        "on-primary-fixed": "#022100",
+                        "on-tertiary-fixed": "#281800",
+                        "secondary-fixed": "#6ff6ff",
+                        "tertiary-container": "#ffd79e",
+                        "on-secondary-fixed-variant": "#004f53",
+                        "primary-container": "#39ff14",
+                        "on-tertiary-fixed-variant": "#614000",
+                        "background": "#131313",
+                        "surface": "#131313",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "surface-container": "#201f1f",
+                        "primary-fixed": "#79ff5b",
+                        "on-error": "#690005",
+                        "surface-dim": "#131313",
+                        "outline-variant": "#3c4b35",
+                        "on-tertiary-container": "#835900",
+                        "secondary": "#dcfdff",
+                        "tertiary-fixed": "#ffddaf",
+                        "surface-container-highest": "#353534",
+                        "secondary-container": "#00f1fd",
+                        "on-tertiary": "#432c00",
+                        "on-primary": "#053900",
+                        "primary-fixed-dim": "#2ae500",
+                        "on-surface": "#e5e2e1",
+                        "surface-variant": "#353534",
+                        "error-container": "#93000a",
+                        "tertiary": "#fff8f4",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary-fixed": "#002022",
+                        "on-primary-fixed-variant": "#095300",
+                        "inverse-primary": "#106e00",
+                        "on-background": "#e5e2e1",
+                        "on-primary-container": "#107100",
+                        "outline": "#85967c",
+                        "inverse-surface": "#e5e2e1"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .scan-line {
+            background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 50%);
+            background-size: 100% 4px;
+        }
+        .glitch-border {
+            box-shadow: -2px 0 0 0 #00f1fd, 2px 0 0 0 #39ff14;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 h-16 bg-neutral-950/80 backdrop-blur-md dark:bg-black/80 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-lime-400">terminal</span>
+<h1 class="font-['Space_Grotesk'] tracking-tighter uppercase text-sm font-bold text-lime-400 drop-shadow-[0_0_8px_rgba(57,255,20,0.6)] text-xl">CYBER_AUDIT_V1.0</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8 font-['Space_Grotesk'] tracking-tighter uppercase text-sm">
+<a class="text-neutral-500 hover:text-lime-300 transition-colors" href="#">DASHBOARD</a>
+<a class="text-lime-400 transition-colors skew-x-2" href="#">REPORTS</a>
+<a class="text-neutral-500 hover:text-lime-300 transition-colors" href="#">NETWORK</a>
+</nav>
+<div class="h-10 w-10 bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-container">account_circle</span>
+</div>
+</div>
+</header>
+<div class="flex h-screen pt-16">
+<!-- NavigationDrawer -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 flex flex-col z-40 bg-neutral-900 dark:bg-neutral-950 border-r border-lime-400/10 font-mono text-xs uppercase tracking-widest overflow-y-auto">
+<div class="p-6 border-b border-neutral-800">
+<div class="text-lime-400 font-bold mb-1">AUDIT_CATEGORIES</div>
+<div class="text-neutral-500 text-[10px]">SYSTEM_READY</div>
+</div>
+<nav class="flex-1 py-4">
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span> Overview
+                </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">speed</span> Performance
+                </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">search</span> SEO
+                </a>
+<a class="text-cyan-400 bg-cyan-950/30 border-l-2 border-cyan-400 py-3 px-4 flex items-center gap-3 translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">accessibility_new</span> A11y
+                </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">account_tree</span> Structure
+                </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">description</span> Content
+                </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">link</span> Links
+                </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">lan</span> Sitemaps
+                </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">security</span> Security
+                </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">lan</span> Network
+                </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">fact_check</span> Compliance
+                </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">share</span> Social
+                </a>
+<a class="text-neutral-400 py-3 px-4 flex items-center gap-3 hover:bg-neutral-800 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">layers</span> Stack
+                </a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-64 p-8 overflow-y-auto scan-line">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-12">
+<div>
+<div class="font-mono text-secondary-container text-sm mb-2">TARGET_MODULE: ACCESSIBILITY_CORE</div>
+<h2 class="font-headline text-5xl font-extrabold tracking-tighter uppercase text-on-surface">A11y Protocol</h2>
+</div>
+<div class="text-right">
+<div class="font-mono text-primary-container text-4xl font-bold">100%</div>
+<div class="font-mono text-[10px] text-neutral-500 uppercase">COMPLIANCE_STATUS: CRITICAL_PASS</div>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Color Contrast Checker -->
+<div class="col-span-12 lg:col-span-7 bg-surface-container border-l-4 border-primary-container p-6 flex flex-col gap-6">
+<div class="flex justify-between items-center bg-surface-container-highest px-4 py-2 -mx-6 -mt-6 mb-4">
+<span class="font-mono text-[10px] text-neutral-400">ANALYSIS_ID: CONTR_7721</span>
+<span class="font-mono text-[10px] text-primary-container">STATUS: OPTIMAL</span>
+</div>
+<h3 class="font-headline text-xl font-bold uppercase tracking-tight text-secondary-fixed">Color Contrast Analysis</h3>
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-surface-container-low p-4 border border-outline-variant/20">
+<div class="text-neutral-500 font-mono text-[10px] mb-2">WCAG_AA</div>
+<div class="text-2xl font-mono text-primary-container">PASS</div>
+<div class="text-[10px] text-neutral-400 mt-1">RATIO: 7.2:1</div>
+</div>
+<div class="bg-surface-container-low p-4 border border-outline-variant/20">
+<div class="text-neutral-500 font-mono text-[10px] mb-2">WCAG_AAA</div>
+<div class="text-2xl font-mono text-primary-container">PASS</div>
+<div class="text-[10px] text-neutral-400 mt-1">RATIO: 14.1:1</div>
+</div>
+<div class="bg-surface-container-low p-4 border border-outline-variant/20">
+<div class="text-neutral-500 font-mono text-[10px] mb-2">CUSTOM_THEME</div>
+<div class="text-2xl font-mono text-secondary-container">ACTIVE</div>
+<div class="text-[10px] text-neutral-400 mt-1">CYBER_DARK</div>
+</div>
+</div>
+<div class="space-y-3 mt-4">
+<div class="flex justify-between items-center p-3 bg-surface-container-lowest font-mono text-xs">
+<span class="text-on-surface">Header Text vs Background</span>
+<span class="text-primary-container">#FFFFFF vs #131313 [21:1]</span>
+</div>
+<div class="flex justify-between items-center p-3 bg-surface-container-lowest font-mono text-xs">
+<span class="text-on-surface">Navigation Labels vs Sidebar</span>
+<span class="text-primary-container">#00DCE6 vs #1C1B1B [6.8:1]</span>
+</div>
+</div>
+</div>
+<!-- Screen Reader Compatibility -->
+<div class="col-span-12 lg:col-span-5 bg-surface-container p-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary-container/5 blur-3xl rounded-full"></div>
+<div class="flex justify-between items-center bg-surface-container-highest px-4 py-2 -mx-6 -mt-6 mb-4">
+<span class="font-mono text-[10px] text-neutral-400">READER_ENGINE: VOICEOVER_V2</span>
+<span class="font-mono text-[10px] text-secondary-container">CONNECTED</span>
+</div>
+<h3 class="font-headline text-xl font-bold uppercase tracking-tight text-secondary-fixed mb-6">Reader Readiness</h3>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">record_voice_over</span>
+</div>
+<div class="flex-1">
+<div class="font-mono text-xs text-on-surface">VOICE_SYNTH_SYNC</div>
+<div class="w-full bg-surface-container-low h-1 mt-2">
+<div class="bg-primary-container h-full w-full"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-secondary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">hearing</span>
+</div>
+<div class="flex-1">
+<div class="font-mono text-xs text-on-surface">NAV_DESCRIPTION_INDEX</div>
+<div class="w-full bg-surface-container-low h-1 mt-2">
+<div class="bg-secondary-container h-full w-[85%]"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 font-mono text-[10px] text-neutral-400 leading-relaxed border-l border-secondary-container/30">
+                            &gt; LOG: DOM tree mapped successfully.<br/>
+                            &gt; LOG: Landmark roles identified: 12.<br/>
+                            &gt; LOG: Heading hierarchy verified (H1-H4).<br/>
+                            &gt; STATUS: 100% AUDIBLE COMPLIANCE.
+                        </div>
+</div>
+</div>
+<!-- ARIA Labels Audit -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container p-6 flex flex-col">
+<div class="flex justify-between items-center bg-surface-container-highest px-4 py-2 -mx-6 -mt-6 mb-4">
+<span class="font-mono text-[10px] text-neutral-400">TAG_MAPPER_V4</span>
+</div>
+<h3 class="font-headline text-xl font-bold uppercase tracking-tight text-secondary-fixed mb-4">ARIA_LABELS</h3>
+<div class="flex-1 space-y-2">
+<div class="p-3 bg-surface-container-low border-r-2 border-primary-container flex justify-between">
+<span class="font-mono text-[11px] text-on-surface">aria-label="close"</span>
+<span class="text-primary-container material-symbols-outlined text-sm">check_circle</span>
+</div>
+<div class="p-3 bg-surface-container-low border-r-2 border-primary-container flex justify-between">
+<span class="font-mono text-[11px] text-on-surface">aria-expanded="false"</span>
+<span class="text-primary-container material-symbols-outlined text-sm">check_circle</span>
+</div>
+<div class="p-3 bg-surface-container-low border-r-2 border-primary-container flex justify-between">
+<span class="font-mono text-[11px] text-on-surface">role="navigation"</span>
+<span class="text-primary-container material-symbols-outlined text-sm">check_circle</span>
+</div>
+<div class="p-3 bg-surface-container-low border-r-2 border-primary-container flex justify-between">
+<span class="font-mono text-[11px] text-on-surface">aria-live="polite"</span>
+<span class="text-primary-container material-symbols-outlined text-sm">check_circle</span>
+</div>
+</div>
+<button class="mt-6 w-full py-3 bg-primary-container text-on-primary-fixed font-headline font-bold uppercase tracking-tighter text-sm flex items-center justify-center gap-2">
+                        _RUN_FULL_RESCAN
+                        <span class="material-symbols-outlined text-sm">refresh</span>
+</button>
+</div>
+<!-- Focus Order Visualization -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container p-6 relative">
+<div class="flex justify-between items-center bg-surface-container-highest px-4 py-2 -mx-6 -mt-6 mb-4">
+<span class="font-mono text-[10px] text-neutral-400">TRAVERSAL_PATH: TAB_INDEX_0</span>
+<span class="font-mono text-[10px] text-tertiary-fixed-dim">SEQUENTIAL_MODE</span>
+</div>
+<h3 class="font-headline text-xl font-bold uppercase tracking-tight text-secondary-fixed mb-4">Focus Order Map</h3>
+<div class="relative h-64 bg-surface-container-lowest border border-outline-variant/10 overflow-hidden">
+<!-- Abstract Visual Map of a Page with Focus Path -->
+<div class="absolute inset-0 opacity-20">
+<div class="absolute top-10 left-10 w-40 h-8 bg-on-surface/10"></div>
+<div class="absolute top-10 right-10 w-20 h-8 bg-on-surface/10"></div>
+<div class="absolute top-24 left-10 w-full pr-20 h-32 bg-on-surface/5"></div>
+</div>
+<!-- Path Line -->
+<svg class="absolute inset-0 w-full h-full" viewbox="0 0 800 256">
+<path d="M40 25 L100 25 L100 120 L300 120 L300 200 L600 200" fill="none" stroke="#39ff14" stroke-dasharray="8 4" stroke-width="2"></path>
+</svg>
+<!-- Focus Nodes -->
+<div class="absolute top-[18px] left-[32px] w-4 h-4 rounded-full bg-primary-container flex items-center justify-center font-mono text-[8px] text-on-primary-fixed font-bold">1</div>
+<div class="absolute top-[18px] left-[92px] w-4 h-4 rounded-full bg-primary-container flex items-center justify-center font-mono text-[8px] text-on-primary-fixed font-bold">2</div>
+<div class="absolute top-[112px] left-[92px] w-4 h-4 rounded-full bg-primary-container flex items-center justify-center font-mono text-[8px] text-on-primary-fixed font-bold">3</div>
+<div class="absolute top-[112px] left-[292px] w-4 h-4 rounded-full bg-primary-container flex items-center justify-center font-mono text-[8px] text-on-primary-fixed font-bold">4</div>
+<div class="absolute top-[192px] left-[292px] w-4 h-4 rounded-full bg-primary-container flex items-center justify-center font-mono text-[8px] text-on-primary-fixed font-bold">5</div>
+<div class="absolute top-[192px] left-[592px] w-4 h-4 rounded-full bg-primary-container flex items-center justify-center font-mono text-[8px] text-on-primary-fixed font-bold">6</div>
+</div>
+<div class="mt-4 flex gap-4 font-mono text-[10px] text-neutral-500 uppercase">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary-container"></span> Logical Sequence
+                        </div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 border border-primary-container"></span> Interactive Element
+                        </div>
+</div>
+</div>
+</div>
+<!-- Footer Stats -->
+<div class="mt-12 flex flex-wrap gap-8 border-t border-outline-variant/20 pt-8">
+<div>
+<div class="font-mono text-[10px] text-neutral-500 mb-1">AUDIT_DURATION</div>
+<div class="font-headline font-bold text-on-surface">1.284s</div>
+</div>
+<div>
+<div class="font-mono text-[10px] text-neutral-500 mb-1">TOTAL_NODES_SCANNED</div>
+<div class="font-headline font-bold text-on-surface">4,812</div>
+</div>
+<div>
+<div class="font-mono text-[10px] text-neutral-500 mb-1">WARNINGS_SUPPRESSED</div>
+<div class="font-headline font-bold text-tertiary-fixed-dim">0</div>
+</div>
+<div class="ml-auto">
+<button class="bg-surface-container-high border border-outline-variant px-6 py-2 font-mono text-[10px] text-secondary-container hover:bg-surface-bright transition-colors">
+                        EXPORT_PDF_REPORT.dat
+                    </button>
+</div>
+</div>
+<!-- Bottom Space for Spacer -->
+<div class="h-24"></div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<footer class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 border-t border-lime-400/10 bg-neutral-950 dark:bg-black shadow-[0_-4px_20px_rgba(0,0,0,0.8)]">
+<div class="flex flex-col items-center justify-center text-neutral-600 font-mono text-[10px] uppercase tracking-widest">
+<span class="material-symbols-outlined">grid_view</span>
+            Dashboard
+        </div>
+<div class="flex flex-col items-center justify-center text-neutral-600 font-mono text-[10px] uppercase tracking-widest">
+<span class="material-symbols-outlined">radar</span>
+            Scans
+        </div>
+<div class="flex flex-col items-center justify-center text-lime-400 drop-shadow-[0_0_5px_rgba(57,255,20,0.5)] bg-lime-950/20 px-4 py-1 font-mono text-[10px] uppercase tracking-widest">
+<span class="material-symbols-outlined">assessment</span>
+            Reports
+        </div>
+<div class="flex flex-col items-center justify-center text-neutral-600 font-mono text-[10px] uppercase tracking-widest">
+<span class="material-symbols-outlined">settings</span>
+            Settings
+        </div>
+</footer>
+</body></html>

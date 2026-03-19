@@ -1,0 +1,16 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local database and generated scan exports
+xwa.db
+reports/scan_*.md
+reports/scan_*.jsonc
+
+# Local env files
+.env
+.env.*
+
+# Node artifacts
+web/node_modules/
+web/.next/

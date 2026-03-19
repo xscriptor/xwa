@@ -88,6 +88,18 @@ This document outlines the step-by-step development plan for the project, separa
 - [ ] Write comprehensive installation and usage documentation for running the tool locally without the web dashboard. (#58)
 - [ ] Explore native GUI alternatives (e.g., PyQt/PySide6) for a standalone desktop application experience. (#59)
 
+
+## Phase 11: Template Parity & UX Alignment <!-- phase:template-parity-ux -->
+
+- [x] Move report modules to independent routes under `/reports/{id}/{section}`.
+- [x] Keep one top navigation bar and show report page tabs in top nav when viewing a report.
+- [x] Add dynamic right-side quick navigation links that point to sections inside each report page.
+- [x] Keep footer developer names as direct profile links.
+- [x] Add report cleanup actions for single-scan delete and full history delete.
+- [x] Add repository ignore rules for generated local scan artifacts.
+- [ ] Complete full section-by-section parity audit against all `design/dark/*/code.html` templates.
+- [ ] Finalize visual parity refinements for cards, micro-panels, and telemetry blocks by section.
+
 ## Phase x: colavorative development <!-- phase:colaborative-development -->
 
 - [/] Modify frontend

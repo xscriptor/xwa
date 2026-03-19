@@ -470,3 +470,30 @@ def run_security_analysis(base_url: str, headers: Dict[str, str], cookies: Any,
         "technology": tech_info,
         "http_methods": http_methods,
     }
+
+
+def run_security_snapshot(url: str, headers: Dict[str, str], html_content: str = "") -> Dict[str, Any]:
+    """Fast per-URL security snapshot for UI drill-downs.
+
+    This avoids expensive checks like SSL sockets, sensitive path brute-force,
+    and HTTP method probing for every discovered URL.
+    """
+    sec_headers = analyze_security_headers(headers)
+    cors_info = analyze_cors(headers)
+    csp_info = parse_csp(headers)
+
+    sri_info = check_subresource_integrity(html_content) if html_content else {}
+    mixed_info = check_mixed_content(html_content, url) if html_content else {}
+    exposure_info = detect_exposure(html_content) if html_content else {}
+    tech_info = detect_technology(html_content, headers) if html_content else {}
+
+    return {
+        "url": url,
+        "headers": sec_headers,
+        "cors": cors_info,
+        "csp": csp_info,
+        "sri": sri_info,
+        "mixed_content": mixed_info,
+        "exposure": exposure_info,
+        "technology": tech_info,
+    }

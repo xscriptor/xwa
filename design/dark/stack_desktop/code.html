@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>STACK_AUDIT // CYBER_AUDIT_PROTOCOL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'Monospace';
+            src: local('ui-monospace'), local('Cascadia Code'), local('Source Code Pro'), local('Menlo');
+        }
+        .font-mono { font-family: 'Monospace', monospace; }
+        
+        /* Custom Clip Paths for Brutalist/Cyberpunk Aesthetic */
+        .clip-path-slant {
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+        }
+        .clip-path-corner {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 90% 100%, 0 100%);
+        }
+        
+        /* Scanning line effect */
+        .scan-line {
+            background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 50%);
+            background-size: 100% 4px;
+        }
+
+        .glow-primary {
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+        }
+        
+        .glass-panel {
+            background: rgba(28, 27, 27, 0.6);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-highest": "#353534",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#313030",
+                        "surface-tint": "#2ae500",
+                        "secondary-fixed": "#6ff6ff",
+                        "on-primary-fixed": "#022100",
+                        "on-secondary-fixed-variant": "#004f53",
+                        "secondary-container": "#00f1fd",
+                        "on-primary-fixed-variant": "#095300",
+                        "primary-fixed-dim": "#2ae500",
+                        "on-surface": "#e5e2e1",
+                        "surface-dim": "#131313",
+                        "on-error": "#690005",
+                        "secondary": "#dcfdff",
+                        "on-secondary-container": "#006a6f",
+                        "on-tertiary-container": "#835900",
+                        "primary-container": "#39ff14",
+                        "on-tertiary-fixed-variant": "#614000",
+                        "on-surface-variant": "#baccb0",
+                        "surface-container": "#201f1f",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#00dce6",
+                        "tertiary": "#fff8f4",
+                        "on-tertiary-fixed": "#281800",
+                        "tertiary-container": "#ffd79e",
+                        "error-container": "#93000a",
+                        "surface": "#131313",
+                        "on-primary-container": "#107100",
+                        "on-secondary-fixed": "#002022",
+                        "background": "#131313",
+                        "primary": "#efffe3",
+                        "tertiary-fixed-dim": "#ffba43",
+                        "surface-container-lowest": "#0e0e0e",
+                        "primary-fixed": "#79ff5b",
+                        "on-secondary": "#00373a",
+                        "surface-container-high": "#2a2a2a",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffddaf",
+                        "inverse-primary": "#106e00",
+                        "surface-variant": "#353534",
+                        "on-primary": "#053900",
+                        "on-tertiary": "#432c00",
+                        "on-background": "#e5e2e1",
+                        "surface-bright": "#3a3939",
+                        "inverse-surface": "#e5e2e1",
+                        "outline": "#85967c",
+                        "outline-variant": "#3c4b35"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-neutral-950/80 backdrop-blur-md flex justify-between items-center px-6 py-3 border-b border-neutral-800">
+<div class="flex items-center gap-8">
+<span class="text-xl font-black text-lime-400 drop-shadow-[0_0_8px_rgba(57,255,20,0.5)] font-['Space_Grotesk'] tracking-tighter uppercase">CYBER_AUDIT_PROTOCOL</span>
+<div class="hidden md:flex gap-6 font-['Space_Grotesk'] tracking-tighter uppercase text-xs">
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">STRUCTURE</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">SITEMAPS</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">NETWORK</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">COMPLIANCE</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">SOCIAL</a>
+<a class="text-lime-400 border-b-2 border-lime-400 pb-1" href="#">STACK</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:block relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 text-sm">terminal</span>
+<input class="bg-neutral-900 border-0 focus:ring-1 focus:ring-lime-400 text-xs font-mono py-1.5 pl-9 pr-4 w-64 uppercase" placeholder="QUERY_STACK..." type="text"/>
+</div>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-lime-400/10 hover:text-lime-400 transition-colors"><span class="material-symbols-outlined text-lg">terminal</span></button>
+<button class="p-2 hover:bg-lime-400/10 hover:text-lime-400 transition-colors"><span class="material-symbols-outlined text-lg">settings</span></button>
+<button class="p-2 hover:bg-lime-400/10 hover:text-lime-400 transition-colors"><span class="material-symbols-outlined text-lg text-error">logout</span></button>
+</div>
+<img alt="OPERATOR_01_AVATAR" class="w-8 h-8 grayscale hover:grayscale-0 transition-all border border-lime-400/30" data-alt="Cyberpunk operator avatar portrait neon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBS9AqyBXtqMNFyMLJzBLBWrI017Wi0Dx_2Dkl6jvYmlx1ixaK903cWMxM2_J4wxnFMDOX4nGxdhGa75OQr_dQYTvFeLm6C7bwJ2kqJWcfxkKJ7A3k3AYvXMEW0Q9WJWK7JHAklO2bQ7EywzUyHBUPW3KzL7xRogJFJgf28Y-d-IPpwvmHWVXzB_e7fZl6D9ceC7NIat4K58sMuoVmah2Eb_BMBNzsY3upC0HdXIgbV--GA1S6NTlv4xJp816P5kqG04b20vqFvem0"/>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-neutral-900 flex flex-col pt-16 z-40 hidden md:flex">
+<div class="p-6 border-b border-neutral-800">
+<div class="flex items-center gap-3">
+<div class="w-2 h-8 bg-lime-400"></div>
+<div>
+<h2 class="font-mono text-xs font-bold text-lime-400 uppercase">AUDIT_v2.0</h2>
+<p class="font-mono text-[10px] text-neutral-500">STATUS: ENCRYPTED</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 py-4 font-mono text-xs uppercase">
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm">dashboard</span> DASHBOARD
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm">radar</span> SCAN_ENGINE
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm">security</span> THREAT_INTEL
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm">analytics</span> REPORTS
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm">terminal</span> SYSTEM_LOGS
+            </a>
+<a class="bg-lime-400 text-black font-bold flex items-center gap-3 px-4 py-3 clip-path-slant ring-1 ring-lime-400" href="#">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">lock</span> VAULT
+            </a>
+</nav>
+<div class="p-4 mt-auto border-t border-neutral-800 bg-neutral-950/40">
+<button class="w-full bg-primary-container text-on-primary-container font-bold py-3 text-xs tracking-widest hover:brightness-125 transition-all uppercase">
+                INITIATE_DEEP_SCAN
+            </button>
+<div class="mt-4 flex flex-col gap-2 font-mono text-[10px] text-neutral-500 uppercase">
+<a class="flex items-center gap-2 hover:text-lime-400" href="#"><span class="material-symbols-outlined text-xs">help</span> SUPPORT</a>
+<a class="flex items-center gap-2 hover:text-lime-400" href="#"><span class="material-symbols-outlined text-xs">description</span> DOCS</a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="md:ml-64 pt-20 p-8 min-h-screen">
+<!-- Header Banner -->
+<header class="mb-12 relative">
+<div class="absolute -top-4 -left-4 text-[6rem] font-black text-neutral-800/10 select-none pointer-events-none">FINGERPRINT</div>
+<div class="flex justify-between items-end border-l-4 border-secondary-container pl-6 relative z-10">
+<div>
+<h1 class="text-4xl font-headline font-bold text-on-surface leading-tight tracking-tighter">TECH_STACK_ANALYSIS</h1>
+<p class="font-mono text-sm text-secondary-fixed-dim uppercase tracking-widest mt-2">Target Host: api.internal.protocol.node [192.168.1.104]</p>
+</div>
+<div class="text-right font-mono">
+<div class="text-[10px] text-neutral-500 mb-1 uppercase">Confidence Rating</div>
+<div class="text-2xl font-bold text-primary-container">98.42%</div>
+</div>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- CMS Module -->
+<section class="lg:col-span-2 bg-surface-container border-l-2 border-primary-container p-6 relative overflow-hidden">
+<div class="scan-line absolute inset-0 pointer-events-none opacity-20"></div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<span class="font-mono text-[10px] bg-primary-container/10 text-primary-container px-2 py-0.5 uppercase mb-2 inline-block">Category: CMS</span>
+<h3 class="text-xl font-headline font-bold uppercase tracking-tight">Content Management</h3>
+</div>
+<span class="material-symbols-outlined text-primary-container opacity-50">data_object</span>
+</div>
+<div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
+<div class="w-32 h-32 bg-neutral-900 border-2 border-primary-container flex items-center justify-center p-4 relative group">
+<div class="absolute inset-0 bg-primary-container/5 scale-0 group-hover:scale-100 transition-transform"></div>
+<span class="material-symbols-outlined text-6xl text-primary-container drop-shadow-[0_0_10px_rgba(57,255,20,0.4)]">php</span>
+</div>
+<div class="flex-1 space-y-4 w-full">
+<div class="flex justify-between items-end border-b border-neutral-800 pb-2">
+<span class="font-mono text-xs text-neutral-400 uppercase">Identity</span>
+<span class="font-bold text-on-surface uppercase tracking-wider">WordPress 6.4.2</span>
+</div>
+<div class="flex justify-between items-end border-b border-neutral-800 pb-2">
+<span class="font-mono text-xs text-neutral-400 uppercase">Patch Status</span>
+<span class="font-mono text-xs text-primary-container uppercase">_UP_TO_DATE</span>
+</div>
+<div class="flex justify-between items-end border-b border-neutral-800 pb-2">
+<span class="font-mono text-xs text-neutral-400 uppercase">Vuln Discovery</span>
+<span class="font-mono text-xs text-neutral-500 uppercase">0 critical / 2 low</span>
+</div>
+<div class="pt-2">
+<div class="text-[10px] font-mono text-neutral-500 mb-1 uppercase">Fingerprint Hash</div>
+<div class="bg-neutral-950 p-2 text-[10px] font-mono text-neutral-400 break-all border border-neutral-800">
+                                SHA256: 8f92a3b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z
+                            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- Server Status (Tertiary/Alert) -->
+<section class="bg-surface-container border-l-2 border-tertiary-fixed-dim p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<span class="font-mono text-[10px] bg-tertiary-fixed-dim/10 text-tertiary-fixed-dim px-2 py-0.5 uppercase mb-2 inline-block">Category: Infrastructure</span>
+<h3 class="text-xl font-headline font-bold uppercase tracking-tight">Server Cluster</h3>
+</div>
+<span class="material-symbols-outlined text-tertiary-fixed-dim">dns</span>
+</div>
+<div class="space-y-4">
+<div class="bg-neutral-950 border border-neutral-800 p-4">
+<div class="flex justify-between mb-2">
+<span class="font-mono text-[10px] text-neutral-400 uppercase">Engine</span>
+<span class="font-mono text-xs font-bold text-on-surface uppercase">NGINX / 1.18.0</span>
+</div>
+<div class="w-full bg-neutral-900 h-1.5 flex gap-0.5">
+<div class="w-1/4 h-full bg-tertiary-fixed-dim"></div>
+<div class="w-1/4 h-full bg-tertiary-fixed-dim"></div>
+<div class="w-1/4 h-full bg-tertiary-fixed-dim"></div>
+<div class="w-1/4 h-full bg-neutral-700"></div>
+</div>
+<div class="mt-2 text-[10px] font-mono text-tertiary-fixed-dim uppercase">Security Patch Legacy Found</div>
+</div>
+<div class="bg-neutral-950 border border-neutral-800 p-4">
+<div class="flex justify-between mb-2">
+<span class="font-mono text-[10px] text-neutral-400 uppercase">Proxy</span>
+<span class="font-mono text-xs font-bold text-on-surface uppercase">Cloudflare</span>
+</div>
+<div class="w-full bg-neutral-900 h-1.5 flex gap-0.5">
+<div class="w-full h-full bg-primary-container"></div>
+</div>
+</div>
+</div>
+</div>
+<button class="mt-6 border border-tertiary-fixed-dim/30 hover:bg-tertiary-fixed-dim hover:text-black transition-all py-2 font-mono text-xs uppercase font-bold tracking-widest">
+                    _GENERATE_FIX_MANIFEST
+                </button>
+</section>
+<!-- Middle Row - Frameworks & Analytics -->
+<div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Frameworks -->
+<div class="bg-surface-container-low p-6 border-l border-secondary-container">
+<span class="font-mono text-[10px] text-secondary-container uppercase block mb-4">_FRAMEWORKS</span>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 border border-secondary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-container">javascript</span>
+</div>
+<div>
+<div class="text-sm font-bold uppercase">React</div>
+<div class="text-[10px] font-mono text-neutral-500 uppercase">v18.2.0 (Stable)</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 border border-secondary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-container">style</span>
+</div>
+<div>
+<div class="text-sm font-bold uppercase">Tailwind CSS</div>
+<div class="text-[10px] font-mono text-neutral-500 uppercase">v3.4.1 (Latest)</div>
+</div>
+</div>
+</div>
+<!-- Analytics -->
+<div class="bg-surface-container-low p-6 border-l border-secondary-container">
+<span class="font-mono text-[10px] text-secondary-container uppercase block mb-4">_TRACKING_LAYER</span>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 border border-secondary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-container">monitoring</span>
+</div>
+<div>
+<div class="text-sm font-bold uppercase">Google Analytics</div>
+<div class="text-[10px] font-mono text-neutral-500 uppercase">GA4 Protocol Active</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 border border-secondary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-container">touch_app</span>
+</div>
+<div>
+<div class="text-sm font-bold uppercase">Hotjar</div>
+<div class="text-[10px] font-mono text-neutral-500 uppercase">Heatmap Tracking</div>
+</div>
+</div>
+</div>
+<!-- Security Compliance Scan -->
+<div class="lg:col-span-2 bg-surface-container p-6 relative">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 -mr-16 -mt-16 rounded-full blur-3xl"></div>
+<div class="flex justify-between mb-4">
+<span class="font-mono text-[10px] text-neutral-500 uppercase">Security Compliance Matrix</span>
+<span class="text-[10px] font-mono text-primary-container uppercase tracking-widest">_SCAN_COMPLETE_</span>
+</div>
+<div class="grid grid-cols-3 gap-2 h-24">
+<div class="bg-neutral-900 border border-neutral-800 p-2 flex flex-col justify-between">
+<div class="text-[8px] font-mono text-neutral-500 uppercase">Headers</div>
+<div class="material-symbols-outlined text-primary-container text-sm">check_circle</div>
+</div>
+<div class="bg-neutral-950 border border-tertiary-fixed-dim/30 p-2 flex flex-col justify-between">
+<div class="text-[8px] font-mono text-neutral-500 uppercase">Cookies</div>
+<div class="material-symbols-outlined text-tertiary-fixed-dim text-sm">warning</div>
+</div>
+<div class="bg-neutral-900 border border-neutral-800 p-2 flex flex-col justify-between">
+<div class="text-[8px] font-mono text-neutral-500 uppercase">XSS Protection</div>
+<div class="material-symbols-outlined text-primary-container text-sm">verified_user</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Library Matrix - High Density Data -->
+<section class="lg:col-span-3 bg-neutral-950 border border-neutral-800 p-6 clip-path-corner">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline font-bold text-xl uppercase tracking-widest">Library_Dependency_Tree</h3>
+<div class="flex gap-4 font-mono text-[10px]">
+<span class="flex items-center gap-1"><span class="w-2 h-2 bg-primary-container"></span> SECURE</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 bg-tertiary-fixed-dim"></span> VULNERABLE</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 bg-error"></span> CRITICAL</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-mono text-xs border-collapse">
+<thead>
+<tr class="text-neutral-500 uppercase border-b border-neutral-800">
+<th class="py-3 px-4 font-normal">Dependency</th>
+<th class="py-3 px-4 font-normal">Version</th>
+<th class="py-3 px-4 font-normal">Type</th>
+<th class="py-3 px-4 font-normal">License</th>
+<th class="py-3 px-4 font-normal text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-900">
+<tr class="hover:bg-neutral-900/50 transition-colors">
+<td class="py-4 px-4 font-bold text-on-surface">Lodash</td>
+<td class="py-4 px-4 text-neutral-400">4.17.21</td>
+<td class="py-4 px-4 text-neutral-500">UTILITY</td>
+<td class="py-4 px-4 text-neutral-500">MIT</td>
+<td class="py-4 px-4 text-right"><span class="bg-primary-container/10 text-primary-container px-2 py-0.5 border border-primary-container/20">SECURE</span></td>
+</tr>
+<tr class="hover:bg-neutral-900/50 transition-colors">
+<td class="py-4 px-4 font-bold text-on-surface">Axios</td>
+<td class="py-4 px-4 text-neutral-400">1.6.0</td>
+<td class="py-4 px-4 text-neutral-500">NETWORK</td>
+<td class="py-4 px-4 text-neutral-500">MIT</td>
+<td class="py-4 px-4 text-right"><span class="bg-primary-container/10 text-primary-container px-2 py-0.5 border border-primary-container/20">SECURE</span></td>
+</tr>
+<tr class="hover:bg-neutral-900/50 transition-colors">
+<td class="py-4 px-4 font-bold text-on-surface">Moment.js</td>
+<td class="py-4 px-4 text-tertiary-fixed-dim">2.29.4</td>
+<td class="py-4 px-4 text-neutral-500">DATETIME</td>
+<td class="py-4 px-4 text-neutral-500">MIT</td>
+<td class="py-4 px-4 text-right"><span class="bg-tertiary-fixed-dim/10 text-tertiary-fixed-dim px-2 py-0.5 border border-tertiary-fixed-dim/20">LEGACY_RISK</span></td>
+</tr>
+<tr class="hover:bg-neutral-900/50 transition-colors">
+<td class="py-4 px-4 font-bold text-on-surface">Three.js</td>
+<td class="py-4 px-4 text-neutral-400">0.158.0</td>
+<td class="py-4 px-4 text-neutral-500">GRAPHICS</td>
+<td class="py-4 px-4 text-neutral-500">MIT</td>
+<td class="py-4 px-4 text-right"><span class="bg-primary-container/10 text-primary-container px-2 py-0.5 border border-primary-container/20">SECURE</span></td>
+</tr>
+<tr class="hover:bg-neutral-900/50 transition-colors">
+<td class="py-4 px-4 font-bold text-on-surface">jQuery</td>
+<td class="py-4 px-4 text-error">3.5.1</td>
+<td class="py-4 px-4 text-neutral-500">DOM_LEGACY</td>
+<td class="py-4 px-4 text-neutral-500">MIT</td>
+<td class="py-4 px-4 text-right"><span class="bg-error/10 text-error px-2 py-0.5 border border-error/20">CVE-2020-11022</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-neutral-950/90 backdrop-blur-lg border-t border-neutral-800 flex justify-around py-3 px-4 z-50">
+<a class="flex flex-col items-center gap-1 text-neutral-500" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-[8px] uppercase font-mono">Dash</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-neutral-500" href="#">
+<span class="material-symbols-outlined text-xl">radar</span>
+<span class="text-[8px] uppercase font-mono">Scan</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-lime-400" href="#">
+<span class="material-symbols-outlined text-xl">terminal</span>
+<span class="text-[8px] uppercase font-mono">Stack</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-neutral-500" href="#">
+<span class="material-symbols-outlined text-xl">security</span>
+<span class="text-[8px] uppercase font-mono">Intel</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-neutral-500" href="#">
+<span class="material-symbols-outlined text-xl">lock</span>
+<span class="text-[8px] uppercase font-mono">Vault</span>
+</a>
+</nav>
+</body></html>

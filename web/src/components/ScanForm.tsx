@@ -1,69 +1,81 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { triggerScan } from "@/lib/api";
 import "./ScanForm.css";
 
 export default function ScanForm() {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleScan = async (e?: React.MouseEvent) => {
-    if (e) e.preventDefault();
-    if (!url) return;
-    
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    let targetUrl = url.trim();
+    if (!targetUrl) return;
+
+    if (!targetUrl.startsWith("http://") && !targetUrl.startsWith("https://")) {
+      targetUrl = "https://" + targetUrl;
+    }
+
     setLoading(true);
-    setError(null);
-    
     try {
-      const res = await fetch("http://localhost:8000/api/scan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url })
-      });
-      
-      if (!res.ok) throw new Error("Failed to start scan");
-      
-      const data = await res.json();
-      console.log("Scan started:", data);
-      
-      // Redirect to report progress view
-      window.location.href = `/reports/${data.scan_id}`;
-      
-    } catch (err: any) {
-      setError(err.message || "An error occurred");
+      const data = await triggerScan(targetUrl);
+      if (data.scan_id) {
+        router.push(`/reports/${data.scan_id}/overview`);
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "Scan failed");
+      } else {
+        setError("Scan failed");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="scan-form glass-panel">
-      <div className="input-wrapper">
-        <svg className="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input 
-          type="url" 
+    <form className="scan-form" onSubmit={handleSubmit} id="scan-form">
+      <div className="scan-bar">
+        <span className="scan-bar-prefix">&gt;_</span>
+        <input
+          type="text"
+          className="scan-input"
+          placeholder="TARGET_URL://"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter') handleScan(); }}
-          placeholder="https://example.com" 
-          required
-          className="url-input"
           disabled={loading}
+          id="scan-url-input"
+          autoComplete="off"
+          spellCheck={false}
         />
+        <button
+          type="submit"
+          className="scan-btn"
+          disabled={loading || !url.trim()}
+          id="scan-submit-btn"
+        >
+          {loading ? (
+            <span className="scan-btn-loading">SCANNING...</span>
+          ) : (
+            <>
+              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>radar</span>
+              INITIATE_SCAN
+            </>
+          )}
+        </button>
       </div>
-      <button type="button" onClick={handleScan} className="btn-primary scan-btn" disabled={loading}>
-        {loading ? (
-          <span className="loader-spin"></span>
-        ) : (
-          <>Initialize Scan</>
-        )}
-      </button>
-      
-      {error && <p className="error-text">{error}</p>}
-    </div>
+      {error && (
+        <div className="scan-error">
+          <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>error</span>
+          {error}
+        </div>
+      )}
+    </form>
   );
 }

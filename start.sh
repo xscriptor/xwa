@@ -21,6 +21,7 @@ fi
 echo "Python environment Ready."
 
 export PYTHONPATH=$(pwd)
+export NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-"http://localhost:8000"}
 
 # 2. Check Node.js Next.js environment
 echo -e "\n${GREEN}[2/3] Checking Node.js Frontend Dependencies...${NC}"

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CYBER_AUDIT_PROTOCOL | COMPLIANCE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;600&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-highest": "#353534",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#313030",
+                        "surface-tint": "#2ae500",
+                        "secondary-fixed": "#6ff6ff",
+                        "on-primary-fixed": "#022100",
+                        "on-secondary-fixed-variant": "#004f53",
+                        "secondary-container": "#00f1fd",
+                        "on-primary-fixed-variant": "#095300",
+                        "primary-fixed-dim": "#2ae500",
+                        "on-surface": "#e5e2e1",
+                        "surface-dim": "#131313",
+                        "on-error": "#690005",
+                        "secondary": "#dcfdff",
+                        "on-secondary-container": "#006a6f",
+                        "on-tertiary-container": "#835900",
+                        "primary-container": "#39ff14",
+                        "on-tertiary-fixed-variant": "#614000",
+                        "on-surface-variant": "#baccb0",
+                        "surface-container": "#201f1f",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#00dce6",
+                        "tertiary": "#fff8f4",
+                        "on-tertiary-fixed": "#281800",
+                        "tertiary-container": "#ffd79e",
+                        "error-container": "#93000a",
+                        "surface": "#131313",
+                        "on-primary-container": "#107100",
+                        "on-secondary-fixed": "#002022",
+                        "background": "#131313",
+                        "primary": "#efffe3",
+                        "tertiary-fixed-dim": "#ffba43",
+                        "surface-container-lowest": "#0e0e0e",
+                        "primary-fixed": "#79ff5b",
+                        "on-secondary": "#00373a",
+                        "surface-container-high": "#2a2a2a",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffddaf",
+                        "inverse-primary": "#106e00",
+                        "surface-variant": "#353534",
+                        "on-primary": "#053900",
+                        "on-tertiary": "#432c00",
+                        "on-background": "#e5e2e1",
+                        "surface-bright": "#3a3939",
+                        "inverse-surface": "#e5e2e1",
+                        "outline": "#85967c",
+                        "outline-variant": "#3c4b35"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    },
+                    borderRadius: {"DEFAULT": "0rem", "lg": "0rem", "xl": "0rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scan-line {
+            background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 51%);
+            background-size: 100% 4px;
+        }
+        .glitch-border {
+            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+        }
+        .segment-bar span {
+            width: 8px;
+            height: 100%;
+            margin-right: 2px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TOP NAVIGATION SHELL -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-neutral-950/80 backdrop-blur-md flex justify-between items-center px-6 py-3 border-b border-neutral-800 font-['Space_Grotesk'] tracking-tighter uppercase">
+<div class="text-xl font-black text-lime-400 drop-shadow-[0_0_8px_rgba(57,255,20,0.5)]">
+            CYBER_AUDIT_PROTOCOL
+        </div>
+<div class="hidden md:flex items-center gap-8 text-xs font-bold">
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">STRUCTURE</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">SITEMAPS</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">NETWORK</a>
+<a class="text-lime-400 border-b-2 border-lime-400 pb-1" href="#">COMPLIANCE</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">SOCIAL</a>
+<a class="text-neutral-500 hover:text-lime-200 transition-colors" href="#">STACK</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-lime-400 cursor-pointer hover:bg-lime-400/10 p-1" data-icon="terminal">terminal</span>
+<span class="material-symbols-outlined text-neutral-500 cursor-pointer hover:bg-lime-400/10 p-1" data-icon="settings">settings</span>
+<img alt="OPERATOR_01_AVATAR" class="w-8 h-8 border border-lime-400/50" data-alt="Avatar of the system operator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACetign_sPF3W2sgMh1EzOPiMcusS8v4qufNvJafqr5AgSTfhN6Q-jai9XzBIpxrmymtxOEN8eLi2-tBiUbB-aY-IBeR0zKRU6AnvQsapNqQlW138VFFXUbppqKb477p1ASTsb3rYgmmaFPK5C6sbmy4ihowiExBgFk6QOKfDxF277Jyl_ESriLm0VIC7nY4sX5lshlKTZmm3QmVJglQWm_3H6C0QeF77AQQY4CX1Dnj0Qss-C6P-l2qof9KqMil66W8YL6G28iZU"/>
+</div>
+</nav>
+<!-- SIDE NAVIGATION SHELL -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-neutral-900 flex flex-col pt-16 z-40 hidden md:flex border-r border-neutral-800">
+<div class="p-6">
+<div class="font-mono text-[10px] text-lime-400 mb-1">CORE_SYSTEM_ACCESS</div>
+<div class="font-headline font-bold text-lg text-lime-400 tracking-tight">AUDIT_v2.0</div>
+<div class="font-mono text-[9px] text-neutral-500">STATUS: ENCRYPTED</div>
+</div>
+<nav class="flex-1 px-2 space-y-1 font-mono text-xs uppercase">
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 transition-transform hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> DASHBOARD
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 transition-transform hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="radar">radar</span> SCAN_ENGINE
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 transition-transform hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span> THREAT_INTEL
+            </a>
+<a class="bg-lime-400 text-black font-bold flex items-center gap-3 px-4 py-3 [clip-path:polygon(0_0,100%_0,95%_100%,0%_100%)] ring-1 ring-lime-400" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span> REPORTS
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 transition-transform hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span> SYSTEM_LOGS
+            </a>
+<a class="text-neutral-400 flex items-center gap-3 px-4 py-3 hover:bg-neutral-800 transition-transform hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="lock">lock</span> VAULT
+            </a>
+</nav>
+<div class="p-4 mt-auto">
+<button class="w-full bg-primary-container text-on-primary-fixed font-bold py-3 text-xs uppercase tracking-widest hover:brightness-125 transition-all active:scale-95">
+                INITIATE_DEEP_SCAN
+            </button>
+<div class="mt-6 space-y-2 font-mono text-[10px] text-neutral-500">
+<div class="flex items-center gap-2 px-2">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span> SUPPORT
+                </div>
+<div class="flex items-center gap-2 px-2">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span> DOCS
+                </div>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT CANVAS -->
+<main class="md:ml-64 pt-24 px-8 pb-12 min-h-screen scan-line">
+<!-- HEADER HUD -->
+<header class="mb-12 flex flex-col md:flex-row justify-between items-end gap-6 border-l-4 border-lime-400 pl-6">
+<div>
+<h1 class="font-headline text-5xl font-black text-on-surface tracking-tighter uppercase mb-2">
+                    Regulatory_Audit <span class="text-lime-400">0x7F4</span>
+</h1>
+<p class="font-mono text-xs text-neutral-400 max-w-xl">
+                    [SYSTEM_LOG]: RUNNING REAL-TIME COMPLIANCE CHECKER v.4.2. COMPARING ACTIVE DATABASES AGAINST GLOBAL PRIVACY FRAMEWORKS.
+                </p>
+</div>
+<div class="flex flex-col items-end font-mono">
+<span class="text-[10px] text-neutral-500 uppercase tracking-widest">Global Shield Integrity</span>
+<span class="text-4xl font-bold text-lime-400 drop-shadow-[0_0_10px_rgba(57,255,20,0.4)]">94.2%</span>
+</div>
+</header>
+<!-- BENTO GRID LAYOUT -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- PRIMARY STATUS SHIELDS -->
+<div class="lg:col-span-4 space-y-6">
+<!-- GDPR SHIELD -->
+<div class="bg-surface-container p-6 border-t border-r border-lime-400/30 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 bg-lime-400 text-black text-[9px] font-bold font-mono">ACTIVE</div>
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-4xl text-lime-400" data-icon="verified_user">verified_user</span>
+<div class="text-right">
+<div class="font-headline font-bold text-xl uppercase tracking-tighter">GDPR</div>
+<div class="font-mono text-[10px] text-neutral-500">GENERAL DATA PROTECTION</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-[10px] font-mono">
+<span class="text-neutral-400 uppercase">Compliance Score</span>
+<span class="text-lime-400">98/100</span>
+</div>
+<div class="h-1 w-full bg-neutral-800">
+<div class="h-full bg-lime-400 w-[98%] shadow-[0_0_8px_#39FF14]"></div>
+</div>
+<div class="bg-surface-container-lowest p-3 border-l-2 border-lime-400 mt-4">
+<div class="font-mono text-[10px] text-lime-400 mb-1 flex justify-between">
+<span>_DATA_ENCRYPTION_LAYER</span>
+<span>OK</span>
+</div>
+<div class="font-mono text-[10px] text-lime-400 flex justify-between">
+<span>_USER_CONSENT_LOGS</span>
+<span>OK</span>
+</div>
+</div>
+</div>
+</div>
+<!-- CCPA SHIELD (VIOLATION STATE) -->
+<div class="bg-surface-container p-6 border-t border-r border-error/30 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2 bg-error text-on-error text-[9px] font-bold font-mono">WARNING</div>
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-4xl text-error" data-icon="gpp_maybe">gpp_maybe</span>
+<div class="text-right">
+<div class="font-headline font-bold text-xl uppercase tracking-tighter">CCPA</div>
+<div class="font-mono text-[10px] text-neutral-500">CALIFORNIA CONSUMER PRIVACY</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-[10px] font-mono">
+<span class="text-neutral-400 uppercase">Compliance Score</span>
+<span class="text-error">62/100</span>
+</div>
+<div class="h-1 w-full bg-neutral-800">
+<div class="h-full bg-error w-[62%] shadow-[0_0_8px_#FFB4AB]"></div>
+</div>
+<div class="bg-error/10 p-3 border-l-2 border-error mt-4">
+<div class="font-mono text-[10px] text-error mb-1 flex justify-between">
+<span>_DNS_OPT_OUT_FAIL</span>
+<span>ERR_403</span>
+</div>
+<div class="font-mono text-[10px] text-neutral-400">CRITICAL: "Do Not Sell" link missing on landing page.</div>
+</div>
+</div>
+</div>
+<!-- COOKIE POLICY SHIELD -->
+<div class="bg-surface-container p-6 border-t border-r border-secondary-container/30">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-4xl text-secondary-container" data-icon="cookie">cookie</span>
+<div class="text-right">
+<div class="font-headline font-bold text-xl uppercase tracking-tighter">COOKIES</div>
+<div class="font-mono text-[10px] text-neutral-500">POLICY &amp; TRACKER STATUS</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-[10px] font-mono">
+<span class="text-neutral-400 uppercase">Audit Integrity</span>
+<span class="text-secondary-container">100%</span>
+</div>
+<div class="h-1 w-full bg-neutral-800">
+<div class="h-full bg-secondary-container w-full shadow-[0_0_8px_#00F1FD]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- CENTRAL SCANNER TERMINAL -->
+<div class="lg:col-span-8 space-y-6">
+<!-- LIVE SCANNER HUD -->
+<div class="bg-neutral-950 p-8 border border-neutral-800 relative glitch-border">
+<div class="flex justify-between items-center mb-8">
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 bg-lime-400 animate-pulse"></div>
+<h2 class="font-headline text-2xl font-bold uppercase tracking-widest text-on-surface">Live_Document_Scan</h2>
+</div>
+<div class="font-mono text-xs text-lime-400 bg-lime-400/10 px-3 py-1 border border-lime-400/20">
+                            ID: X-RAY-7729-ALPHA
+                        </div>
+</div>
+<!-- SCAN PROGRESS BLOCKS -->
+<div class="space-y-8">
+<div class="space-y-2">
+<div class="flex justify-between font-mono text-[10px] uppercase">
+<span class="text-neutral-400">Terms_of_Service.pdf</span>
+<span class="text-lime-400">Processing... 88%</span>
+</div>
+<div class="segment-bar flex h-4">
+<span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-mono text-[10px] uppercase">
+<span class="text-neutral-400">Privacy_Protocol_EU.docx</span>
+<span class="text-lime-400">SECURE</span>
+</div>
+<div class="segment-bar flex h-4">
+<span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span><span class="bg-lime-400"></span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-mono text-[10px] uppercase text-error">
+<span>Marketing_Retention.md</span>
+<span>CRITICAL_FAIL</span>
+</div>
+<div class="segment-bar flex h-4">
+<span class="bg-error"></span><span class="bg-error"></span><span class="bg-error"></span><span class="bg-error"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span><span class="bg-neutral-800"></span>
+</div>
+</div>
+</div>
+<!-- TERMINAL LOGS -->
+<div class="mt-12 bg-surface-container-lowest p-4 font-mono text-[11px] h-48 overflow-y-auto border border-neutral-800">
+<div class="text-lime-400">[08:22:45] INITIALIZING PARSER...</div>
+<div class="text-neutral-500">[08:22:46] LOADED GDPR_V2_DICTIONARY.JSON</div>
+<div class="text-neutral-500">[08:22:47] SCANNING 'TERMS_OF_SERVICE.PDF' FOR KEYWORDS: [LIABILITY, CONSENT, DATA_SALE]</div>
+<div class="text-lime-400">[08:22:48] POSITIVE MATCH FOUND: 'RIGHT_TO_ERASURE' CLAUSE IN PARAGRAPH 12.</div>
+<div class="text-error">[08:22:50] ERROR: MISSING MANDATORY CCPA DISCLOSURE ON PAGE 4.</div>
+<div class="text-neutral-500">[08:22:51] INJECTING REMEDIATION SUGGESTION INTO REPORT...</div>
+<div class="text-lime-400 animate-pulse">[08:22:52] STILL SCANNING...</div>
+</div>
+</div>
+<!-- SECONDARY BENTO MODULES -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container-low p-6 border-l-4 border-secondary-container">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary-container" data-icon="policy">policy</span>
+<h3 class="font-headline font-bold text-sm uppercase tracking-wider">Policy_Coverage</h3>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-3 border border-neutral-800 text-center">
+<div class="text-[9px] text-neutral-500 uppercase">Active Nodes</div>
+<div class="text-lg font-bold text-on-surface">42</div>
+</div>
+<div class="bg-surface-container-lowest p-3 border border-neutral-800 text-center">
+<div class="text-[9px] text-neutral-500 uppercase">Exceptions</div>
+<div class="text-lg font-bold text-tertiary-fixed-dim">03</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 border-l-4 border-tertiary-fixed-dim">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="history">history</span>
+<h3 class="font-headline font-bold text-sm uppercase tracking-wider">Audit_Timeline</h3>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center bg-surface-container-lowest p-2 text-[10px] font-mono">
+<span class="text-neutral-400">Last Full Scan</span>
+<span class="text-on-surface">04h 12m ago</span>
+</div>
+<div class="flex justify-between items-center bg-surface-container-lowest p-2 text-[10px] font-mono">
+<span class="text-neutral-400">Next Scheduled</span>
+<span class="text-on-surface">In 19h 48m</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- TRANSACTIONAL ACTION AREA -->
+<footer class="mt-12 pt-8 border-t border-neutral-800 flex flex-col md:flex-row gap-8 items-center justify-between">
+<div class="flex gap-4">
+<button class="bg-surface-container-highest text-secondary-fixed border border-secondary-fixed/50 px-8 py-3 text-xs font-bold uppercase tracking-widest hover:bg-secondary-fixed/10 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span> EXPORT_AUDIT_LOG
+                </button>
+<button class="bg-surface-container-highest text-neutral-400 border border-neutral-700 px-8 py-3 text-xs font-bold uppercase tracking-widest hover:text-on-surface transition-all">
+                    ARCHIVE_HISTORY
+                </button>
+</div>
+<div class="font-mono text-[9px] text-neutral-600 text-right uppercase tracking-[0.2em]">
+                System_Node: <span class="text-lime-400">US-EAST-AUDIT-01</span><br/>
+                Protocol_Hash: <span class="text-lime-400">A7F8-D990-221B-CC44</span>
+</div>
+</footer>
+</main>
+<!-- MOBILE NAVIGATION (HIDDEN ON DESKTOP) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-neutral-900 grid grid-cols-4 items-center h-16 border-t border-neutral-800 z-50">
+<a class="flex flex-col items-center text-neutral-500" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[8px] mt-1 font-bold">HOME</span>
+</a>
+<a class="flex flex-col items-center text-neutral-500" href="#">
+<span class="material-symbols-outlined" data-icon="radar">radar</span>
+<span class="text-[8px] mt-1 font-bold">SCAN</span>
+</a>
+<a class="flex flex-col items-center text-lime-400" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-[8px] mt-1 font-bold">AUDIT</span>
+</a>
+<a class="flex flex-col items-center text-neutral-500" href="#">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+<span class="text-[8px] mt-1 font-bold">VAULT</span>
+</a>
+</nav>
+</body></html>
