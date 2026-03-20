@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import ThemeProvider from "./ThemeProvider";
+import AsideSymbolIcon from "@/components/icons/aside/AsideSymbolIcon";
+import NavHamburgerIcon from "@/components/icons/navbar/NavHamburgerIcon";
+import NavStatusIcon from "@/components/icons/navbar/NavStatusIcon";
 import {
   getCurrentReportId,
   getCurrentReportSection,
@@ -112,7 +115,7 @@ export default function ThemeWrapper({ children }: { children: React.ReactNode }
               aria-expanded={mobileMenuOpen}
               onClick={() => setMobileMenuOpen((prev) => !prev)}
             >
-              <span className="material-symbols-outlined">{mobileMenuOpen ? "close" : "menu"}</span>
+              <NavHamburgerIcon open={mobileMenuOpen} />
             </button>
             <div style={{
               width: '2.25rem',
@@ -122,8 +125,9 @@ export default function ThemeWrapper({ children }: { children: React.ReactNode }
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              color: 'var(--primary)',
             }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '18px', color: 'var(--primary)' }}>Z</span>
+              <NavStatusIcon />
             </div>
           </div>
         </nav>
@@ -156,7 +160,7 @@ export default function ThemeWrapper({ children }: { children: React.ReactNode }
         {asideLinks.length > 0 && (
           <aside className="page-aside">
             <div className="page-aside-header">
-              <span className="material-symbols-outlined">Sections_M</span>
+              <AsideSymbolIcon symbol="Sections_M" size={12} />
             </div>
             <nav className="page-aside-nav" aria-label="Page sections">
               {asideLinks.map((link) => (
@@ -167,7 +171,7 @@ export default function ThemeWrapper({ children }: { children: React.ReactNode }
                   data-active={link.isActive ? "true" : "false"}
                   aria-current={link.isActive ? "page" : undefined}
                 >
-                  {link.icon && <span className="material-symbols-outlined">{link.icon}</span>}
+                  {link.icon && <AsideSymbolIcon symbol={link.icon} size={12} />}
                   {link.label}
                 </Link>
               ))}

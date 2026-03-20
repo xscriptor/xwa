@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { triggerScan } from "@/lib/api";
+import ScanErrorIcon from "@/components/icons/scan/ScanErrorIcon";
+import ScanRadarIcon from "@/components/icons/scan/ScanRadarIcon";
 import "./ScanForm.css";
 
 export default function ScanForm() {
@@ -64,7 +66,7 @@ export default function ScanForm() {
             <span className="scan-btn-loading">SCANNING...</span>
           ) : (
             <>
-              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>radar</span>
+              <ScanRadarIcon />
               INITIATE_SCAN
             </>
           )}
@@ -72,7 +74,7 @@ export default function ScanForm() {
       </div>
       {error && (
         <div className="scan-error">
-          <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>error</span>
+          <ScanErrorIcon />
           {error}
         </div>
       )}
