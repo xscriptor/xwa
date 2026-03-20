@@ -176,9 +176,9 @@ export default function ThemeWrapper({ children }: { children: React.ReactNode }
         )}
 
         <footer className="app-footer">
-          <a href="https://github.com/xscriptor" target="_blank" rel="noreferrer">Xscriptor</a>
-          <span className="footer-sep">|</span>
           <a href="https://github.com/FrancisFoRL" target="_blank" rel="noreferrer">Francis</a>
+          <span className="footer-sep">|</span>
+          <a href="https://github.com/xscriptor" target="_blank" rel="noreferrer">Xscriptor</a>
         </footer>
       </div>
     </ThemeProvider>
