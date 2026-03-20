@@ -1,0 +1,8 @@
+# =========================
+# Git attributes for stats
+# =========================
+# Goal: keep all languages visible but down-weight HTML in linguist stats.
+
+# Only de-emphasize HTML; everything else remains counted normally.
+*.html linguist-vendored
+web/src/**/*.html linguist-vendored
