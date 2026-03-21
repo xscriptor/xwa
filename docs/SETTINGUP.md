@@ -16,6 +16,8 @@ Ensure you have the following installed on your system:
 
 ## 1. Starting the Backend (FastAPI + SQLModel)
 
+**Note:** ./start.sh starts all for you. 
+
 The backend handles all the heavy lifting: SEO analysis, concurrent sitemap crawling, and passive security audits.
 
 Open a terminal at the root of the project (`xwa/`):
