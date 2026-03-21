@@ -92,6 +92,29 @@ export default function ReportDashboard({
   const [reportData, setReportData] = useState<ScanReport | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // First, try to load any existing stored report so revisits don't wait on SSE.
+  useEffect(() => {
+    let cancelled = false;
+    setError(null);
+    getReport<ScanReport>(scanId)
+      .then((data) => {
+        if (cancelled) return;
+        if ("status" in data && data.status === "In Progress") {
+          setStatus(data.current_step || "In Progress");
+          setIsCompleted(false);
+        } else {
+          setReportData(data as ScanReport);
+          setIsCompleted(true);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setError("Failed to load report data");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [scanId]);
+
   const handleQuickScan = async (targetUrl: string) => {
     try {
       const data = await triggerScan(targetUrl);
@@ -102,18 +125,22 @@ export default function ReportDashboard({
   };
 
   useEffect(() => {
+    if (reportData) return;
+
     const es = openProgressStream(scanId);
     es.onmessage = (event) => {
       const s = event.data;
       setStatus(s);
-      if (s.includes("Completed")) { setIsCompleted(true); es.close(); }
+      if (s.includes("Completed") || s === "Unknown") { setIsCompleted(true); es.close(); }
       else if (s.includes("Error")) { setError(s); es.close(); }
     };
     es.onerror = () => { setIsCompleted(true); es.close(); };
     return () => { es.close(); };
-  }, [scanId]);
+  }, [scanId, reportData]);
 
   useEffect(() => {
+    if (reportData || !isCompleted || error) return;
+
     if (isCompleted && !error) {
       getReport<ScanReport>(scanId)
         .then(data => {
@@ -125,7 +152,7 @@ export default function ReportDashboard({
         })
         .catch(() => setError("Failed to load report data"));
     }
-  }, [isCompleted, error, scanId]);
+  }, [isCompleted, error, scanId, reportData]);
 
   if (error) {
     return (
