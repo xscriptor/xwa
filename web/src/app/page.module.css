@@ -1,3 +1,20 @@
+.main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.pageShell {
+  width: 100%;
+  min-height: calc(100vh - 4rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem 3rem;
+}
+
 .hero {
   display: flex;
   align-items: center;
@@ -6,6 +23,20 @@
   position: relative;
   z-index: 1;
   padding: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Home needs to counter the global right padding when the aside is visible.
+   Keep desktop compensation, but revert to default on small screens. */
+:global(.content-shell.has-aside .main-content) {
+  padding-right: 2rem;
+}
+
+@media (max-width: 900px) {
+  :global(.content-shell.has-aside .main-content) {
+    padding-right: 1.5rem;
+  }
 }
 
 .heroContent {

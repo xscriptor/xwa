@@ -60,3 +60,27 @@ xwa/
 1. **`core/`**: This is a standalone Python package. It should not know anything about the database or the web server. It takes a URL as input and returns structured data (Python dictionaries or Pydantic models). It can be run purely from the terminal via `cli.py`.
 2. **`api/`**: The FastAPI server. It imports the `core` package to perform scans, saves the results to an SQLite database, and serves HTTP endpoints for the web frontend to consume.
 3. **`web/`**: The Next.js dashboard. It is completely isolated from the Python code. It communicates entirely by fetching data from the FastAPI endpoints (`GET`, `POST` to `api/`).
+
+## Frontend UI entry points (per page)
+
+Edit these files to change the UI for each route:
+
+- `/` (Home):
+  - Layout/markup: `web/src/app/page.tsx`
+  - Styles: `web/src/app/page.module.css`
+  - Shared scan form component: `web/src/components/ScanForm.tsx`
+
+- `/reports` (History table):
+  - Layout/markup: `web/src/app/reports/page.tsx`
+  - Styles: `web/src/app/reports/reports.css`
+  - Data helpers: `web/src/lib/api.ts` (list/delete)
+
+- `/reports/[id]/[section]` (Report detail):
+  - Route wrapper that passes params: `web/src/app/reports/[id]/[section]/page.tsx`
+  - Dashboard shell, status handling, header: `web/src/components/ReportDashboard.tsx`
+  - Styles: `web/src/components/ReportDashboard.css`
+  - Tab content (one file per section): `web/src/components/tabs/*.tsx` (overview, performance, seo, accessibility, structure, content, links, sitemap, security, network, compliance, social, stack)
+
+- Shared navigation/asides:
+  - Links and route mapping: `web/src/lib/navigation.ts`
+  - Layout wrapper and nav/aside markup: `web/src/components/ThemeWrapper.tsx`
