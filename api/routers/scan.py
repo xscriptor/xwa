@@ -4,13 +4,14 @@ from api.db.database import get_session
 from api.db.models import ScanRecord
 from core.models.scan_results import (
     FullScanReport, SEOResults, SitemapResults, SecurityResults,
-    AccessibilityResults, StructureResults
+    AccessibilityResults, StructureResults, PerformanceResults
 )
 from core.modules.security import run_security_analysis
 from core.modules.security import run_security_snapshot
 from core.modules.sitemap import run_sitemap_analysis
 from core.modules.accessibility import run_accessibility_analysis
 from core.modules.structure import run_structure_analysis
+from core.modules.performance import run_performance_analysis, run_performance_snapshot
 from core.modules.seo import (
     extract_standard_meta_tags,
     extract_social_meta_tags,
@@ -105,11 +106,17 @@ def sync_core_execution(url: str, session: Session, scan_id: int):
         scan_progress[scan_id] = "Running Structure Analysis..."
         main_structure = run_structure_analysis(html_content, url)
 
+        scan_progress[scan_id] = "Running Performance Analysis..."
+        main_performance = run_performance_analysis(
+            html_content, url, dict(response.headers), int((response.elapsed.total_seconds()) * 1000)
+        )
+
         # Per-URL analysis: sample up to 25 discovered URLs
         per_url_accessibility = []
         per_url_seo = []
         per_url_security = []
         per_url_structure = []
+        per_url_performance = []
         crawled_urls = sitemap_results.get("all_urls", [])
         sample_urls = [u for u in crawled_urls if u != url][:25]
         if sample_urls:
@@ -145,6 +152,17 @@ def sync_core_execution(url: str, session: Session, scan_id: int):
                     # Structure per URL
                     per_url_structure.append(run_structure_analysis(page_html, page_url))
 
+                    # Performance per URL
+                    # Use crawl_results response_time if available
+                    page_response_ms = 0
+                    for cr in sitemap_results.get("crawl_results", []):
+                        if cr.get("url") == page_url:
+                            page_response_ms = cr.get("response_time_ms", 0)
+                            break
+                    per_url_performance.append(
+                        run_performance_snapshot(page_html, page_url, page.get("headers", {}), page_response_ms)
+                    )
+
 
         scan_progress[scan_id] = "Formatting Final Report..."
 
@@ -175,6 +193,10 @@ def sync_core_execution(url: str, session: Session, scan_id: int):
             structure=StructureResults(
                 main_page=main_structure,
                 per_url=per_url_structure,
+            ),
+            performance=PerformanceResults(
+                main_page=main_performance,
+                per_url=per_url_performance,
             )
         )
 
