@@ -66,29 +66,106 @@ def analyze_resources(html: str, url: str) -> Dict[str, Any]:
     # Inline styles count
     inline_styles = len(soup.find_all("style"))
 
-    # Images
-    for tag in soup.find_all("img", src=True):
-        image_sources.append(tag["src"])
+    # Images — standard src, lazy-loaded (data-src, data-lazy-src, data-original), noscript
+    LAZY_ATTRS = ["src", "data-src", "data-lazy-src", "data-original", "data-lazy", "data-srcset"]
+    seen_images: set = set()
+    for tag in soup.find_all("img"):
+        for attr in LAZY_ATTRS:
+            val = tag.get(attr, "")
+            if val and val not in seen_images and not val.startswith("data:"):
+                if attr == "data-srcset":
+                    val = val.split(",")[0].strip().split(" ")[0]
+                seen_images.add(val)
+                image_sources.append(val)
+                break
 
     # Picture sources
-    for tag in soup.find_all("source", srcset=True):
-        image_sources.append(tag["srcset"].split(",")[0].strip().split(" ")[0])
+    for tag in soup.find_all("source"):
+        srcset = tag.get("srcset", "")
+        if srcset:
+            first_src = srcset.split(",")[0].strip().split(" ")[0]
+            if first_src and first_src not in seen_images:
+                seen_images.add(first_src)
+                image_sources.append(first_src)
 
-    # Fonts (preloaded)
+    # Noscript fallback images
+    for noscript in soup.find_all("noscript"):
+        noscript_soup = BeautifulSoup(str(noscript), "html.parser")
+        for tag in noscript_soup.find_all("img"):
+            src = tag.get("src", "")
+            if src and src not in seen_images and not src.startswith("data:"):
+                seen_images.add(src)
+                image_sources.append(src)
+
+    # CSS background-image in inline styles
+    bg_images: List[str] = []
+    for tag in soup.find_all(style=True):
+        style_val = tag.get("style", "")
+        if "url(" in style_val:
+            urls = re.findall(r'url\(["\']?([^"\')\s]+)["\']?\)', style_val)
+            for u in urls:
+                if u not in seen_images and not u.startswith("data:"):
+                    seen_images.add(u)
+                    bg_images.append(u)
+                    image_sources.append(u)
+
+    # CSS background-image in <style> blocks
+    for style in soup.find_all("style"):
+        if style.string and "url(" in style.string:
+            urls = re.findall(r'url\(["\']?([^"\')\s]+)["\']?\)', style.string)
+            for u in urls:
+                ext = u.rsplit(".", 1)[-1].lower() if "." in u else ""
+                if ext in ("jpg", "jpeg", "png", "gif", "webp", "avif", "svg", "ico", "bmp"):
+                    if u not in seen_images:
+                        seen_images.add(u)
+                        bg_images.append(u)
+                        image_sources.append(u)
+
+    # Fonts — preloaded, @font-face, Google Fonts, CSS @import
+    seen_fonts: set = set()
     for tag in soup.find_all("link", rel="preload"):
         as_val = tag.get("as", "")
-        if as_val == "font":
-            font_sources.append(tag.get("href", ""))
+        href = tag.get("href", "")
+        if as_val == "font" and href and href not in seen_fonts:
+            seen_fonts.add(href)
+            font_sources.append(href)
 
-    # Font-face in inline styles
+    # Google Fonts / external font stylesheets
+    for tag in soup.find_all("link", rel="stylesheet"):
+        href = tag.get("href", "")
+        if href and ("fonts.googleapis.com" in href or "fonts.gstatic.com" in href or "use.typekit.net" in href):
+            if href not in seen_fonts:
+                seen_fonts.add(href)
+                font_sources.append(href)
+
+    # @font-face in <style> blocks
     for style in soup.find_all("style"):
         if style.string and "@font-face" in style.string:
             urls = re.findall(r'url\(["\']?([^"\')\s]+)["\']?\)', style.string)
-            font_sources.extend(urls)
+            for u in urls:
+                if u not in seen_fonts:
+                    seen_fonts.add(u)
+                    font_sources.append(u)
 
-    # Iframes
-    for tag in soup.find_all("iframe", src=True):
-        iframe_sources.append(tag["src"])
+    # CSS @import in <style> blocks (may load font stylesheets)
+    for style in soup.find_all("style"):
+        if style.string and "@import" in style.string:
+            imports = re.findall(r'@import\s+(?:url\()?["\']?([^"\')\s;]+)["\']?\)?', style.string)
+            for imp in imports:
+                if "font" in imp.lower() and imp not in seen_fonts:
+                    seen_fonts.add(imp)
+                    font_sources.append(imp)
+
+    # Iframes — standard src + lazy-loaded (data-src, data-lazy-src)
+    IFRAME_ATTRS = ["src", "data-src", "data-lazy-src"]
+    seen_iframes: set = set()
+    for tag in soup.find_all("iframe"):
+        for attr in IFRAME_ATTRS:
+            val = tag.get(attr, "")
+            if val and val not in seen_iframes and not val.startswith("about:"):
+                seen_iframes.add(val)
+                iframe_sources.append(val)
+                break
 
     total_external = len(js_sources) + len(css_sources) + len(image_sources) + len(font_sources) + len(iframe_sources)
     html_size = len(html.encode("utf-8", errors="ignore"))
@@ -109,6 +186,7 @@ def analyze_resources(html: str, url: str) -> Dict[str, Any]:
         "images": {
             "count": len(image_sources),
             "sources": image_sources[:40],
+            "bg_images_count": len(bg_images),
         },
         "fonts": {
             "count": len(font_sources),
@@ -127,14 +205,60 @@ MODERN_FORMATS = {".webp", ".avif", ".svg"}
 
 
 def detect_unoptimized_images(html: str, page_url: str) -> Dict[str, Any]:
-    """Detect images not using modern formats (WebP, AVIF, SVG)."""
+    """Detect images not using modern formats (WebP, AVIF, SVG).
+    
+    Checks: <img src/data-src/data-lazy-src>, <source srcset>, <noscript> fallbacks,
+    and CSS background-image in inline styles.
+    """
     soup = BeautifulSoup(html, "html.parser")
     unoptimized: List[Dict[str, str]] = []
-    total = 0
+    all_sources: List[str] = []
+    seen: set = set()
 
-    for tag in soup.find_all("img", src=True):
-        src = tag["src"]
-        total += 1
+    LAZY_ATTRS = ["src", "data-src", "data-lazy-src", "data-original", "data-lazy"]
+
+    # Collect all image sources
+    for tag in soup.find_all("img"):
+        for attr in LAZY_ATTRS:
+            val = tag.get(attr, "")
+            if val and val not in seen and not val.startswith("data:"):
+                seen.add(val)
+                all_sources.append(val)
+                break
+
+    # <source srcset>
+    for tag in soup.find_all("source"):
+        srcset = tag.get("srcset", "")
+        if srcset:
+            first_src = srcset.split(",")[0].strip().split(" ")[0]
+            if first_src and first_src not in seen:
+                seen.add(first_src)
+                all_sources.append(first_src)
+
+    # Noscript fallback images
+    for noscript in soup.find_all("noscript"):
+        noscript_soup = BeautifulSoup(str(noscript), "html.parser")
+        for tag in noscript_soup.find_all("img"):
+            src = tag.get("src", "")
+            if src and src not in seen and not src.startswith("data:"):
+                seen.add(src)
+                all_sources.append(src)
+
+    # CSS background-image in inline styles
+    for tag in soup.find_all(style=True):
+        style_val = tag.get("style", "")
+        if "url(" in style_val:
+            urls = re.findall(r'url\(["\']?([^"\')\s]+)["\']?\)', style_val)
+            for u in urls:
+                ext = u.rsplit(".", 1)[-1].lower() if "." in u else ""
+                if ext in ("jpg", "jpeg", "png", "gif", "webp", "avif", "svg", "ico", "bmp"):
+                    if u not in seen:
+                        seen.add(u)
+                        all_sources.append(u)
+
+    # Check each source for format
+    total = len(all_sources)
+    for src in all_sources:
         parsed = urlparse(src)
         ext = parsed.path.rsplit(".", 1)[-1].lower() if "." in parsed.path else ""
         full_ext = f".{ext}" if ext else ""
@@ -145,7 +269,7 @@ def detect_unoptimized_images(html: str, page_url: str) -> Dict[str, Any]:
                 "format": ext.upper() if ext else "unknown",
             })
 
-    # Check <picture> for fallback-only patterns
+    # Check <picture> for modern format support
     has_picture_modern = False
     for pic in soup.find_all("picture"):
         for source in pic.find_all("source"):
