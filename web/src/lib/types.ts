@@ -217,6 +217,51 @@ export interface StructureData {
   per_url?: StructurePage[];
 }
 
+export interface PerformanceTTFB {
+  ttfb_estimate_ms?: number;
+  transfer_estimate_ms?: number;
+  total_response_ms?: number;
+  html_size_bytes?: number;
+  rating?: string;
+}
+
+export interface PerformanceResources {
+  total_external_requests?: number;
+  html_size_bytes?: number;
+  js?: { external_count?: number; inline_count?: number; sources?: string[] };
+  css?: { external_count?: number; inline_count?: number; sources?: string[] };
+  images?: { count?: number; sources?: string[] };
+  fonts?: { count?: number; sources?: string[] };
+  iframes?: { count?: number; sources?: string[] };
+}
+
+export interface PerformanceCWV {
+  lcp?: { estimate_ms?: number; rating?: string; blocking_js?: number; blocking_css?: number; hint?: string };
+  cls?: { risk?: string; unstable_elements?: number; hint?: string };
+  inp?: { risk?: string; sync_scripts?: number; hint?: string };
+}
+
+export interface PerformanceUnoptimizedImages {
+  total_images?: number;
+  unoptimized_count?: number;
+  unoptimized?: Array<{ src?: string; format?: string }>;
+  has_picture_element_modern?: boolean;
+  recommendation?: string;
+}
+
+export interface PerformancePage {
+  url?: string;
+  ttfb?: PerformanceTTFB;
+  resources?: PerformanceResources;
+  unoptimized_images?: PerformanceUnoptimizedImages;
+  cwv_estimates?: PerformanceCWV;
+}
+
+export interface PerformanceData {
+  main_page?: PerformancePage;
+  per_url?: PerformancePage[];
+}
+
 export interface ScanReport {
   target_url: string;
   scan_timestamp: string;
@@ -225,4 +270,5 @@ export interface ScanReport {
   security: SecurityData;
   accessibility: AccessibilityData;
   structure: StructureData;
+  performance: PerformanceData;
 }
