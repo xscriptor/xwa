@@ -39,6 +39,11 @@ class StructureResults(BaseModel):
     main_page: Dict[str, Any] = Field(default_factory=dict)
     per_url: List[Dict[str, Any]] = Field(default_factory=list)
 
+class PerformanceResults(BaseModel):
+    """Performance metrics: TTFB, resources, CWV estimates."""
+    main_page: Dict[str, Any] = Field(default_factory=dict)
+    per_url: List[Dict[str, Any]] = Field(default_factory=list)
+
 class FullScanReport(BaseModel):
     target_url: str
     scan_timestamp: str
@@ -47,6 +52,7 @@ class FullScanReport(BaseModel):
     security: SecurityResults
     accessibility: AccessibilityResults = Field(default_factory=AccessibilityResults)
     structure: StructureResults = Field(default_factory=StructureResults)
+    performance: PerformanceResults = Field(default_factory=PerformanceResults)
 
     def serialize(self) -> Dict[str, Any]:
         """Unified serialization down to primitive dictionaries."""
