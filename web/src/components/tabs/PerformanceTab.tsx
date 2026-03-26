@@ -20,14 +20,39 @@ function formatKB(bytes?: number) {
 
 /* ==================== PER-LINK ROW ==================== */
 
+function ResourceList({ label, items }: { label: string; items?: string[] }) {
+  if (!items || items.length === 0) return null;
+  return (
+    <div style={{ marginTop: "0.5rem" }}>
+      <h4 style={{ fontFamily: "var(--font-mono)", fontSize: "0.66rem", color: "var(--secondary)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.3rem" }}>
+        {label} [{items.length}]
+      </h4>
+      <div className="matrix-panel">
+        {items.map((src, idx) => {
+          const ext = src.includes(".") ? src.split(".").pop()?.split("?")[0]?.toUpperCase() || "" : "";
+          return (
+            <div key={idx} className="matrix-row">
+              <span className="matrix-key">{ext || "---"}</span>
+              <span className="matrix-value" title={src}>{src}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function PerformanceUrlRow({ perf, crawl }: { perf: PerformancePage; crawl?: SitemapCrawlResult }) {
   const [open, setOpen] = useState(false);
   const ttfb = perf.ttfb?.ttfb_estimate_ms || 0;
   const lcp = perf.cwv_estimates?.lcp?.estimate_ms || 0;
   const requests = perf.resources?.total_external_requests || 0;
   const unopt = perf.unoptimized_images?.unoptimized_count || 0;
+  const totalImg = perf.resources?.images?.count || 0;
   const responseMs = crawl?.response_time_ms || perf.ttfb?.total_response_ms || 0;
   const tone = responseMs > 1500 ? "badge-4xx" : responseMs > 700 ? "badge-3xx" : "badge-2xx";
+
+  const res = perf.resources;
 
   return (
     <div className="details-card glass-panel">
@@ -38,11 +63,13 @@ function PerformanceUrlRow({ perf, crawl }: { perf: PerformancePage; crawl?: Sit
         </div>
         <div className="a11y-page-badges">
           <span className={`status-badge ${tone}`}>{responseMs}ms</span>
+          <span className="status-badge badge-2xx">IMG:{totalImg}</span>
           {riskTag(perf.cwv_estimates?.lcp?.rating)}
         </div>
       </div>
       {open && (
         <div className="details-content">
+          {/* Summary stats */}
           <div className="status-strip">
             <div className="status-cell"><span>TTFB</span><strong>{ttfb}ms</strong></div>
             <div className="status-cell"><span>LCP_EST</span><strong>{lcp}ms</strong></div>
@@ -51,10 +78,39 @@ function PerformanceUrlRow({ perf, crawl }: { perf: PerformancePage; crawl?: Sit
           </div>
           <div className="status-strip" style={{ marginTop: "0.4rem" }}>
             <div className="status-cell"><span>REQUESTS</span><strong>{requests}</strong></div>
-            <div className="status-cell"><span>PAGE_SIZE</span><strong>{formatKB(perf.resources?.html_size_bytes)}</strong></div>
+            <div className="status-cell"><span>PAGE_SIZE</span><strong>{formatKB(res?.html_size_bytes)}</strong></div>
+            <div className="status-cell"><span>IMAGES</span><strong>{totalImg}</strong></div>
             <div className="status-cell"><span>UNOPT_IMG</span><strong>{unopt}</strong></div>
-            <div className="status-cell"><span>JS_FILES</span><strong>{perf.resources?.js?.external_count || 0}</strong></div>
+            <div className="status-cell"><span>JS</span><strong>{(res?.js?.external_count || 0) + (res?.js?.inline_count || 0)}</strong></div>
+            <div className="status-cell"><span>CSS</span><strong>{(res?.css?.external_count || 0) + (res?.css?.inline_count || 0)}</strong></div>
+            <div className="status-cell"><span>FONTS</span><strong>{res?.fonts?.count || 0}</strong></div>
+            <div className="status-cell"><span>IFRAMES</span><strong>{res?.iframes?.count || 0}</strong></div>
           </div>
+
+          {/* Unoptimized images list */}
+          {(perf.unoptimized_images?.unoptimized?.length || 0) > 0 && (
+            <div style={{ marginTop: "0.5rem" }}>
+              <h4 style={{ fontFamily: "var(--font-mono)", fontSize: "0.66rem", color: "var(--danger)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.3rem" }}>
+                UNOPTIMIZED_IMAGES [{perf.unoptimized_images!.unoptimized!.length}]
+              </h4>
+              <div className="matrix-panel">
+                {perf.unoptimized_images!.unoptimized!.map((img, idx) => (
+                  <div key={idx} className="matrix-row">
+                    <span className="matrix-key">{img.format}</span>
+                    <span className="matrix-value" title={img.src}>{img.src}</span>
+                    <span className="matrix-state tag-warn">CONVERT</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Full resource lists */}
+          <ResourceList label="IMAGES" items={res?.images?.sources} />
+          <ResourceList label="JAVASCRIPT" items={res?.js?.sources} />
+          <ResourceList label="CSS" items={res?.css?.sources} />
+          <ResourceList label="FONTS" items={res?.fonts?.sources} />
+          <ResourceList label="IFRAMES" items={res?.iframes?.sources} />
         </div>
       )}
     </div>
