@@ -20,14 +20,39 @@ function formatKB(bytes?: number) {
 
 /* ==================== PER-LINK ROW ==================== */
 
+function ResourceList({ label, items }: { label: string; items?: string[] }) {
+  if (!items || items.length === 0) return null;
+  return (
+    <div style={{ marginTop: "0.5rem" }}>
+      <h4 style={{ fontFamily: "var(--font-mono)", fontSize: "0.66rem", color: "var(--secondary)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.3rem" }}>
+        {label} [{items.length}]
+      </h4>
+      <div className="matrix-panel">
+        {items.map((src, idx) => {
+          const ext = src.includes(".") ? src.split(".").pop()?.split("?")[0]?.toUpperCase() || "" : "";
+          return (
+            <div key={idx} className="matrix-row">
+              <span className="matrix-key">{ext || "---"}</span>
+              <span className="matrix-value" title={src}>{src}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function PerformanceUrlRow({ perf, crawl }: { perf: PerformancePage; crawl?: SitemapCrawlResult }) {
   const [open, setOpen] = useState(false);
   const ttfb = perf.ttfb?.ttfb_estimate_ms || 0;
   const lcp = perf.cwv_estimates?.lcp?.estimate_ms || 0;
   const requests = perf.resources?.total_external_requests || 0;
   const unopt = perf.unoptimized_images?.unoptimized_count || 0;
+  const totalImg = perf.resources?.images?.count || 0;
   const responseMs = crawl?.response_time_ms || perf.ttfb?.total_response_ms || 0;
   const tone = responseMs > 1500 ? "badge-4xx" : responseMs > 700 ? "badge-3xx" : "badge-2xx";
+
+  const res = perf.resources;
 
   return (
     <div className="details-card glass-panel">
@@ -38,11 +63,13 @@ function PerformanceUrlRow({ perf, crawl }: { perf: PerformancePage; crawl?: Sit
         </div>
         <div className="a11y-page-badges">
           <span className={`status-badge ${tone}`}>{responseMs}ms</span>
+          <span className="status-badge badge-2xx">IMG:{totalImg}</span>
           {riskTag(perf.cwv_estimates?.lcp?.rating)}
         </div>
       </div>
       {open && (
         <div className="details-content">
+          {/* Summary stats */}
           <div className="status-strip">
             <div className="status-cell"><span>TTFB</span><strong>{ttfb}ms</strong></div>
             <div className="status-cell"><span>LCP_EST</span><strong>{lcp}ms</strong></div>
@@ -51,10 +78,39 @@ function PerformanceUrlRow({ perf, crawl }: { perf: PerformancePage; crawl?: Sit
           </div>
           <div className="status-strip" style={{ marginTop: "0.4rem" }}>
             <div className="status-cell"><span>REQUESTS</span><strong>{requests}</strong></div>
-            <div className="status-cell"><span>PAGE_SIZE</span><strong>{formatKB(perf.resources?.html_size_bytes)}</strong></div>
+            <div className="status-cell"><span>PAGE_SIZE</span><strong>{formatKB(res?.html_size_bytes)}</strong></div>
+            <div className="status-cell"><span>IMAGES</span><strong>{totalImg}</strong></div>
             <div className="status-cell"><span>UNOPT_IMG</span><strong>{unopt}</strong></div>
-            <div className="status-cell"><span>JS_FILES</span><strong>{perf.resources?.js?.external_count || 0}</strong></div>
+            <div className="status-cell"><span>JS</span><strong>{(res?.js?.external_count || 0) + (res?.js?.inline_count || 0)}</strong></div>
+            <div className="status-cell"><span>CSS</span><strong>{(res?.css?.external_count || 0) + (res?.css?.inline_count || 0)}</strong></div>
+            <div className="status-cell"><span>FONTS</span><strong>{res?.fonts?.count || 0}</strong></div>
+            <div className="status-cell"><span>IFRAMES</span><strong>{res?.iframes?.count || 0}</strong></div>
           </div>
+
+          {/* Unoptimized images list */}
+          {(perf.unoptimized_images?.unoptimized?.length || 0) > 0 && (
+            <div style={{ marginTop: "0.5rem" }}>
+              <h4 style={{ fontFamily: "var(--font-mono)", fontSize: "0.66rem", color: "var(--danger)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.3rem" }}>
+                UNOPTIMIZED_IMAGES [{perf.unoptimized_images!.unoptimized!.length}]
+              </h4>
+              <div className="matrix-panel">
+                {perf.unoptimized_images!.unoptimized!.map((img, idx) => (
+                  <div key={idx} className="matrix-row">
+                    <span className="matrix-key">{img.format}</span>
+                    <span className="matrix-value" title={img.src}>{img.src}</span>
+                    <span className="matrix-state tag-warn">CONVERT</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Full resource lists */}
+          <ResourceList label="IMAGES" items={res?.images?.sources} />
+          <ResourceList label="JAVASCRIPT" items={res?.js?.sources} />
+          <ResourceList label="CSS" items={res?.css?.sources} />
+          <ResourceList label="FONTS" items={res?.fonts?.sources} />
+          <ResourceList label="IFRAMES" items={res?.iframes?.sources} />
         </div>
       )}
     </div>
@@ -74,17 +130,45 @@ export default function PerformanceTab({
   const perUrl = performance?.per_url || [];
   const crawlResults = sitemap.crawl_results || [];
 
-  // Sitemap-level stats (kept for backward compat)
+  // Build combined list: main page + all per-url pages
+  const allPages: PerformancePage[] = [];
+  if (main) allPages.push(main);
+  allPages.push(...perUrl);
+
+  // Aggregate stats across ALL pages
+  const agg = {
+    totalRequests: 0,
+    jsExternal: 0, jsInline: 0,
+    cssExternal: 0, cssInline: 0,
+    images: 0, fonts: 0, iframes: 0,
+    unoptimizedImages: 0, totalImages: 0,
+    totalHtmlBytes: 0,
+  };
+  for (const p of allPages) {
+    const r = p.resources;
+    agg.totalRequests += r?.total_external_requests || 0;
+    agg.jsExternal += r?.js?.external_count || 0;
+    agg.jsInline += r?.js?.inline_count || 0;
+    agg.cssExternal += r?.css?.external_count || 0;
+    agg.cssInline += r?.css?.inline_count || 0;
+    agg.images += r?.images?.count || 0;
+    agg.fonts += r?.fonts?.count || 0;
+    agg.iframes += r?.iframes?.count || 0;
+    agg.totalHtmlBytes += r?.html_size_bytes || 0;
+    agg.totalImages += p.unoptimized_images?.total_images || 0;
+    agg.unoptimizedImages += p.unoptimized_images?.unoptimized_count || 0;
+  }
+  const aggOptimized = agg.totalImages - agg.unoptimizedImages;
+
+  // Sitemap-level stats
   const rows = crawlResults;
   const avg = sitemap.avg_response_time_ms || 0;
   const fastCount = rows.filter((r) => (r.response_time_ms || 0) < 700).length;
   const slowCount = rows.filter((r) => (r.response_time_ms || 0) > 1200).length;
 
-  // Main page data
+  // Main page data (for CWV hero)
   const ttfb = main?.ttfb;
   const cwv = main?.cwv_estimates;
-  const res = main?.resources;
-  const unopt = main?.unoptimized_images;
 
   return (
     <div className="tab-sections">
@@ -93,7 +177,7 @@ export default function PerformanceTab({
       <div className="protocol-hero-grid">
         <div className="details-card glass-panel protocol-hero-main">
           <h2>CORE_WEB_VITALS</h2>
-          <p className="mono-subline">Estimated from static HTML analysis &middot; Without chrome browser</p>
+          <p className="mono-subline">Estimated from static HTML analysis -- not real browser metrics</p>
 
           <div className="radial-micro-grid">
             {/* LCP */}
@@ -189,35 +273,38 @@ export default function PerformanceTab({
         </div>
       </div>
 
-      {/* ===== RESOURCE BREAKDOWN ===== */}
+      {/* ===== AGGREGATED RESOURCE BREAKDOWN (all pages combined) ===== */}
       <div className="details-card glass-panel">
-        <h2>RESOURCE_BREAKDOWN</h2>
-        <p className="mono-subline">External requests and payload analysis for the main page</p>
+        <h2>RESOURCE_BREAKDOWN_TOTAL</h2>
+        <p className="mono-subline">Aggregated across {allPages.length} scanned page(s)</p>
 
         <div className="status-strip">
-          <div className="status-cell"><span>TOTAL_REQUESTS</span><strong>{res?.total_external_requests || 0}</strong></div>
-          <div className="status-cell"><span>HTML_SIZE</span><strong>{formatKB(res?.html_size_bytes)}</strong></div>
-          <div className="status-cell"><span>JS_FILES</span><strong>{res?.js?.external_count || 0}</strong></div>
-          <div className="status-cell"><span>CSS_FILES</span><strong>{res?.css?.external_count || 0}</strong></div>
-          <div className="status-cell"><span>IMAGES</span><strong>{res?.images?.count || 0}</strong></div>
-          <div className="status-cell"><span>FONTS</span><strong>{res?.fonts?.count || 0}</strong></div>
+          <div className="status-cell"><span>TOTAL_REQUESTS</span><strong>{agg.totalRequests}</strong></div>
+          <div className="status-cell"><span>TOTAL_HTML</span><strong>{formatKB(agg.totalHtmlBytes)}</strong></div>
+          <div className="status-cell"><span>EXT_JS</span><strong>{agg.jsExternal}</strong></div>
+          <div className="status-cell"><span>INLINE_JS</span><strong>{agg.jsInline}</strong></div>
+          <div className="status-cell"><span>EXT_CSS</span><strong>{agg.cssExternal}</strong></div>
+          <div className="status-cell"><span>INLINE_CSS</span><strong>{agg.cssInline}</strong></div>
+        </div>
+        <div className="status-strip" style={{ marginTop: "0.4rem" }}>
+          <div className="status-cell"><span>IMAGES</span><strong>{agg.images}</strong></div>
+          <div className="status-cell"><span>OPTIMIZED</span><strong className="text-success">{aggOptimized}</strong></div>
+          <div className="status-cell"><span>UNOPTIMIZED</span><strong className="text-warning">{agg.unoptimizedImages}</strong></div>
+          <div className="status-cell"><span>FONTS</span><strong>{agg.fonts}</strong></div>
+          <div className="status-cell"><span>IFRAMES</span><strong>{agg.iframes}</strong></div>
+          <div className="status-cell"><span>PAGES</span><strong>{allPages.length}</strong></div>
         </div>
 
-        {/* Waterfall-style bar for each type */}
+        {/* Waterfall-style bar for each type (aggregated) */}
         <div className="waterfall-table" style={{ marginTop: "0.7rem" }}>
           {[
-            { label: "JavaScript", count: (res?.js?.external_count || 0) + (res?.js?.inline_count || 0), color: "var(--warning)" },
-            { label: "CSS", count: (res?.css?.external_count || 0) + (res?.css?.inline_count || 0), color: "var(--secondary)" },
-            { label: "Images", count: res?.images?.count || 0, color: "var(--primary)" },
-            { label: "Fonts", count: res?.fonts?.count || 0, color: "var(--tertiary)" },
-            { label: "Iframes", count: res?.iframes?.count || 0, color: "var(--danger)" },
+            { label: "JavaScript", count: agg.jsExternal + agg.jsInline, color: "var(--warning)" },
+            { label: "CSS", count: agg.cssExternal + agg.cssInline, color: "var(--secondary)" },
+            { label: "Images", count: agg.images, color: "var(--primary)" },
+            { label: "Fonts", count: agg.fonts, color: "var(--tertiary)" },
+            { label: "Iframes", count: agg.iframes, color: "var(--danger)" },
           ].map((item) => {
-            const max = Math.max(
-              (res?.js?.external_count || 0) + (res?.js?.inline_count || 0),
-              res?.images?.count || 0,
-              (res?.css?.external_count || 0) + (res?.css?.inline_count || 0),
-              1
-            );
+            const max = Math.max(agg.jsExternal + agg.jsInline, agg.images, agg.cssExternal + agg.cssInline, 1);
             const pct = Math.round((item.count / max) * 100);
             return (
               <div key={item.label} className="waterfall-row">
@@ -231,38 +318,17 @@ export default function PerformanceTab({
           })}
         </div>
 
-        {/* Inline vs external breakdown */}
         <div className="terminal-action-panel" style={{ marginTop: "0.6rem" }}>
-          <div className="terminal-action-line"><span>inline_scripts</span><strong>{res?.js?.inline_count || 0}</strong></div>
-          <div className="terminal-action-line"><span>external_scripts</span><strong>{res?.js?.external_count || 0}</strong></div>
-          <div className="terminal-action-line"><span>inline_styles</span><strong>{res?.css?.inline_count || 0}</strong></div>
-          <div className="terminal-action-line"><span>external_styles</span><strong>{res?.css?.external_count || 0}</strong></div>
+          <div className="terminal-action-line"><span>total_inline_scripts</span><strong>{agg.jsInline}</strong></div>
+          <div className="terminal-action-line"><span>total_external_scripts</span><strong>{agg.jsExternal}</strong></div>
+          <div className="terminal-action-line"><span>total_inline_styles</span><strong>{agg.cssInline}</strong></div>
+          <div className="terminal-action-line"><span>total_external_styles</span><strong>{agg.cssExternal}</strong></div>
+          <div className="terminal-action-line"><span>total_images_optimized</span><strong className="text-success">{aggOptimized}</strong></div>
+          <div className="terminal-action-line"><span>total_images_unoptimized</span><strong className="text-warning">{agg.unoptimizedImages}</strong></div>
         </div>
       </div>
 
-      {/* ===== UNOPTIMIZED IMAGES ===== */}
-      <div className="details-card glass-panel">
-        <h2>UNOPTIMIZED_IMAGES [{unopt?.unoptimized_count || 0}/{unopt?.total_images || 0}]</h2>
-        <p className="mono-subline">{unopt?.recommendation || "No image data"}</p>
-
-        {(unopt?.unoptimized?.length || 0) > 0 ? (
-          <div className="matrix-panel">
-            {unopt!.unoptimized!.map((img, idx) => (
-              <div key={idx} className="matrix-row">
-                <span className="matrix-key">{img.format}</span>
-                <span className="matrix-value">{img.src}</span>
-                <span className="matrix-state tag-warn">CONVERT</span>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="terminal-action-panel">
-            <div className="terminal-action-line"><span>status</span><strong>All images use modern formats</strong></div>
-          </div>
-        )}
-      </div>
-
-      {/* ===== PERFORMANCE TIMELINE (from crawl) ===== */}
+      {/* ===== RESPONSE TIMELINE ===== */}
       <div className="details-card glass-panel">
         <h2>RESPONSE_TIMELINE</h2>
         <div className="telemetry-feed">
@@ -279,21 +345,20 @@ export default function PerformanceTab({
         </div>
       </div>
 
-      {/* ===== PER-LINK ANALYSIS ===== */}
+      {/* ===== PER-LINK ANALYSIS (main page included as first row) ===== */}
       <div className="details-card glass-panel">
-        <h2>PERFORMANCE_PER_LINK [{perUrl.length}]</h2>
+        <h2>PERFORMANCE_PER_LINK [{allPages.length}]</h2>
         <div className="terminal-action-panel" style={{ marginBottom: "0.8rem" }}>
           <div className="terminal-action-line"><span>cache_policy</span><strong>{avg > 1000 ? "enable edge caching" : "within target"}</strong></div>
-          <div className="terminal-action-line"><span>image_strategy</span><strong>{slowCount > 0 ? "compress + modern formats" : "stable"}</strong></div>
-          <div className="terminal-action-line"><span>critical_css</span><strong>{rows.length > 0 ? "inline first paint styles" : "n/a"}</strong></div>
+          <div className="terminal-action-line"><span>image_strategy</span><strong>{agg.unoptimizedImages > 0 ? "compress + modern formats" : "stable"}</strong></div>
+          <div className="terminal-action-line"><span>critical_css</span><strong>{allPages.length > 0 ? "inline first paint styles" : "n/a"}</strong></div>
         </div>
-        {perUrl.length > 0 ? (
-          perUrl.map((p, i) => {
+        {allPages.length > 0 ? (
+          allPages.map((p, i) => {
             const matchedCrawl = crawlResults.find((cr) => cr.url === p.url);
             return <PerformanceUrlRow key={`${p.url}-${i}`} perf={p} crawl={matchedCrawl} />;
           })
         ) : (
-          // Fallback to crawl-only data if no performance per-url
           rows.length > 0 ? (
             rows.map((row, i) => (
               <div key={`${row.url}-${i}`} className="details-card glass-panel">
