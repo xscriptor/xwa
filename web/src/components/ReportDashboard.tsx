@@ -216,7 +216,7 @@ export default function ReportDashboard({
           {activeTab === "sitemap" && <SitemapTab sitemap={reportData.sitemap} onQuickScan={handleQuickScan} />}
           {activeTab === "accessibility" && <AccessibilityTab accessibility={reportData.accessibility} />}
           {activeTab === "structure" && <StructureTab structure={reportData.structure} />}
-          {activeTab === "performance" && <PerformanceTab sitemap={reportData.sitemap} />}
+          {activeTab === "performance" && <PerformanceTab performance={reportData.performance} sitemap={reportData.sitemap} />}
           {activeTab === "content" && <ContentTab seo={reportData.seo} sitemap={reportData.sitemap} structure={reportData.structure} />}
           {activeTab === "links" && <LinksTab sitemap={reportData.sitemap} seo={reportData.seo} />}
           {activeTab === "network" && <NetworkTab sitemap={reportData.sitemap} security={reportData.security} />}
