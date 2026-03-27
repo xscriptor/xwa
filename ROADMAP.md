@@ -106,3 +106,18 @@ This document outlines the step-by-step development plan for the project, separa
 - [/] Add translations to spanish (#70)
 - [/] Add design templates (#71)
 - [/] init dev branch (#72)
+- [ ] Improve the Scan tab.
+- [ ] Improve the Overview tab.
+- [ ] Improve the Performance tab.
+- [ ] Improve the Security tab.
+- [ ] Improve the Network tab.
+- [ ] Improve the Sitemaps tab.
+- [ ] Improve the Stack tab.
+- [ ] Improve the Reports tab.
+- [ ] Improve the SEO tab.
+- [ ] Improve the Accessibility tab.
+- [ ] Improve the Structure tab.
+- [ ] Improve the Content tab.
+- [ ] Improve the Links tab.
+- [ ] Improve the Compliance tab.
+- [ ] Improve the Social tab.
