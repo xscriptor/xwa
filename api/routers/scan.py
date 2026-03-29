@@ -98,7 +98,7 @@ def sync_core_execution(url: str, session: Session, scan_id: int):
         sitemap_results = run_sitemap_analysis(url)
 
         scan_progress[scan_id] = "Running Security Analysis..."
-        security_results = run_security_analysis(url, response.headers, response.cookies)
+        security_results = run_security_analysis(url, response.headers, response.cookies, html_content)
 
         scan_progress[scan_id] = "Running Accessibility Analysis..."
         main_accessibility = run_accessibility_analysis(html_content, url)

@@ -83,13 +83,74 @@ export interface SecurityCookies {
   issues?: string[];
 }
 
+export interface SecurityMixedContentResource {
+  tag?: string;
+  attribute?: string;
+  url?: string;
+}
+
+export interface SecurityVulnerabilityCve {
+  id?: string;
+  published?: string;
+  last_modified?: string;
+  severity?: string;
+  cvss_score?: number;
+  description?: string;
+}
+
+export interface SecurityVulnerabilityFinding {
+  technology?: string;
+  keyword?: string;
+  version?: string;
+  count?: number;
+  cves?: SecurityVulnerabilityCve[];
+}
+
+export interface SecurityVulnerabilities {
+  available?: boolean;
+  provider?: string;
+  status?: string;
+  total_cves?: number;
+  findings?: SecurityVulnerabilityFinding[];
+  errors?: string[];
+}
+
+export interface SecurityBlacklistProvider {
+  provider?: string;
+  available?: boolean;
+  listed?: boolean | null;
+  status?: string;
+  reason?: string;
+  error?: string;
+  threat?: string | null;
+  url_status?: string | null;
+  tags?: string[];
+}
+
+export interface SecurityBlacklist {
+  status?: string;
+  is_listed?: boolean;
+  providers?: SecurityBlacklistProvider[];
+}
+
+export interface SecurityDnsSecurity {
+  domain?: string | null;
+  status?: string;
+  error?: string;
+  dnssec?: { present?: boolean; dnskey_records?: string[]; rrsig_records?: string[]; error?: string | null };
+  spf?: { present?: boolean; records?: string[] };
+  dkim?: { present?: boolean; selectors_checked?: string[]; records?: Array<{ selector?: string; record?: string }> };
+  dmarc?: { present?: boolean; records?: string[] };
+  summary?: { configured?: string[]; missing?: string[] };
+}
+
 export interface SecurityPerUrl {
   url: string;
   headers?: SecurityHeaders;
   cors?: Record<string, unknown>;
   csp?: { present?: boolean; directives?: Record<string, string[]>; issues?: Array<Record<string, unknown>> };
   sri?: { total_external?: number; missing_integrity?: number };
-  mixed_content?: { applicable?: boolean; total_mixed?: number };
+  mixed_content?: { applicable?: boolean; total_mixed?: number; resources?: SecurityMixedContentResource[] };
   exposure?: { email_count?: number; ip_count?: number; emails?: string[]; internal_ips?: string[] };
   technology?: { technologies?: Array<{ name?: string; source?: string; detail?: string }>; count?: number };
 }
@@ -102,9 +163,12 @@ export interface SecurityData {
   cors?: Record<string, unknown>;
   csp?: { present?: boolean; directives?: Record<string, string[]>; issues?: Array<Record<string, unknown>> };
   sri?: { total_external?: number; missing_integrity?: number };
-  mixed_content?: { applicable?: boolean; total_mixed?: number };
+  mixed_content?: { applicable?: boolean; total_mixed?: number; resources?: SecurityMixedContentResource[] };
   exposure?: { email_count?: number; ip_count?: number; emails?: string[]; internal_ips?: string[] };
   technology?: { technologies?: Array<{ name?: string; source?: string; detail?: string }>; count?: number };
+  vulnerabilities?: SecurityVulnerabilities;
+  blacklist?: SecurityBlacklist;
+  dns_security?: SecurityDnsSecurity;
   http_methods?: { allowed?: string[]; dangerous?: string[]; has_dangerous?: boolean };
   per_url?: SecurityPerUrl[];
 }

@@ -11,6 +11,9 @@ import socket
 import asyncio
 import aiohttp
 import re
+import os
+import requests
+import dns.resolver
 from urllib.parse import urlparse
 from typing import Dict, Any, List, Optional
 from datetime import datetime
@@ -272,6 +275,320 @@ def detect_technology(html_content: str, headers: Dict[str, str]) -> Dict[str, A
     }
 
 
+def _extract_version(value: str) -> Optional[str]:
+    if not value:
+        return None
+    match = re.search(r'(\d+\.\d+(?:\.\d+)?)', value)
+    if match:
+        return match.group(1)
+    return None
+
+
+def analyze_technology_vulnerabilities(technology_info: Dict[str, Any]) -> Dict[str, Any]:
+    technologies = technology_info.get("technologies", []) if technology_info else []
+    if not technologies:
+        return {
+            "available": False,
+            "provider": "nvd",
+            "status": "no_technology_detected",
+            "total_cves": 0,
+            "findings": [],
+            "errors": [],
+        }
+
+    excluded_keywords = {
+        "nginx",
+        "apache",
+        "cloudflare",
+        "litespeed",
+        "microsoft iis",
+        "php",
+        "asp.net",
+    }
+    query_candidates = []
+    seen = set()
+    for tech in technologies:
+        name = (tech.get("name") or "").strip()
+        detail = (tech.get("detail") or "").strip()
+        if not name:
+            continue
+        keyword = name.lower()
+        if keyword in excluded_keywords:
+            continue
+        version = _extract_version(name) or _extract_version(detail)
+        dedupe_key = (keyword, version or "")
+        if dedupe_key in seen:
+            continue
+        seen.add(dedupe_key)
+        query_candidates.append({
+            "technology": name,
+            "keyword": keyword,
+            "version": version,
+        })
+
+    findings = []
+    errors = []
+    max_candidates = 5
+    for candidate in query_candidates[:max_candidates]:
+        keyword = candidate["keyword"]
+        version = candidate["version"]
+        query = f"{keyword} {version}" if version else keyword
+        try:
+            response = requests.get(
+                "https://services.nvd.nist.gov/rest/json/cves/2.0",
+                params={"keywordSearch": query, "resultsPerPage": 5},
+                timeout=5,
+            )
+            response.raise_for_status()
+            payload = response.json()
+            vulnerabilities = payload.get("vulnerabilities", [])
+            cves = []
+            for entry in vulnerabilities[:5]:
+                cve_data = entry.get("cve", {})
+                metrics = cve_data.get("metrics", {})
+                severity = None
+                score = None
+                for metric_key in ["cvssMetricV31", "cvssMetricV30", "cvssMetricV2"]:
+                    metric_values = metrics.get(metric_key, [])
+                    if metric_values:
+                        metric = metric_values[0].get("cvssData", {})
+                        severity = metric.get("baseSeverity") or severity
+                        score = metric.get("baseScore") or score
+                        break
+
+                description = ""
+                for desc in cve_data.get("descriptions", []):
+                    if desc.get("lang") == "en":
+                        description = desc.get("value", "")
+                        break
+
+                cves.append({
+                    "id": cve_data.get("id"),
+                    "published": cve_data.get("published"),
+                    "last_modified": cve_data.get("lastModified"),
+                    "severity": severity,
+                    "cvss_score": score,
+                    "description": description[:300],
+                })
+
+            if cves:
+                findings.append({
+                    "technology": candidate["technology"],
+                    "keyword": keyword,
+                    "version": version,
+                    "count": len(cves),
+                    "cves": cves,
+                })
+        except Exception as exc:
+            errors.append(f"{candidate['technology']}: {str(exc)}")
+
+    total_cves = sum(item.get("count", 0) for item in findings)
+    status = "ok"
+    if not findings and errors:
+        status = "unavailable"
+    elif findings and errors:
+        status = "partial"
+
+    return {
+        "available": bool(findings) or not errors,
+        "provider": "nvd",
+        "status": status,
+        "total_cves": total_cves,
+        "findings": findings,
+        "errors": errors[:5],
+    }
+
+
+def _check_google_safe_browsing(url: str) -> Dict[str, Any]:
+    api_key = os.getenv("GOOGLE_SAFE_BROWSING_API_KEY", "").strip()
+    if not api_key:
+        return {
+            "provider": "google_safe_browsing",
+            "available": False,
+            "listed": None,
+            "status": "skipped",
+            "reason": "missing_api_key",
+        }
+
+    endpoint = f"https://safebrowsing.googleapis.com/v4/threatMatches:find?key={api_key}"
+    payload = {
+        "client": {"clientId": "xwa", "clientVersion": "1.0.0"},
+        "threatInfo": {
+            "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE"],
+            "platformTypes": ["ANY_PLATFORM"],
+            "threatEntryTypes": ["URL"],
+            "threatEntries": [{"url": url}],
+        },
+    }
+    try:
+        response = requests.post(endpoint, json=payload, timeout=8)
+        response.raise_for_status()
+        body = response.json()
+        matches = body.get("matches", [])
+        return {
+            "provider": "google_safe_browsing",
+            "available": True,
+            "listed": len(matches) > 0,
+            "matches": matches[:5],
+            "status": "ok",
+        }
+    except Exception as exc:
+        return {
+            "provider": "google_safe_browsing",
+            "available": False,
+            "listed": None,
+            "status": "error",
+            "error": str(exc),
+        }
+
+
+def _check_urlhaus(url: str) -> Dict[str, Any]:
+    try:
+        response = requests.post(
+            "https://urlhaus-api.abuse.ch/v1/url/",
+            data={"url": url},
+            timeout=8,
+        )
+        response.raise_for_status()
+        body = response.json()
+        query_status = body.get("query_status")
+        listed = query_status == "ok"
+        return {
+            "provider": "urlhaus",
+            "available": True,
+            "listed": listed,
+            "status": "ok",
+            "threat": body.get("threat"),
+            "url_status": body.get("url_status"),
+            "tags": body.get("tags", []),
+        }
+    except Exception as exc:
+        return {
+            "provider": "urlhaus",
+            "available": False,
+            "listed": None,
+            "status": "error",
+            "error": str(exc),
+        }
+
+
+def analyze_blacklists(url: str) -> Dict[str, Any]:
+    checks = [
+        _check_google_safe_browsing(url),
+        _check_urlhaus(url),
+    ]
+    available = [c for c in checks if c.get("available")]
+    listed = [c for c in available if c.get("listed") is True]
+    status = "ok"
+    if not available:
+        status = "unavailable"
+    elif listed:
+        status = "listed"
+
+    return {
+        "status": status,
+        "is_listed": len(listed) > 0,
+        "providers": checks,
+    }
+
+
+def _dns_txt_records(name: str) -> List[str]:
+    try:
+        answers = dns.resolver.resolve(name, "TXT", lifetime=4)
+        records = []
+        for rdata in answers:
+            value = "".join(part.decode("utf-8", errors="ignore") for part in rdata.strings)
+            records.append(value)
+        return records
+    except Exception:
+        return []
+
+
+def analyze_dns_security(url: str) -> Dict[str, Any]:
+    parsed = urlparse(url)
+    domain = parsed.hostname or ""
+    if not domain:
+        return {
+            "domain": None,
+            "status": "unavailable",
+            "error": "invalid_domain",
+        }
+
+    dnskey_records = []
+    rrsig_records = []
+    dnssec_error = None
+    try:
+        dnskey_answers = dns.resolver.resolve(domain, "DNSKEY", lifetime=4)
+        dnskey_records = [str(r)[:200] for r in dnskey_answers]
+    except Exception as exc:
+        dnssec_error = str(exc)
+
+    try:
+        rrsig_answers = dns.resolver.resolve(domain, "RRSIG", lifetime=4)
+        rrsig_records = [str(r)[:200] for r in rrsig_answers]
+    except Exception:
+        pass
+
+    spf_records = [r for r in _dns_txt_records(domain) if r.lower().startswith("v=spf1")]
+    dmarc_records = [r for r in _dns_txt_records(f"_dmarc.{domain}") if r.lower().startswith("v=dmarc1")]
+
+    dkim_selectors = ["default", "selector1", "selector2", "google", "k1", "mail", "dkim"]
+    dkim_records = []
+    for selector in dkim_selectors:
+        selector_name = f"{selector}._domainkey.{domain}"
+        for record in _dns_txt_records(selector_name):
+            if "dkim" in record.lower() or record.lower().startswith("v=dkim1"):
+                dkim_records.append({"selector": selector, "record": record[:250]})
+
+    dnssec_present = bool(dnskey_records) and bool(rrsig_records)
+    configured = []
+    missing = []
+    for name, present in [
+        ("DNSSEC", dnssec_present),
+        ("SPF", bool(spf_records)),
+        ("DKIM", bool(dkim_records)),
+        ("DMARC", bool(dmarc_records)),
+    ]:
+        if present:
+            configured.append(name)
+        else:
+            missing.append(name)
+
+    summary_status = "good"
+    if len(configured) == 0:
+        summary_status = "critical"
+    elif missing:
+        summary_status = "partial"
+
+    return {
+        "domain": domain,
+        "status": summary_status,
+        "dnssec": {
+            "present": dnssec_present,
+            "dnskey_records": dnskey_records[:3],
+            "rrsig_records": rrsig_records[:3],
+            "error": dnssec_error,
+        },
+        "spf": {
+            "present": bool(spf_records),
+            "records": spf_records[:3],
+        },
+        "dkim": {
+            "present": bool(dkim_records),
+            "selectors_checked": dkim_selectors,
+            "records": dkim_records[:5],
+        },
+        "dmarc": {
+            "present": bool(dmarc_records),
+            "records": dmarc_records[:3],
+        },
+        "summary": {
+            "configured": configured,
+            "missing": missing,
+        },
+    }
+
+
 # ==================== SSL ====================
 
 def analyze_ssl_certificate(url: str) -> Dict[str, Any]:
@@ -450,6 +767,9 @@ def run_security_analysis(base_url: str, headers: Dict[str, str], cookies: Any,
     mixed_info = check_mixed_content(html_content, base_url) if html_content else {}
     exposure_info = detect_exposure(html_content) if html_content else {}
     tech_info = detect_technology(html_content, headers) if html_content else {}
+    vulnerabilities_info = analyze_technology_vulnerabilities(tech_info)
+    blacklist_info = analyze_blacklists(base_url)
+    dns_security_info = analyze_dns_security(base_url)
 
     logger.info("Brute forcing sensitive paths (async)...")
     sensitive_paths = asyncio.run(brute_force_sensitive_paths(base_url))
@@ -468,6 +788,9 @@ def run_security_analysis(base_url: str, headers: Dict[str, str], cookies: Any,
         "mixed_content": mixed_info,
         "exposure": exposure_info,
         "technology": tech_info,
+        "vulnerabilities": vulnerabilities_info,
+        "blacklist": blacklist_info,
+        "dns_security": dns_security_info,
         "http_methods": http_methods,
     }
 

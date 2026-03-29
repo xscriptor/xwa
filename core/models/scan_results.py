@@ -27,6 +27,16 @@ class SecurityResults(BaseModel):
     ssl: Dict[str, Any] = Field(default_factory=dict)
     cookies: Dict[str, Any] = Field(default_factory=dict)
     sensitive_paths_found: List[str] = Field(default_factory=list)
+    cors: Dict[str, Any] = Field(default_factory=dict)
+    csp: Dict[str, Any] = Field(default_factory=dict)
+    sri: Dict[str, Any] = Field(default_factory=dict)
+    mixed_content: Dict[str, Any] = Field(default_factory=dict)
+    exposure: Dict[str, Any] = Field(default_factory=dict)
+    technology: Dict[str, Any] = Field(default_factory=dict)
+    vulnerabilities: Dict[str, Any] = Field(default_factory=dict)
+    blacklist: Dict[str, Any] = Field(default_factory=dict)
+    dns_security: Dict[str, Any] = Field(default_factory=dict)
+    http_methods: Dict[str, Any] = Field(default_factory=dict)
     per_url: List[Dict[str, Any]] = Field(default_factory=list)
 
 class AccessibilityResults(BaseModel):

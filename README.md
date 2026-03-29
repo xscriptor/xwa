@@ -4,6 +4,6 @@
 
 ## Docs:
 
-- [Setting-Up](./docs/SETTINGUP.md)
+- [Setting-Up](./docs/setting-up.md.md)
 - [Structure](./docs/structure.md)
 - [Storage](./docs/scan_storage.md)
