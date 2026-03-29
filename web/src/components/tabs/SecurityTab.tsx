@@ -30,6 +30,27 @@ function SecurityUrlAccordion({ page, defaultOpen = false }: { page: SecurityPer
           <div className="detail-item"><span className="label">SRI Missing:</span><span className="value">{page.sri?.missing_integrity || 0}</span></div>
           <div className="detail-item"><span className="label">Exposed Emails:</span><span className="value">{page.exposure?.email_count || 0}</span></div>
           <div className="detail-item"><span className="label">Internal IPs:</span><span className="value">{page.exposure?.ip_count || 0}</span></div>
+          <div className="detail-item vertical mt-4">
+            <span className="label text-warning">Mixed Resources [{page.mixed_content?.resources?.length || 0}]</span>
+            {(page.mixed_content?.resources || []).length > 0 ? (
+              <div className="table-responsive">
+                <table className="link-table">
+                  <thead><tr><th>Tag</th><th>Attr</th><th>HTTP URL</th></tr></thead>
+                  <tbody>
+                    {(page.mixed_content?.resources || []).map((res, i) => (
+                      <tr key={`${res.url}-${i}`}>
+                        <td>{res.tag || "N/A"}</td>
+                        <td>{res.attribute || "N/A"}</td>
+                        <td className="url-cell text-warning">{res.url || "N/A"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <span className="text-success">no mixed content detected</span>
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -40,6 +61,11 @@ export default function SecurityTab({ security: sec }: { security: SecurityData 
   const perUrl = useMemo(() => sec.per_url || [], [sec.per_url]);
   const missingHeaderCount = sec.headers?.missing_headers?.length || 0;
   const exposedCount = sec.sensitive_paths_found?.length || 0;
+  const mixedResources = sec.mixed_content?.resources || [];
+  const vulnerabilityFindings = sec.vulnerabilities?.findings || [];
+  const blacklistProviders = sec.blacklist?.providers || [];
+  const dnsConfigured = sec.dns_security?.summary?.configured || [];
+  const dnsMissing = sec.dns_security?.summary?.missing || [];
   const threatCells = [
     `ssl:${sec.ssl?.valid ? "ok" : "risk"}`,
     `headers:${missingHeaderCount}`,
@@ -49,6 +75,9 @@ export default function SecurityTab({ security: sec }: { security: SecurityData 
     `csp:${sec.csp?.present ? "on" : "off"}`,
     `mixed:${sec.mixed_content?.total_mixed || 0}`,
     `sri:${sec.sri?.missing_integrity || 0}`,
+    `cves:${sec.vulnerabilities?.total_cves || 0}`,
+    `blacklist:${sec.blacklist?.is_listed ? "listed" : "clean"}`,
+    `dns_missing:${dnsMissing.length}`,
   ];
 
   return (
@@ -61,6 +90,10 @@ export default function SecurityTab({ security: sec }: { security: SecurityData 
             <div className="telemetry-line"><span>[02]</span><span>HEADERS</span><span className="url-cell">security headers check</span><span className={missingHeaderCount > 0 ? "text-warning" : "text-success"}>{missingHeaderCount} missing</span></div>
             <div className="telemetry-line"><span>[03]</span><span>PATHS</span><span className="url-cell">sensitive paths exposure</span><span className={exposedCount > 0 ? "text-danger" : "text-success"}>{exposedCount} exposed</span></div>
             <div className="telemetry-line"><span>[04]</span><span>COOKIES</span><span className="url-cell">flags + hardening</span><span className={(sec.cookies?.issues?.length || 0) > 0 ? "text-warning" : "text-success"}>{sec.cookies?.issues?.length || 0} issues</span></div>
+            <div className="telemetry-line"><span>[05]</span><span>CVE</span><span className="url-cell">library vulnerability scan</span><span className={(sec.vulnerabilities?.total_cves || 0) > 0 ? "text-danger" : "text-success"}>{sec.vulnerabilities?.total_cves || 0} matches</span></div>
+            <div className="telemetry-line"><span>[06]</span><span>BLACKLIST</span><span className="url-cell">malware/phishing reputation</span><span className={sec.blacklist?.is_listed ? "text-danger" : "text-success"}>{sec.blacklist?.is_listed ? "LISTED" : "NOT LISTED"}</span></div>
+            <div className="telemetry-line"><span>[07]</span><span>DNS</span><span className="url-cell">DNSSEC/SPF/DKIM/DMARC</span><span className={dnsMissing.length > 0 ? "text-warning" : "text-success"}>{dnsConfigured.length}/4 configured</span></div>
+            <div className="telemetry-line"><span>[08]</span><span>MIXED</span><span className="url-cell">http resources over https</span><span className={mixedResources.length > 0 ? "text-danger" : "text-success"}>{mixedResources.length} resources</span></div>
           </div>
 
           <h3>SSL_TLS_CERT</h3>
@@ -94,7 +127,137 @@ export default function SecurityTab({ security: sec }: { security: SecurityData 
             <div className="mini-stat"><span className="label">HDR_MISSING</span><span className={`value ${missingHeaderCount > 0 ? "text-warning" : "text-success"}`}>{missingHeaderCount}</span></div>
             <div className="mini-stat"><span className="label">EXPOSED_PATHS</span><span className={`value ${exposedCount > 0 ? "text-danger" : "text-success"}`}>{exposedCount}</span></div>
             <div className="mini-stat"><span className="label">COOKIE_ISSUES</span><span className={`value ${(sec.cookies?.issues?.length || 0) > 0 ? "text-warning" : "text-success"}`}>{sec.cookies?.issues?.length || 0}</span></div>
+            <div className="mini-stat"><span className="label">CVE_COUNT</span><span className={`value ${(sec.vulnerabilities?.total_cves || 0) > 0 ? "text-danger" : "text-success"}`}>{sec.vulnerabilities?.total_cves || 0}</span></div>
+            <div className="mini-stat"><span className="label">BLACKLISTED</span><span className={`value ${sec.blacklist?.is_listed ? "text-danger" : "text-success"}`}>{sec.blacklist?.is_listed ? "YES" : "NO"}</span></div>
+            <div className="mini-stat"><span className="label">DNS_GAPS</span><span className={`value ${dnsMissing.length > 0 ? "text-warning" : "text-success"}`}>{dnsMissing.length}</span></div>
+            <div className="mini-stat"><span className="label">MIXED_FILES</span><span className={`value ${mixedResources.length > 0 ? "text-danger" : "text-success"}`}>{mixedResources.length}</span></div>
           </div>
+        </div>
+      </div>
+
+      <div className="details-card glass-panel">
+        <h2>LIBRARY_VULNERABILITIES</h2>
+        <div className="details-content">
+          <div className="detail-item"><span className="label">Provider:</span><span className="value">{sec.vulnerabilities?.provider || "N/A"}</span></div>
+          <div className="detail-item"><span className="label">Status:</span><span className="value">{sec.vulnerabilities?.status || "N/A"}</span></div>
+          <div className="detail-item"><span className="label">Total CVE:</span><span className={`value ${(sec.vulnerabilities?.total_cves || 0) > 0 ? "text-danger" : "text-success"}`}>{sec.vulnerabilities?.total_cves || 0}</span></div>
+          {vulnerabilityFindings.length > 0 ? (
+            <div className="detail-item vertical mt-4">
+              <span className="label text-warning">Findings [{vulnerabilityFindings.length}]</span>
+              {vulnerabilityFindings.map((finding, idx) => (
+                <div key={`${finding.technology}-${idx}`} className="details-card glass-panel mt-4">
+                  <div className="detail-item"><span className="label">Technology:</span><span className="value">{finding.technology || "N/A"}</span></div>
+                  <div className="detail-item"><span className="label">Version:</span><span className="value">{finding.version || "unknown"}</span></div>
+                  <div className="detail-item"><span className="label">CVE Matches:</span><span className="value text-danger">{finding.count || 0}</span></div>
+                  {(finding.cves || []).length > 0 && (
+                    <div className="table-responsive mt-4">
+                      <table className="link-table">
+                        <thead><tr><th>ID</th><th>Severity</th><th>Score</th><th>Description</th></tr></thead>
+                        <tbody>
+                          {(finding.cves || []).map((cve, cveIdx) => (
+                            <tr key={`${cve.id}-${cveIdx}`}>
+                              <td className="font-medium">{cve.id || "N/A"}</td>
+                              <td className={(cve.severity || "").toLowerCase().includes("critical") || (cve.severity || "").toLowerCase().includes("high") ? "text-danger" : "text-warning"}>{cve.severity || "N/A"}</td>
+                              <td>{cve.cvss_score ?? "N/A"}</td>
+                              <td className="url-cell">{cve.description || "N/A"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="alert-box alert-success">No CVEs matched in detected technologies.</div>
+          )}
+          {(sec.vulnerabilities?.errors || []).length > 0 && (
+            <div className="detail-item vertical mt-4">
+              <span className="label text-danger">scan_errors</span>
+              <ul className="value-list error-list">
+                {(sec.vulnerabilities?.errors || []).map((err, i) => <li key={`${err}-${i}`}>{err}</li>)}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="details-card glass-panel">
+        <h2>BLACKLISTING_STATUS</h2>
+        <div className="details-content">
+          <div className="detail-item"><span className="label">Global Status:</span><span className={`value ${sec.blacklist?.is_listed ? "text-danger" : "text-success"}`}>{sec.blacklist?.status || "unknown"}</span></div>
+          <div className="detail-item"><span className="label">Listed:</span><span className={`value ${sec.blacklist?.is_listed ? "text-danger" : "text-success"}`}>{sec.blacklist?.is_listed ? "YES" : "NO"}</span></div>
+          {(blacklistProviders || []).length > 0 ? (
+            <div className="table-responsive mt-4">
+              <table className="link-table">
+                <thead><tr><th>Provider</th><th>Available</th><th>Listed</th><th>Status</th><th>Detail</th></tr></thead>
+                <tbody>
+                  {(blacklistProviders || []).map((provider, i) => (
+                    <tr key={`${provider.provider}-${i}`}>
+                      <td className="font-medium">{provider.provider || "N/A"}</td>
+                      <td className={provider.available ? "text-success" : "text-warning"}>{provider.available ? "YES" : "NO"}</td>
+                      <td className={provider.listed ? "text-danger" : "text-success"}>{provider.listed === null || provider.listed === undefined ? "N/A" : provider.listed ? "YES" : "NO"}</td>
+                      <td>{provider.status || "N/A"}</td>
+                      <td className="url-cell">{provider.reason || provider.error || provider.threat || provider.url_status || "N/A"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <span className="text-muted">No blacklist providers executed.</span>
+          )}
+        </div>
+      </div>
+
+      <div className="details-card glass-panel">
+        <h2>DNS_SECURITY</h2>
+        <div className="details-content">
+          <div className="detail-item"><span className="label">Domain:</span><span className="value">{sec.dns_security?.domain || "N/A"}</span></div>
+          <div className="detail-item"><span className="label">Status:</span><span className={`value ${dnsMissing.length > 0 ? "text-warning" : "text-success"}`}>{sec.dns_security?.status || "unknown"}</span></div>
+          <div className="detail-item"><span className="label">DNSSEC:</span><span className={`value ${sec.dns_security?.dnssec?.present ? "text-success" : "text-warning"}`}>{sec.dns_security?.dnssec?.present ? "PRESENT" : "MISSING"}</span></div>
+          <div className="detail-item"><span className="label">SPF:</span><span className={`value ${sec.dns_security?.spf?.present ? "text-success" : "text-warning"}`}>{sec.dns_security?.spf?.present ? "PRESENT" : "MISSING"}</span></div>
+          <div className="detail-item"><span className="label">DKIM:</span><span className={`value ${sec.dns_security?.dkim?.present ? "text-success" : "text-warning"}`}>{sec.dns_security?.dkim?.present ? "PRESENT" : "MISSING"}</span></div>
+          <div className="detail-item"><span className="label">DMARC:</span><span className={`value ${sec.dns_security?.dmarc?.present ? "text-success" : "text-warning"}`}>{sec.dns_security?.dmarc?.present ? "PRESENT" : "MISSING"}</span></div>
+          <div className="detail-item vertical mt-4">
+            <span className="label text-success">configured [{dnsConfigured.length}]</span>
+            <ul className="value-list">
+              {dnsConfigured.length > 0 ? dnsConfigured.map((item) => <li key={item}>{item}</li>) : <li>none</li>}
+            </ul>
+          </div>
+          <div className="detail-item vertical mt-4">
+            <span className="label text-danger">missing [{dnsMissing.length}]</span>
+            <ul className="value-list error-list">
+              {dnsMissing.length > 0 ? dnsMissing.map((item) => <li key={item}>{item}</li>) : <li className="text-success">none</li>}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div className="details-card glass-panel">
+        <h2>MIXED_CONTENT_DETAIL</h2>
+        <div className="details-content">
+          <div className="detail-item"><span className="label">HTTPS Applicable:</span><span className="value">{sec.mixed_content?.applicable ? "YES" : "NO"}</span></div>
+          <div className="detail-item"><span className="label">Mixed Resources:</span><span className={`value ${mixedResources.length > 0 ? "text-danger" : "text-success"}`}>{mixedResources.length}</span></div>
+          {mixedResources.length > 0 ? (
+            <div className="table-responsive mt-4">
+              <table className="link-table">
+                <thead><tr><th>Tag</th><th>Attribute</th><th>HTTP Resource</th></tr></thead>
+                <tbody>
+                  {mixedResources.map((resource, i) => (
+                    <tr key={`${resource.url}-${i}`}>
+                      <td>{resource.tag || "N/A"}</td>
+                      <td>{resource.attribute || "N/A"}</td>
+                      <td className="url-cell text-danger">{resource.url || "N/A"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="alert-box alert-success">No mixed-content HTTP resources detected in the main page.</div>
+          )}
         </div>
       </div>
 
