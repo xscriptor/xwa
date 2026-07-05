@@ -37,10 +37,10 @@
     <td>Planned</td>
   </tr>
   <tr>
-    <td><strong>tengu</strong></td>
+    <td><strong><a href="https://github.com/xscriptor/tengu">tengu</a></strong></td>
     <td>Web quality auditor</td>
-    <td>TBD</td>
-    <td>Planned</td>
+    <td>Rust (Axum) + Angular 19</td>
+    <td>Released</td>
   </tr>
   <tr>
     <td><strong>kabuki</strong></td>
