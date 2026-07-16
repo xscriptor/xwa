@@ -1,0 +1,295 @@
+<section *ngIf="results" class="results-container" aria-label="Reconnaissance results">
+  <header class="results-header">
+    <div>
+      <h3 class="t-label">{{ '[ RECON RESULTS ]' | t }}</h3>
+      <p class="results-copy">{{ 'Signal-first distribution: one primary metric, compact telemetry, and module outputs below.' | t }}</p>
+      <p *ngIf="activeFilter !== 'all'" class="results-filter-copy">{{ 'Filtered view: ' | t }}{{ activeFilterLabel() }}</p>
+    </div>
+    <div class="results-status" [class.empty]="!hasAnyResults()">
+      {{ hasAnyResults() ? ('ANALYZED' | t) : ('NO SIGNALS' | t) }}
+    </div>
+  </header>
+
+  <div class="overview-grid" *ngIf="isAllView()">
+    <article class="hero-panel dot-grid-subtle" aria-label="Primary signal metrics">
+      <span class="t-label">{{ 'PRIMARY SIGNAL' | t }}</span>
+      <div class="hero-value">
+        <span class="value">{{ availableSections() }}</span>
+        <span class="unit">/{{ totalSections() }}</span>
+      </div>
+      <p class="hero-copy">{{ 'modules produced actionable output' | t }}</p>
+      <div class="hero-divider"></div>
+      <div class="hero-rows" role="list" aria-label="Primary signal breakdown">
+        <div class="hero-row">
+          <span class="metric-label">{{ 'SURFACE HOSTS' | t }}</span>
+          <span class="metric-value">{{ surfaceHosts().length }}</span>
+        </div>
+        <div class="hero-row">
+          <span class="metric-label">{{ 'AUTH CONTROLS' | t }}</span>
+          <span class="metric-value">{{ authSessionPresentControls().length }}</span>
+        </div>
+        <div class="hero-row">
+          <span class="metric-label">{{ 'CLIENT SIGNALS' | t }}</span>
+          <span class="metric-value">{{ clientSideFrameworkSignals().length + clientSideAssetSignals().length + clientSideRouteSignals().length }}</span>
+        </div>
+      </div>
+    </article>
+
+    <section class="metrics-panel" aria-label="Recon telemetry">
+      <div class="metric-row">
+        <span class="metric-label">{{ 'DNS RECORDS' | t }}</span>
+        <span class="metric-value">{{ dnsTotal() }}</span>
+        <span class="metric-note">{{ 'resolved entries' | t }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">{{ 'SUBDOMAINS DISCOVERED' | t }}</span>
+        <span class="metric-value">{{ subdomainTotal() }}</span>
+        <span class="metric-note">{{ subdomainActiveTotal() }} {{ 'active' | t }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">{{ 'API SIGNALS' | t }}</span>
+        <span class="metric-value">{{ apiTotal() }}</span>
+        <span class="metric-note">{{ apiProbeTotal() }} {{ 'paths probed' | t }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">{{ 'DOC PATHS' | t }}</span>
+        <span class="metric-value">{{ documentationTotal() }}</span>
+        <span class="metric-note">{{ 'spec and docs endpoints' | t }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">{{ 'SECURITY HEADERS' | t }}</span>
+        <span class="metric-value">{{ headerPresentTotal() }}/{{ headerPresentTotal() + headerMissingTotal() }}</span>
+        <span class="metric-note">{{ headerMissingTotal() }} {{ 'missing' | t }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">{{ 'TECH STACK' | t }}</span>
+        <span class="metric-value">{{ techSignalTotal() }}</span>
+        <span class="metric-note">{{ 'frontend, backend, cdn' | t }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">{{ 'AUTH/SESSION RISK' | t }}</span>
+        <span class="metric-value">{{ authSessionRiskLevel() }}</span>
+        <span class="metric-note">{{ authSessionMissingControls().length }} {{ 'missing controls' | t }}</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">{{ 'CLIENT-SIDE EXPOSURE' | t }}</span>
+        <span class="metric-value">{{ clientSideWarnings().length }}</span>
+        <span class="metric-note">{{ 'heuristic warnings from passive signals' | t }}</span>
+      </div>
+    </section>
+  </div>
+
+  <div class="module-stack">
+    <section class="module-section" *ngIf="shouldShow('surface-map')">
+      <div class="module-header">
+        <div>
+          <span class="module-name">{{ 'SURFACE MAP' | t }}</span>
+          <p>{{ 'Cross-view of hosts, endpoints, and technology traces to prioritize exploration paths quickly.' | t }}</p>
+        </div>
+        <span class="module-badge">{{ surfaceHosts().length }} {{ 'HOSTS' | t }}</span>
+      </div>
+
+      <div class="insight-grid">
+        <article class="insight-tile">
+          <span class="tile-label">{{ 'HOSTS' | t }}</span>
+          <span class="tile-value">{{ surfaceHosts().length }}</span>
+          <span class="tile-copy">{{ 'inventory nodes' | t }}</span>
+        </article>
+        <article class="insight-tile">
+          <span class="tile-label">{{ 'ENDPOINTS' | t }}</span>
+          <span class="tile-value">{{ surfaceEndpoints().length }}</span>
+          <span class="tile-copy">{{ 'api + docs signals' | t }}</span>
+        </article>
+        <article class="insight-tile">
+          <span class="tile-label">{{ 'TECH SIGNALS' | t }}</span>
+          <span class="tile-value">{{ surfaceTechSignals().length }}</span>
+          <span class="tile-copy">{{ 'fingerprint artifacts' | t }}</span>
+        </article>
+        <article class="insight-tile">
+          <span class="tile-label">{{ 'HEADER GAPS' | t }}</span>
+          <span class="tile-value">{{ headerMissingTotal() }}</span>
+          <span class="tile-copy">{{ 'hardening opportunities' | t }}</span>
+        </article>
+      </div>
+
+      <div class="signal-lists">
+        <article class="signal-group">
+          <span class="signal-title">{{ 'HOST INVENTORY' | t }}</span>
+          <div class="signal-chip-wrap" *ngIf="surfaceHosts().length > 0; else noSurfaceHosts" role="list" aria-label="Host inventory list">
+            <span class="signal-chip" *ngFor="let host of surfaceHosts()">{{ host }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">{{ 'DISCOVERED ENDPOINTS' | t }}</span>
+          <div class="signal-chip-wrap" *ngIf="surfaceEndpoints().length > 0; else noSurfaceEndpoints" role="list" aria-label="Discovered endpoints list">
+            <span class="signal-chip" *ngFor="let endpoint of surfaceEndpoints()">{{ endpoint }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">{{ 'TECH CLUES' | t }}</span>
+          <div class="signal-chip-wrap" *ngIf="surfaceTechSignals().length > 0; else noSurfaceTech" role="list" aria-label="Technology clues list">
+            <span class="signal-chip" *ngFor="let signal of surfaceTechSignals()">{{ signal }}</span>
+          </div>
+        </article>
+      </div>
+
+      <ng-template #noSurfaceHosts>
+        <div class="signal-empty">{{ 'No host inventory available for this run.' | t }}</div>
+      </ng-template>
+      <ng-template #noSurfaceEndpoints>
+        <div class="signal-empty">{{ 'No endpoint traces were captured.' | t }}</div>
+      </ng-template>
+      <ng-template #noSurfaceTech>
+        <div class="signal-empty">{{ 'No technology clues available.' | t }}</div>
+      </ng-template>
+    </section>
+
+    <section class="module-section" *ngIf="shouldShow('auth-session')">
+      <div class="module-header">
+        <div>
+          <span class="module-name">{{ 'AUTH & SESSION' | t }}</span>
+          <p>{{ 'Session hardening and browser-facing auth controls inferred from discovered response headers.' | t }}</p>
+        </div>
+        <span class="module-badge risk-badge" [ngClass]="riskClass(authSessionRiskLevel())">{{ authSessionRiskLevel() }} {{ 'RISK' | t }}</span>
+      </div>
+
+      <div class="signal-lists three-up">
+        <article class="signal-group">
+          <span class="signal-title">{{ 'PRESENT CONTROLS' | t }}</span>
+          <div class="signal-chip-wrap" *ngIf="authSessionPresentControls().length > 0; else noAuthControls">
+            <span class="signal-chip" *ngFor="let control of authSessionPresentControls()">{{ control }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">{{ 'MISSING CONTROLS' | t }}</span>
+          <div class="signal-chip-wrap" *ngIf="authSessionMissingControls().length > 0; else noAuthMissing">
+            <span class="signal-chip signal-chip-warning" *ngFor="let control of authSessionMissingControls()">{{ control }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">{{ 'COOKIE SIGNALS' | t }}</span>
+          <div class="signal-chip-wrap" *ngIf="authSessionCookieSignals().length > 0; else noCookieSignals">
+            <span class="signal-chip" *ngFor="let signal of authSessionCookieSignals()">{{ signal }}</span>
+          </div>
+        </article>
+      </div>
+
+      <ng-template #noAuthControls>
+        <div class="signal-empty">{{ 'No auth/session control headers were detected.' | t }}</div>
+      </ng-template>
+      <ng-template #noAuthMissing>
+        <div class="signal-empty">{{ 'No missing auth/session controls flagged from this signal set.' | t }}</div>
+      </ng-template>
+      <ng-template #noCookieSignals>
+        <div class="signal-empty">{{ 'No cookie-level header traces were detected.' | t }}</div>
+      </ng-template>
+    </section>
+
+    <section class="module-section" *ngIf="shouldShow('client-side')">
+      <div class="module-header">
+        <div>
+          <span class="module-name">{{ 'CLIENT SIDE' | t }}</span>
+          <p>{{ 'Frontend framework, static asset, and browser-consumable route traces with fast risk heuristics.' | t }}</p>
+        </div>
+        <span class="module-badge">{{ clientSideFrameworkSignals().length + clientSideAssetSignals().length + clientSideRouteSignals().length }} {{ 'SIGNALS' | t }}</span>
+      </div>
+
+      <div class="signal-lists three-up">
+        <article class="signal-group">
+          <span class="signal-title">{{ 'FRAMEWORK SIGNALS' | t }}</span>
+          <div class="signal-chip-wrap" *ngIf="clientSideFrameworkSignals().length > 0; else noClientFrameworks">
+            <span class="signal-chip" *ngFor="let framework of clientSideFrameworkSignals()">{{ framework }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">{{ 'ASSET CLUES' | t }}</span>
+          <div class="signal-chip-wrap" *ngIf="clientSideAssetSignals().length > 0; else noClientAssets">
+            <span class="signal-chip" *ngFor="let clue of clientSideAssetSignals()">{{ clue }}</span>
+          </div>
+        </article>
+
+        <article class="signal-group">
+          <span class="signal-title">{{ 'PUBLIC ROUTE TRACES' | t }}</span>
+          <div class="signal-chip-wrap" *ngIf="clientSideRouteSignals().length > 0; else noClientRoutes">
+            <span class="signal-chip" *ngFor="let route of clientSideRouteSignals()">{{ route }}</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="warnings-box">
+        <span class="signal-title">{{ 'HEURISTIC WARNINGS' | t }}</span>
+        <div class="warning-item" *ngFor="let warning of clientSideWarnings()">{{ warning }}</div>
+      </div>
+
+      <ng-template #noClientFrameworks>
+        <div class="signal-empty">{{ 'No explicit frontend frameworks were identified.' | t }}</div>
+      </ng-template>
+      <ng-template #noClientAssets>
+        <div class="signal-empty">{{ 'No client-focused asset clues were detected.' | t }}</div>
+      </ng-template>
+      <ng-template #noClientRoutes>
+        <div class="signal-empty">{{ 'No public client route traces were detected.' | t }}</div>
+      </ng-template>
+    </section>
+
+    <section class="module-section" *ngIf="shouldShow('dns')">
+      <div class="module-header">
+        <div>
+          <span class="module-name">{{ 'DNS ENUMERATION' | t }}</span>
+          <p>{{ 'Resolved records grouped by type for ownership and infrastructure fingerprinting.' | t }}</p>
+        </div>
+        <span class="module-badge">{{ dnsTotal() }} {{ 'RECORDS' | t }}</span>
+      </div>
+      <app-recon-dns-results [dns]="results.dns"></app-recon-dns-results>
+    </section>
+
+    <section class="module-section" *ngIf="shouldShow('subdomains')">
+      <div class="module-header">
+        <div>
+          <span class="module-name">{{ 'SUBDOMAINS' | t }}</span>
+          <p>{{ 'Passive discovery plus active DNS validation for operationally reachable hosts.' | t }}</p>
+        </div>
+        <span class="module-badge">{{ subdomainActiveTotal() }} {{ 'ACTIVE' | t }}</span>
+      </div>
+      <app-recon-subdomains-results [subdomains]="results.subdomains"></app-recon-subdomains-results>
+    </section>
+
+    <section class="module-section" *ngIf="shouldShow('apis')">
+      <div class="module-header">
+        <div>
+          <span class="module-name">{{ 'API DISCOVERY' | t }}</span>
+          <p>{{ 'Endpoint probing, documentation discovery, and framework-level backend hints.' | t }}</p>
+        </div>
+        <span class="module-badge">{{ apiTotal() }} {{ 'SIGNALS' | t }}</span>
+      </div>
+      <app-recon-api-results [apis]="results.apis"></app-recon-api-results>
+    </section>
+
+    <section class="module-section" *ngIf="shouldShow('headers')">
+      <div class="module-header">
+        <div>
+          <span class="module-name">{{ 'SECURITY HEADERS' | t }}</span>
+          <p>{{ 'Missing controls are often more useful than present ones because they show hardening gaps.' | t }}</p>
+        </div>
+        <span class="module-badge">{{ results.headers?.risk_level || 'N/A' }} {{ 'RISK' | t }}</span>
+      </div>
+      <app-recon-headers-results [headers]="results.headers"></app-recon-headers-results>
+    </section>
+
+    <section class="module-section" *ngIf="shouldShow('tech')">
+      <div class="module-header">
+        <div>
+          <span class="module-name">{{ 'TECH STACK' | t }}</span>
+          <p>{{ 'Frontend/backend/CDN signals plus interesting HTML clues.' | t }}</p>
+        </div>
+        <span class="module-badge">{{ techSignalTotal() }} {{ 'SIGNALS' | t }}</span>
+      </div>
+      <app-recon-tech-results [technology]="results.technology"></app-recon-tech-results>
+    </section>
+  </div>
+</section>

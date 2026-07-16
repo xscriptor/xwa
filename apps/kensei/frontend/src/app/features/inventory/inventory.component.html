@@ -1,0 +1,79 @@
+<div class="route-container">
+  <header class="section-header">
+    <div>
+      <h1 class="t-heading">INVENTORY</h1>
+      <span class="t-label">FULL TECHNOLOGY STACK REPORT</span>
+    </div>
+  </header>
+
+  <div class="selector-row" *ngIf="profiles.length > 0">
+    <label class="t-label" for="profile-select">PROFILE</label>
+    <select id="profile-select" class="input-field" (change)="loadProfile(+$any($event.target).value)">
+      <option value="" [selected]="!selectedId">— SELECT —</option>
+      <option *ngFor="let p of profiles" [value]="p.id" [selected]="p.id === selectedId">{{ p.domain_target }} (ID {{ p.id }})</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="t-label" style="margin: var(--space-lg) 0;">Loading...</div>
+  <div *ngIf="error" class="t-label text-error" style="margin-bottom: var(--space-lg);">[ {{ error }} ]</div>
+
+  <div *ngIf="profile && !loading">
+    <div class="report-header">
+      <span class="t-data">{{ profile.domain_target }}</span>
+      <span class="t-caption text-secondary">ID {{ profile.id }} · {{ profile.created_at | date:'medium' }} · Status: {{ profile.status }}</span>
+    </div>
+
+    <div class="export-actions" *ngIf="profile">
+      <button class="export-btn" (click)="exportJson()">
+        <svg class="export-icon" viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M1 1h14v14H1V1zm1 1v12h12V2H2zm3 4h6v1H5V6zm0 2h6v1H5V8zm0 2h4v1H5v-1z"/></svg>
+        <span>JSON</span>
+      </button>
+      <button class="export-btn" (click)="exportCsv()">
+        <svg class="export-icon" viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M1 1h14v14H1V1zm1 1v12h12V2H2zm2 3l2 3-2 3h1l1.5-2.25L8 11h1L7 8l2-3H8L6.5 7.25 5 5H4z"/></svg>
+        <span>CSV</span>
+      </button>
+      <button class="export-btn" (click)="exportPdf()">
+        <svg class="export-icon" viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M1 1h14v14H1V1zm1 1v12h12V2H2zm2 2h8v1H4V4zm0 2h8v1H4V6zm0 2h6v1H4V8z"/></svg>
+        <span>PDF</span>
+      </button>
+      <button class="export-btn" (click)="exportBinary()">
+        <svg class="export-icon" viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M1 1h14v14H1V1zm1 1v12h12V2H2zm6 2.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4 10h8v1H4v-1z"/></svg>
+        <span>BIN</span>
+      </button>
+    </div>
+
+    <section class="panel" *ngIf="profile.technologies.length > 0">
+      <span class="t-label">TECHNOLOGIES ({{ profile.technologies.length }})</span>
+      <div *ngFor="let entry of groupedTechs() | keyvalue" class="category-group">
+        <span class="t-caption text-secondary" style="margin-bottom: var(--space-sm); display: block;">{{ entry.key | uppercase }}</span>
+        <div class="tech-grid">
+          <div *ngFor="let t of entry.value" class="tech-item">
+            <span class="t-body">{{ t.name }}</span>
+            <span class="t-caption text-secondary" *ngIf="t.version">v{{ t.version }}</span>
+            <span class="t-caption text-secondary"> · {{ t.confidence }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" *ngIf="profile.routes.length > 0">
+      <span class="t-label">ROUTES ({{ profile.routes.length }})</span>
+      <div class="route-grid">
+        <div *ngFor="let r of profile.routes" class="route-item">
+          <span class="t-data">{{ r.path }}</span>
+          <span class="t-caption text-secondary">{{ r.route_type }}<span *ngIf="r.framework"> · {{ r.framework }}</span></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" *ngIf="profile.js_dependencies.length > 0">
+      <span class="t-label">JS DEPENDENCIES ({{ profile.js_dependencies.length }})</span>
+      <div class="dep-grid">
+        <div *ngFor="let d of profile.js_dependencies" class="dep-item">
+          <span class="t-data">{{ d.name }}</span>
+          <span class="t-caption text-secondary">v{{ d.version }}<span *ngIf="d.package_manager"> · {{ d.package_manager }}</span></span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

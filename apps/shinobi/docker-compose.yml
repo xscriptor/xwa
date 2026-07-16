@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  shinobi:
+    build: .
+    container_name: shinobi
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DATA_DIR=/data/downloads
+      - EXTRACTOR_URL=http://extractor:9090
+      - RUST_LOG=shinobi=info,tower_http=info
+    volumes:
+      - downloads:/data/downloads
+    depends_on:
+      extractor:
+        condition: service_started
+
+  extractor:
+    build: ./extractor
+    container_name: shinobi-extractor
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    environment:
+      - PORT=9090
+    volumes:
+      - downloads:/data/downloads
+
+volumes:
+  downloads:

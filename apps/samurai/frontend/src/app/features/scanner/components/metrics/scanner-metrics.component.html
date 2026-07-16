@@ -1,0 +1,34 @@
+<section class="panel">
+  <div class="metric-grid" role="list" [attr.aria-label]="'Scanner key metrics' | t">
+    <div class="hero-metric" role="listitem" [attr.aria-label]="'Ports found metric' | t">
+      <span class="t-label">{{ 'PORTS_FOUND' | t }}</span>
+      <span class="t-display-xl" [attr.aria-label]="('Ports found: ' | t) + vulnerabilitiesFound">{{ vulnerabilitiesFound }}</span>
+    </div>
+
+    <div class="hero-metric" role="listitem" [attr.aria-label]="'Contact artifacts metric' | t">
+      <span class="t-label">{{ 'CONTACT_ARTIFACTS' | t }}</span>
+      <span class="t-display-xl" [attr.aria-label]="('Contact artifacts: ' | t) + contactsFound">{{ contactsFound }}</span>
+    </div>
+
+    <div class="hero-metric" role="listitem" [attr.aria-label]="'Unsanitized surfaces metric' | t">
+      <span class="t-label">{{ 'UNSANITIZED_SURFACES' | t }}</span>
+      <span class="t-display-xl" [attr.aria-label]="('Unsanitized surfaces: ' | t) + unsanitizedFindings">{{ unsanitizedFindings }}</span>
+    </div>
+
+    <div class="hero-metric" role="listitem" [attr.aria-label]="'Open ports delta metric' | t">
+      <span class="t-label">{{ 'DELTA_OPEN_PORTS' | t }}</span>
+      <span class="t-display-xl" [attr.aria-label]="latestOpenPortDelta === null ? ('Open ports delta unavailable' | t) : ('Open ports delta: ' | t) + latestOpenPortDelta">{{ latestOpenPortDelta === null ? '-' : latestOpenPortDelta }}</span>
+    </div>
+  </div>
+
+  <div class="open-ports-wrap" *ngIf="openPortsDetailed.length">
+    <span class="t-label">{{ 'OPEN_PORTS_DETECTED' | t }}</span>
+    <div class="open-ports-grid" role="list" [attr.aria-label]="'Open ports detected' | t">
+      <div class="port-pill" *ngFor="let port of openPortsDetailed" role="listitem" [attr.aria-label]="('Port ' | t) + port.token + (', service ' | t) + port.service + (', version ' | t) + port.version">
+        <span class="port-token">{{ port.token }}</span>
+        <span class="port-service">{{ port.service }}</span>
+        <span class="port-version">{{ port.version }}</span>
+      </div>
+    </div>
+  </div>
+</section>

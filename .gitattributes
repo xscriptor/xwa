@@ -1,0 +1,60 @@
+* text=auto
+
+*.ts text
+*.js text
+*.html text
+*.css text
+*.scss text
+*.json text
+*.md text
+*.py text
+*.rs text
+*.sh text eol=lf
+*.yml text
+*.yaml text
+*.toml text
+*.conf text
+Dockerfile text
+.dockerignore text
+requirements.txt text
+Cargo.toml text
+Cargo.lock text
+
+*.ts linguist-language=TypeScript
+*.js linguist-language=JavaScript
+*.py linguist-language=Python
+*.rs linguist-language=Rust
+*.sh linguist-language=Shell
+*.md linguist-language=Markdown
+*.json linguist-language=JSON
+*.yml linguist-language=YAML
+*.yaml linguist-language=YAML
+*.toml linguist-language=TOML
+*.conf linguist-language=Nginx
+Dockerfile linguist-language=Dockerfile
+docker-compose.yml linguist-language=YAML
+
+*.sh linguist-detectable=true
+*.py linguist-detectable=true
+*.ts linguist-detectable=true
+*.rs linguist-detectable=true
+Dockerfile linguist-detectable=true
+
+*.map linguist-generated=true
+frontend/node_modules/** linguist-vendored
+frontend/.angular/** linguist-generated=true
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.mp4 binary
+*.mp3 binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+
+*.sln text eol=crlf

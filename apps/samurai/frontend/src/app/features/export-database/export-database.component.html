@@ -1,0 +1,150 @@
+<div class="route-container">
+  <header class="section-header">
+    <div>
+      <h1 class="t-heading">{{ 'DATABASE_EXPORT' | t }}</h1>
+      <span class="t-label">{{ 'FULL ANALYTICS DUMP — RAW OR ENCRYPTED' | t }}</span>
+    </div>
+  </header>
+
+  <div class="dashboard-grid archive-grid">
+    <!-- LEFT: Mode Selection -->
+    <section class="panel list-panel">
+      <h2 class="t-heading" id="export-modes">{{ 'EXPORT_MODE' | t }}</h2>
+
+      <div class="mode-selector">
+        <button
+          type="button"
+          class="mode-card"
+          [class.active]="exportMode === 'direct'"
+          (click)="selectMode('direct')"
+          [attr.aria-label]="'Select direct export mode' | t"
+        >
+          <div class="mode-header">
+            <span class="t-label">{{ 'DIRECT EXPORT' | t }}</span>
+            <span class="t-label badge text-success" *ngIf="exportMode === 'direct'">{{ 'ACTIVE' | t }}</span>
+          </div>
+          <p class="mode-desc">
+            {{ 'Download the complete database as a readable JSON file. All scans, findings, and discovered URLs included. No encryption — data is transferred as plain text.' | t }}
+          </p>
+          <span class="t-label mode-format">{{ 'FORMAT: .JSON' | t }}</span>
+        </button>
+
+        <button
+          type="button"
+          class="mode-card"
+          [class.active]="exportMode === 'encrypted'"
+          (click)="selectMode('encrypted')"
+          [attr.aria-label]="'Select encrypted export mode' | t"
+        >
+          <div class="mode-header">
+            <span class="t-label">{{ 'ENCRYPTED EXPORT' | t }}</span>
+            <span class="t-label badge text-warning" *ngIf="exportMode === 'encrypted'">{{ 'ACTIVE' | t }}</span>
+          </div>
+          <p class="mode-desc">
+            {{ 'Encrypt the database dump with a password using AES-256-GCM. The file is only recoverable with the password you provide. Recommended for sensitive data.' | t }}
+          </p>
+          <span class="t-label mode-format">{{ 'FORMAT: .BIN.ENC (AES-256-GCM)' | t }}</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- RIGHT: Action Panel -->
+    <section class="panel detail-panel">
+      <h2 class="t-heading">{{ 'EXPORT_ACTION' | t }}</h2>
+
+      <!-- Direct Export Section -->
+      <div *ngIf="exportMode === 'direct'" class="action-area">
+        <p class="t-body text-secondary" style="margin-bottom: var(--space-xl);">
+          {{ 'Click the button below to download the full database as a JSON file. All scan history, findings, and discovered links will be included.' | t }}
+        </p>
+
+        <div *ngIf="!exportDone && !isExporting" class="action-center">
+          <button
+            type="button"
+            class="export-btn export-primary"
+            (click)="exportDirect()"
+            [disabled]="isExporting"
+            [attr.aria-label]="'Download database export as JSON' | t"
+          >
+            <svg class="export-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path d="M5 2C3.89543 2 3 2.89543 3 4V6.00469C3 6.53494 2.99231 6.79889 2.91088 7.00209C2.84826 7.15835 2.71576 7.33309 2.2764 7.55276C2.10701 7.63745 2 7.81058 2 7.99997C2 8.18935 2.10699 8.36249 2.27638 8.44719C2.71569 8.66685 2.84809 8.84151 2.91076 8.99819C2.99233 9.20211 3 9.46732 3 10L3 12C3 13.1046 3.89543 14 5 14C5.27614 14 5.5 13.7761 5.5 13.5C5.5 13.2239 5.27614 13 5 13C4.44772 13 4 12.5523 4 12L4.00003 9.94145C4.00033 9.49235 4.00065 9.03033 3.83924 8.6268C3.74212 8.384 3.59654 8.17962 3.40072 8.00002C3.59646 7.82057 3.74199 7.61645 3.83912 7.37408C4.00065 6.971 4.00033 6.51001 4.00003 6.063L4 4C4 3.44772 4.44772 3 5 3C5.27614 3 5.5 2.77614 5.5 2.5C5.5 2.22386 5.27614 2 5 2ZM11 2C12.1046 2 13 2.89543 13 4V6.00469C13 6.53494 13.0077 6.79889 13.0891 7.00209C13.1517 7.15835 13.2842 7.33309 13.7236 7.55276C13.893 7.63745 14 7.81058 14 7.99997C14 8.18935 13.893 8.36249 13.7236 8.44719C13.2843 8.66685 13.1519 8.84151 13.0892 8.99819C13.0077 9.20211 13 9.46732 13 10V12C13 13.1046 12.1046 14 11 14C10.7239 14 10.5 13.7761 10.5 13.5C10.5 13.2239 10.7239 13 11 13C11.5523 13 12 12.5523 12 12L12 9.94145C11.9997 9.49235 11.9994 9.03033 12.1608 8.6268C12.2579 8.384 12.4035 8.17962 12.5993 8.00002C12.4035 7.82057 12.258 7.61645 12.1609 7.37408C11.9993 6.971 11.9997 6.51001 12 6.063L12 4C12 3.44772 11.5523 3 11 3C10.7239 3 10.5 2.77614 10.5 2.5C10.5 2.22386 10.7239 2 11 2Z"/>
+              <g transform="translate(0 0) scale(1 1)">
+                <path d="M6 1 L7 1 L10 4 L9 4 Z"/>
+                <path d="M9 1 L10 1 L7 4 L6 4 Z"/>
+              </g>
+            </svg>
+            <span>{{ 'DOWNLOAD DATABASE' | t }}</span>
+          </button>
+        </div>
+
+        <div *ngIf="isExporting" class="status-row">
+          <span class="t-label">{{ '[EXPORTING...]' | t }}</span>
+        </div>
+
+        <div *ngIf="exportDone && !isExporting && summary" class="status-row">
+          <span class="t-label text-success">{{ '[EXPORTED]' | t }} {{ lastExportFilename }}</span>
+          <div class="summary-stats">
+            <span class="t-data">{{ summary.scan_count }} {{ 'SCANS' | t }}</span>
+            <span class="t-data">{{ summary.finding_count }} {{ 'FINDINGS' | t }}</span>
+            <span class="t-data">{{ summary.link_count }} {{ 'URLS' | t }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Encrypted Export Section -->
+      <div *ngIf="exportMode === 'encrypted'" class="action-area">
+        <p class="t-body text-secondary" style="margin-bottom: var(--space-lg);">
+          {{ 'Enter a password to encrypt the database export. You will need this password to decrypt the file later. Encryption uses AES-256-GCM.' | t }}
+        </p>
+
+        <div class="encrypt-form">
+          <label class="t-label" for="encrypt-password">{{ 'ENCRYPTION_PASSWORD' | t }}</label>
+          <input
+            type="password"
+            id="encrypt-password"
+            [(ngModel)]="encryptPassword"
+            class="input-field"
+            [placeholder]="'Enter password...' | t"
+            [disabled]="isExporting"
+          />
+
+          <p class="t-data password-hint" style="color: var(--text-secondary);">
+            {{ 'Minimum 4 characters. Lost password = unrecoverable data.' | t }}
+          </p>
+
+          <div *ngIf="!exportDone && !isExporting" style="margin-top: var(--space-md);">
+            <button
+              type="button"
+              class="export-btn export-encrypted"
+              (click)="exportEncrypted()"
+              [disabled]="isExporting || !encryptPassword"
+              [attr.aria-label]="'Download encrypted database export' | t"
+            >
+              <svg class="export-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M5 1C3.895 1 3 1.895 3 3V13C3 14.105 3.895 15 5 15H11C12.105 15 13 14.105 13 13V5.414C13 5.016 12.842 4.635 12.561 4.353L9.647 1.439C9.366 1.158 8.984 1 8.586 1H5ZM4 3C4 2.448 4.448 2 5 2H8V4.5C8 5.328 8.672 6 9.5 6H12V13C12 13.552 11.552 14 11 14H5C4.448 14 4 13.552 4 13V3ZM11.793 5H9.5C9.224 5 9 4.776 9 4.5V2.207L11.793 5Z"/>
+                <path d="M10.801 8.204C10.901 8.298 11 8.451 11 8.655V12.501C11 12.777 10.776 13.001 10.5 13.001C10.224 13.001 10 12.777 10 12.501V9.459C9.781 9.641 9.519 9.814 9.207 9.956C8.956 10.07 8.659 9.959 8.545 9.708C8.431 9.457 8.542 9.16 8.793 9.046C9.26 8.833 9.573 8.522 9.77 8.262C9.993 7.967 10.343 7.996 10.495 8.037C10.593 8.064 10.705 8.114 10.801 8.204ZM6.5 8C5.672 8 5 8.672 5 9.5V11.5C5 12.328 5.672 13 6.5 13C7.328 13 8 12.328 8 11.5V9.5C8 8.672 7.328 8 6.5 8ZM6 9.5C6 9.224 6.224 9 6.5 9C6.776 9 7 9.224 7 9.5V11.5C7 11.776 6.776 12 6.5 12C6.224 12 6 11.776 6 11.5V9.5Z"/>
+              </svg>
+              <span>{{ 'DOWNLOAD ENCRYPTED' | t }}</span>
+            </button>
+          </div>
+
+          <div *ngIf="isExporting" class="status-row">
+            <span class="t-label">{{ '[ENCRYPTING & EXPORTING...]' | t }}</span>
+          </div>
+
+          <div *ngIf="exportDone && !isExporting" class="status-row">
+            <span class="t-label text-success">{{ '[EXPORTED]' | t }} {{ lastExportFilename }}</span>
+            <span class="t-label text-secondary" style="margin-top: var(--space-xs);">
+              {{ 'SAVE THAT PASSWORD. THIS FILE CANNOT BE RECOVERED WITHOUT IT.' | t }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Display -->
+      <div *ngIf="errorMessage" class="error-box">
+        <span class="t-label text-accent">{{ errorMessage }}</span>
+      </div>
+    </section>
+  </div>
+</div>

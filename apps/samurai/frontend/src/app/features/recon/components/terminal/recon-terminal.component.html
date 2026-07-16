@@ -1,0 +1,12 @@
+<div class="terminal-container">
+  <div class="terminal-header">
+    <span class="t-label">{{ '[ X OUTPUT ]' | t }}</span>
+    <span class="status-indicator" [class.active]="isScanning" aria-live="polite">{{ isScanning ? ('LIVE' | t) : ('IDLE' | t) }}</span>
+  </div>
+  <div class="terminal" aria-live="polite" aria-atomic="false">
+      <div class="terminal-content" role="log" [attr.aria-label]="'Recon terminal output' | t">
+      <div *ngFor="let line of lines" class="terminal-line">{{ line }}</div>
+      <div *ngIf="isScanning" class="cursor" aria-hidden="true">_</div>
+    </div>
+  </div>
+</div>

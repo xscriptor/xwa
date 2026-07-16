@@ -1,0 +1,77 @@
+<div class="route-container">
+  <header class="section-header">
+    <div>
+      <h1 class="t-heading">HISTORY & ARCHIVE</h1>
+      <span class="t-label">BROWSE PAST PROFILES</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn-nuclear" *ngIf="profiles.length > 0 && confirmDeleteId !== 'all'" (click)="requestDelete('all')" [disabled]="deletingAll">
+        {{ deletingAll ? 'DELETING...' : 'DELETE ALL' }}
+      </button>
+      <span class="confirm-inline" *ngIf="confirmDeleteId === 'all'">
+        <span class="t-label text-error">[ CONFIRM DELETE ALL? ]</span>
+        <button class="btn-sm destructive" (click)="confirmDelete()">YES</button>
+        <button class="btn-sm" (click)="cancelDelete()">NO</button>
+      </span>
+      <button class="btn-compare" *ngIf="profiles.length >= 2" (click)="runCompare()" [disabled]="selectedForCompare.size < 2 || comparing">
+        {{ comparing ? 'COMPARING...' : 'COMPARE SELECTED' }}
+      </button>
+    </div>
+  </header>
+
+  <div *ngIf="loading" class="t-label">Loading profiles...</div>
+  <div *ngIf="error" class="t-label text-error" style="margin-bottom: var(--space-lg);">[ {{ error }} ]</div>
+  <div *ngIf="compareError" class="t-label text-error" style="margin-bottom: var(--space-lg);">[ {{ compareError }} ]</div>
+
+  <div *ngIf="!loading && profiles.length === 0" class="t-label text-secondary">
+    [ NO PROFILES YET — RUN A SCAN FROM THE PROFILER TAB ]
+  </div>
+
+  <div class="profile-list" *ngIf="profiles.length > 0">
+    <div *ngFor="let p of profiles" class="profile-row" (click)="viewProfile(p.id)">
+      <div class="profile-compare">
+        <input type="checkbox" [checked]="selectedForCompare.has(p.id)" (change)="toggleCompare(p.id); $event.stopPropagation()" (click)="$event.stopPropagation()" class="compare-cb">
+      </div>
+      <div class="profile-info">
+        <span class="t-data">{{ p.domain_target }}</span>
+        <span class="t-caption text-secondary">
+          <span class="status-badge {{ statusClass(p.status) }}">{{ p.status }}</span>
+          {{ p.created_at | date:'medium' }}
+        </span>
+      </div>
+      <div class="profile-actions" (click)="$event.stopPropagation()">
+        <button class="btn-sm" (click)="exportJson(p.id)">JSON</button>
+        <ng-container *ngIf="confirmDeleteId !== p.id">
+          <button class="btn-sm destructive" (click)="requestDelete(p.id)">DELETE</button>
+        </ng-container>
+        <ng-container *ngIf="confirmDeleteId === p.id">
+          <span class="confirm-inline">
+            <span class="t-label text-error">[ CONFIRM? ]</span>
+            <button class="btn-sm destructive" (click)="confirmDelete()">YES</button>
+            <button class="btn-sm" (click)="cancelDelete()">NO</button>
+          </span>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="compareResult" class="compare-panel">
+    <span class="t-label">COMPARE RESULTS</span>
+    <div *ngFor="let c of compareResult.changes" class="change-block">
+      <span class="t-caption text-secondary">Profile {{ c.from_profile }} → Profile {{ c.to_profile }}</span>
+      <div *ngIf="c.added.length > 0">
+        <span class="t-label text-success">ADDED</span>
+        <div class="tech-grid">
+          <span *ngFor="let a of c.added" class="tech-item text-success">{{ a }}</span>
+        </div>
+      </div>
+      <div *ngIf="c.removed.length > 0" style="margin-top: var(--space-sm);">
+        <span class="t-label text-error">REMOVED</span>
+        <div class="tech-grid">
+          <span *ngFor="let r of c.removed" class="tech-item text-error">{{ r }}</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="compareResult.changes.length === 0" class="t-label text-secondary">[ NO CHANGES DETECTED ]</div>
+  </div>
+</div>

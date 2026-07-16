@@ -1,0 +1,88 @@
+<div class="app-layout">
+  <!-- SIDEBAR NAVIGATION -->
+  <nav class="sidebar" [attr.aria-label]="'Main navigation' | t">
+    <div class="brand">
+      <h1 class="t-heading">{{ 'SAMURAI' | t }}</h1>
+      <span class="t-label">{{ 'XWA - MODULE' | t }}</span>
+    </div>
+
+    <ul class="nav-links">
+      <li>
+        <a routerLink="/scanner" routerLinkActive="active" class="t-label">{{ '01 // SCANNER' | t }}</a>
+      </li>
+      <li>
+        <a routerLink="/recon" routerLinkActive="active" class="t-label">{{ '02 // WEB RECON' | t }}</a>
+      </li>
+      <li>
+        <a routerLink="/vulnerabilities" routerLinkActive="active" class="t-label">{{ '03 // VULNERABILITIES' | t }}</a>
+      </li>
+      <li>
+        <a routerLink="/history" routerLinkActive="active" class="t-label">{{ '04 // HISTORY & ARCHIVE' | t }}</a>
+      </li>
+      <li>
+        <a routerLink="/export" routerLinkActive="active" class="t-label">{{ '05 // EXPORT DB' | t }}</a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <span class="t-label">{{ 'v. 2.5.0' | t }}</span>
+      <div class="toggles-row">
+      <button
+        type="button"
+        class="lang-toggle-btn"
+        (click)="toggleLang()"
+        [attr.aria-label]="translationService.nextLangAria()"
+        [attr.title]="translationService.nextLangAria()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path d="M8 1C4.134 1 1 4.134 1 8C1 11.866 4.134 15 8 15C11.866 15 15 11.866 15 8C15 4.134 11.866 1 8 1ZM2.08 7H4.196C4.267 5.764 4.465 4.585 4.78 3.497C3.318 4.416 2.219 5.914 2.08 7ZM5 8C5 9.084 5.117 10.107 5.336 11H10.664C10.883 10.107 11 9.084 11 8C11 6.916 10.883 5.893 10.664 5H5.336C5.117 5.893 5 6.916 5 8ZM6.458 1.088C6.275 1.351 6.105 1.654 5.951 2H7.204C7.043 1.684 6.88 1.4 6.737 1.183C6.642 1.042 6.54 1.014 6.458 1.088ZM8 1.067C8.196 1.321 8.444 1.718 8.648 2.224C8.837 2.688 8.992 3.24 9.099 3.852V3.854C9.157 4.195 9.207 4.548 9.243 4.91C9.108 4.97 8.56 5 8 5C7.44 5 6.892 4.97 6.757 4.91C6.793 4.548 6.843 4.195 6.901 3.854C7.008 3.24 7.163 2.688 7.352 2.224C7.556 1.718 7.804 1.321 8 1.067ZM5.951 14C6.105 14.346 6.275 14.649 6.458 14.912C6.54 14.986 6.642 14.958 6.737 14.817C6.88 14.6 7.043 14.316 7.204 14H5.951ZM8 14.933C7.804 14.679 7.556 14.282 7.352 13.776C7.163 13.312 7.008 12.76 6.901 12.148C6.843 11.807 6.793 11.454 6.757 11.092C6.892 11.032 7.44 11 8 11C8.56 11 9.108 11.03 9.243 11.09C9.207 11.452 9.157 11.805 9.099 12.146C8.992 12.76 8.837 13.312 8.648 13.776C8.444 14.282 8.196 14.679 8 14.933ZM11.22 12.503C11.535 11.415 11.733 10.236 11.804 9H13.92C13.781 10.086 12.682 11.584 11.22 12.503ZM13.92 7H11.804C11.733 5.764 11.535 4.585 11.22 3.497C12.682 4.416 13.781 5.914 13.92 7Z" />
+        </svg>
+        <span>{{ translationService.nextLangLabel() }}</span>
+      </button>
+      <button
+        type="button"
+        class="theme-toggle-btn"
+        (click)="toggleTheme()"
+        [attr.aria-label]="themeService.nextThemeAriaLabel()"
+        [attr.title]="themeService.nextThemeAriaLabel()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path d="M8 1.00195C6.61553 1.00195 5.26216 1.4125 4.11101 2.18167C2.95987 2.95084 2.06266 4.04409 1.53285 5.32317C1.00303 6.60225 0.86441 8.00972 1.13451 9.36759C1.4046 10.7255 2.07129 11.9727 3.05026 12.9517C4.02922 13.9307 5.27651 14.5974 6.63437 14.8675C7.99224 15.1375 9.3997 14.9989 10.6788 14.4691C11.9579 13.9393 13.0511 13.0421 13.8203 11.8909C14.5895 10.7398 15 9.38642 15 8.00195C15 6.14544 14.2625 4.36496 12.9498 3.05221C11.637 1.73945 9.85652 1.00195 8 1.00195ZM8 14.002V2.00195C9.5913 2.00195 11.1174 2.63409 12.2426 3.75931C13.3679 4.88453 14 6.41065 14 8.00195C14 9.59325 13.3679 11.1194 12.2426 12.2446C11.1174 13.3698 9.5913 14.002 8 14.002Z" />
+        </svg>
+        <span>{{ themeService.nextThemeLabel() }}</span>
+      </button>
+      </div>
+      <div class="social-links">
+        <a href="https://github.com/xscriptor/" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="Open xscriptor GitHub profile in a new tab">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 25" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M21.0346 5.82524C21.9445 6.91709 22.3994 8.19091 22.3994 9.64671C22.3994 14.924 19.3969 16.4707 16.5763 16.9257C16.9402 17.5626 17.0312 18.2905 17.0312 19.0184V22.7489C17.0312 23.2038 16.7582 23.4768 16.3943 23.4768C16.0303 23.4768 15.6664 23.2038 15.6664 22.7489V19.0184C15.7574 18.1995 15.4844 17.4716 14.9385 16.9257L15.3934 15.7428C18.214 15.3789 21.1256 14.469 21.1256 9.55572C21.1256 8.37289 20.6707 7.28104 19.8518 6.37117L19.6698 5.64327C20.0338 4.7334 20.0338 3.73254 19.7608 2.91365C19.3059 3.00464 18.396 3.18661 16.8492 4.27846L16.3033 4.36945C14.1196 3.82352 11.9359 3.82352 9.75222 4.36945L9.2063 4.27846C7.56853 3.2776 6.65866 3.00464 6.20372 3.00464C5.93076 3.91451 5.93076 4.91537 6.29471 5.73426L6.11274 6.46215C5.20286 7.37203 4.74793 8.55486 4.74793 9.64671C4.74793 14.469 7.47754 15.4699 10.4801 15.8338L10.8441 17.0167C10.2981 17.5626 10.0252 18.2905 10.1162 19.0184V19.9283V20.0192V22.8399C10.1162 23.2038 9.84321 23.5677 9.38828 23.5677C9.02433 23.5677 8.66038 23.2948 8.66038 22.8399V20.7471C5.6578 21.3841 4.47497 19.8373 3.5651 18.6544C3.11016 18.1085 2.74621 17.6536 2.29127 17.5626C2.20029 17.4716 1.92733 17.1077 2.01831 16.7437C2.1093 16.3798 2.47325 16.1068 2.8372 16.2888C3.74707 16.4707 4.29299 17.1986 4.83892 17.8356C5.6578 18.9274 6.47669 19.9283 8.93334 19.3823V19.0184C8.84235 18.2905 9.02433 17.5626 9.38828 16.9257C6.65866 16.3798 3.47411 14.833 3.47411 9.64671C3.47411 8.19091 3.92904 6.91709 4.83892 5.82524C4.56595 4.55142 4.65694 3.18661 5.11188 2.09477L5.56681 1.73082C5.74879 1.63983 7.02261 1.36687 9.66124 3.00464C11.8449 2.45872 14.1196 2.45872 16.3033 3.00464C18.8509 1.27588 20.2158 1.54884 20.3977 1.63983L20.8527 2.00378C21.3076 3.2776 21.3986 4.55142 21.0346 5.82524Z" />
+            <g transform="translate(0 0) scale(1.5 1.5625)">
+              <path d="M6 11 L7 11 L10 14 L9 14 Z" />
+              <path d="M9 11 L10 11 L7 14 L6 14 Z" />
+            </g>
+          </svg>
+        </a>
+        <a href="https://dev.xscriptor.com" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="Open xscriptor website in a new tab">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+        <a href="https://github.com/xscriptor/samurai" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="Open Samurai repository in a new tab">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M12.5 12C12.776 12 13 11.776 13 11.5V3C13 1.895 12.105 1 11 1H5C3.895 1 3 1.895 3 3V13C3 14.105 3.895 15 5 15V15.5C5 15.702 5.122 15.885 5.309 15.962C5.495 16.039 5.711 15.997 5.854 15.854L6.5 15.208L7.146 15.854C7.242 15.95 7.37 16 7.5 16C7.564 16 7.63 15.987 7.691 15.962C7.878 15.885 8 15.702 8 15.5V15H12.5C12.776 15 13 14.776 13 14.5C13 14.224 12.776 14 12.5 14H8V13.5C8 13.224 7.776 13 7.5 13H5.5C5.224 13 5 13.224 5 13.5V14C4.448 14 4 13.552 4 13V12H12.5ZM5.646 5.646C5.841 5.451 6.158 5.451 6.353 5.646L7.499 6.792L10.145 4.146C10.34 3.951 10.657 3.951 10.852 4.146C11.047 4.341 11.047 4.658 10.852 4.853L7.852 7.853C7.754 7.951 7.626 7.999 7.498 7.999C7.37 7.999 7.242 7.95 7.144 7.853L5.644 6.353C5.449 6.158 5.449 5.841 5.644 5.646H5.646Z" />
+            <g transform="translate(0 0) scale(1 1)">
+              <path d="M11 11 L12 11 L15 14 L14 14 Z" />
+              <path d="M14 11 L15 11 L12 14 L11 14 Z" />
+            </g>
+          </svg>
+        </a>
+      </div>
+      <div class="dot-grid-subtle branding-grid"></div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT AREA -->
+  <main id="main-content" class="main-content dot-grid-subtle" role="main" [attr.aria-label]="'Primary content' | t">
+    <router-outlet></router-outlet>
+  </main>
+</div>

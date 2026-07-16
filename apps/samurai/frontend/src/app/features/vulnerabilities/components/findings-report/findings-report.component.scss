@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+.panel {
+  padding: var(--space-lg);
+  border: 1px solid var(--border-visible);
+  background-color: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+.helper-text {
+  margin-bottom: 1rem;
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
