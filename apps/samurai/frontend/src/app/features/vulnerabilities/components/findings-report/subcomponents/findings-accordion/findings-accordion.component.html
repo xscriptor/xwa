@@ -1,0 +1,24 @@
+<div *ngIf="filteredLinks.length">
+  <div class="t-label text-secondary">
+    {{ 'MATCHED_NODES' | t }}: {{ filteredLinks.length }} | {{ 'MATCHED_FINDINGS' | t }}: {{ severityCount(filteredLinks) }}
+  </div>
+
+  <details class="nothing-accordion" *ngFor="let link of filteredLinks">
+    <summary [attr.aria-label]="('Toggle findings for ' | t) + link.url">
+      <div class="summary-info">
+        <span class="t-label status-code" *ngIf="!link.isGlobal">{{ link.status_code }} {{ 'HTTP' | t }}</span>
+        <span class="t-label status-code global" *ngIf="link.isGlobal">{{ 'GLOBAL_SCOPE' | t }}</span>
+        <span class="t-body">{{ link.url }}</span>
+      </div>
+      <span class="badge warning" *ngIf="link.findings.length" [attr.aria-label]="link.findings.length + ' ' + ('issues found' | t)">! {{ link.findings.length }} {{ 'Issues' | t }}</span>
+      <span class="badge success" *ngIf="!link.findings.length">{{ 'Clean' | t }}</span>
+    </summary>
+
+    <div class="accordion-content">
+      <span class="t-label text-secondary">{{ 'Content-Type' | t }}: {{ link.content_type }}</span>
+      <div *ngIf="!link.findings.length" class="t-body empty-node">{{ 'No vulnerabilities detected on this specific node.' | t }}</div>
+
+      <app-finding-item *ngFor="let vf of link.findings" [finding]="vf"></app-finding-item>
+    </div>
+  </details>
+</div>

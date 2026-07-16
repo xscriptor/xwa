@@ -1,0 +1,262 @@
+<header class="section-header">
+  <div>
+    <h1 class="t-heading">{{ 'audit.title' | t }}</h1>
+    <span class="t-label">{{ 'audit.subtitle' | t }}</span>
+  </div>
+  <div class="loaded-id" *ngIf="loadedId">
+    <span class="t-label text-secondary">{{ 'audit.loaded' | t }} {{ targetUrl }}</span>
+  </div>
+</header>
+
+<section class="panel">
+  <div class="audit-form">
+    <label class="t-label" for="target-url">{{ auditMode === 'batch' ? ('audit.batch_url' | t) : ('audit.target_url' | t) }}</label>
+    <input
+      type="url"
+      id="target-url"
+      [(ngModel)]="targetUrl"
+      class="input-field"
+      [placeholder]="auditMode === 'batch' ? 'https://example.com/sitemap.xml' : 'https://example.com'"
+      [disabled]="isRunning"
+    />
+
+    <div class="mode-row">
+      <div class="mode-toggle">
+        <button
+          class="mode-btn t-label"
+          [class.active]="auditMode === 'single'"
+          (click)="auditMode = 'single'"
+          [disabled]="isRunning"
+        >{{ 'audit.single' | t }}</button>
+        <button
+          class="mode-btn t-label"
+          [class.active]="auditMode === 'fullsite'"
+          (click)="auditMode = 'fullsite'"
+          [disabled]="isRunning"
+        >{{ 'audit.fullsite' | t }}</button>
+        <button
+          class="mode-btn t-label"
+          [class.active]="auditMode === 'batch'"
+          (click)="auditMode = 'batch'; batchUrl = targetUrl"
+          [disabled]="isRunning"
+        >{{ 'audit.batch' | t }}</button>
+      </div>
+      <div class="subdomain-toggle" *ngIf="hasCrawlOptions">
+        <span class="t-label">{{ 'audit.subdomains' | t }}</span>
+        <div class="toggle-group">
+          <button
+            class="toggle-btn t-label"
+            [class.active]="!includeSubdomains"
+            (click)="includeSubdomains = false"
+            [disabled]="isRunning"
+          >OFF</button>
+          <button
+            class="toggle-btn t-label"
+            [class.active]="includeSubdomains"
+            (click)="includeSubdomains = true"
+            [disabled]="isRunning"
+          >ON</button>
+        </div>
+      </div>
+      <div class="batch-format-toggle" *ngIf="hasBatchOptions">
+        <span class="t-label">{{ 'audit.format' | t }}</span>
+        <div class="toggle-group">
+          <button
+            class="toggle-btn t-label"
+            [class.active]="batchFormat === 'sitemap'"
+            (click)="batchFormat = 'sitemap'"
+            [disabled]="isRunning"
+          >{{ 'audit.sitemap' | t }}</button>
+          <button
+            class="toggle-btn t-label"
+            [class.active]="batchFormat === 'csv'"
+            (click)="batchFormat = 'csv'"
+            [disabled]="isRunning"
+          >{{ 'audit.csv' | t }}</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-bar">
+      <button
+        class="tab-btn t-label"
+        [class.active]="checkTab === 'all'"
+        (click)="setCheckTab('all')"
+        [disabled]="isRunning"
+      >{{ 'audit.all' | t }}</button>
+      <button
+        class="tab-btn t-label"
+        [class.active]="checkTab === 'performance'"
+        (click)="setCheckTab('performance')"
+        [disabled]="isRunning"
+      >{{ 'audit.performance' | t }}</button>
+      <button
+        class="tab-btn t-label"
+        [class.active]="checkTab === 'seo'"
+        (click)="setCheckTab('seo')"
+        [disabled]="isRunning"
+      >{{ 'audit.seo' | t }}</button>
+      <button
+        class="tab-btn t-label"
+        [class.active]="checkTab === 'accessibility'"
+        (click)="setCheckTab('accessibility')"
+        [disabled]="isRunning"
+      >{{ 'audit.accessibility' | t }}</button>
+      <button
+        class="tab-btn t-label"
+        [class.active]="checkTab === 'best_practices'"
+        (click)="setCheckTab('best_practices')"
+        [disabled]="isRunning"
+      >{{ 'audit.best_practices' | t }}</button>
+    </div>
+
+    <button
+      type="button"
+      class="btn-audit"
+      (click)="startAudit()"
+      [disabled]="isRunning || !targetUrl.trim()"
+    >
+      {{ isRunning ? ('audit.analyzing' | t) : (loadedId ? ('audit.rerun' | t) : ('audit.start' | t)) }}
+    </button>
+  </div>
+</section>
+
+<section class="results-area" *ngIf="findings.length > 0 || isRunning || isComplete">
+  <div class="panel">
+    <header class="panel-header">
+      <h2 class="t-heading">{{ 'audit.findings' | t }}</h2>
+      <span class="t-label" *ngIf="!isRunning">{{ findings.length }} {{ 'audit.total' | t }}</span>
+      <span class="t-label text-secondary" *ngIf="isRunning">{{ 'audit.scanning' | t }}</span>
+    </header>
+
+    <div class="terminal-panel" *ngIf="isRunning || logs.length > 0">
+      <div class="terminal-header">
+        <span class="t-label">{{ 'audit.terminal' | t }}</span>
+        <span class="t-label text-secondary">{{ isRunning ? ('audit.live' | t) : logs.length + ' ' + ('audit.lines' | t) }}</span>
+      </div>
+      <div class="terminal-body" #terminalLog>
+        <div *ngFor="let line of logs" class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-msg">{{ line }}</span>
+        </div>
+        <div *ngIf="isRunning" class="terminal-line cursor-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-cursor">▊</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-results-message" *ngIf="isComplete && findings.length === 0">
+      <span class="t-label text-secondary">{{ 'audit.no_issues' | t }}</span>
+      <p class="t-data text-secondary" style="margin-top:var(--space-sm);font-size:var(--caption);line-height:1.6">
+        {{ 'audit.no_issues_desc' | t }} "{{ targetUrl }}"
+      </p>
+    </div>
+
+    <div class="severity-summary" *ngIf="findings.length > 0">
+      <div class="stat error" *ngIf="summary.error">
+        <span class="t-display-md">{{ summary.error }}</span>
+        <span class="t-label">{{ 'audit.errors' | t }}</span>
+      </div>
+      <div class="stat warning" *ngIf="summary.warning">
+        <span class="t-display-md">{{ summary.warning }}</span>
+        <span class="t-label">{{ 'audit.warnings' | t }}</span>
+      </div>
+      <div class="stat info" *ngIf="summary.info">
+        <span class="t-display-md">{{ summary.info }}</span>
+        <span class="t-label">{{ 'audit.info' | t }}</span>
+      </div>
+      <div class="stat pass" *ngIf="summary.pass">
+        <span class="t-display-md">{{ summary.pass }}</span>
+        <span class="t-label">{{ 'audit.passed' | t }}</span>
+      </div>
+    </div>
+
+    <div class="result-tabs" *ngIf="findings.length > 0">
+      <button
+        class="result-tab t-label"
+        [class.active]="filterTab === 'all'"
+        (click)="setFilterTab('all')"
+      >{{ 'audit.all' | t }} ({{ findings.length }})</button>
+      <button
+        class="result-tab t-label"
+        *ngFor="let cat of categories"
+        [class.active]="filterTab === cat"
+        (click)="setFilterTab(cat)"
+      >{{ categoryLabel(cat) }} ({{ categoryCounts[cat] }})</button>
+    </div>
+
+    <div class="check-tabs" *ngIf="checkTypes.length > 1">
+      <button
+        class="check-tab t-label"
+        [class.active]="filterCheck === 'all'"
+        (click)="setCheckFilter('all')"
+      >{{ 'audit.all' | t }} ({{ filteredFindings.length }})</button>
+      <button
+        class="check-tab t-label"
+        *ngFor="let ch of checkTypes"
+        [class.active]="filterCheck === ch"
+        (click)="setCheckFilter(ch)"
+      >{{ labelCheck(ch) }} ({{ checkCount(ch) }})</button>
+    </div>
+
+    <div class="pages-list" *ngIf="pagesFound.length > 1">
+      <details class="pages-details">
+        <summary class="t-label">{{ 'audit.pages_crawled' | t }} {{ pagesFound.length }}</summary>
+        <div class="pages-content">
+          <div class="t-data page-item" *ngFor="let p of pagesFound">{{ p }}</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="findings-list">
+        <details class="finding-item" *ngFor="let f of filteredFindings" [ngClass]="'sev-' + f.severity.toLowerCase()">
+        <summary>
+          <span class="severity-badge" [ngClass]="f.severity.toLowerCase()">{{ f.severity }}</span>
+          <span class="t-label finding-check">{{ f.check }}</span>
+          <span class="finding-title">{{ f.title }}</span>
+          <span class="finding-line t-label" *ngIf="findingLine(f) > 0">L{{ findingLine(f) }}</span>
+          <span class="finding-page t-label" *ngIf="f.page_url && pagesFound.length > 1" title="{{ f.page_url }}">{{ f.page_url | slice:0:40 }}…</span>
+        </summary>
+        <div class="finding-detail">
+          <p class="finding-description">{{ f.description }}</p>
+          <p class="finding-page-url t-data" *ngIf="f.page_url && pagesFound.length > 1"><span class="t-label">{{ 'audit.page' | t }}:</span> {{ f.page_url }}</p>
+          <pre *ngIf="f.snippet" class="finding-snippet">{{ f.snippet }}</pre>
+        </div>
+      </details>
+      <div *ngIf="filteredFindings.length === 0 && !isRunning" class="t-label text-secondary empty-findings">
+        {{ 'audit.no_findings' | t }}
+      </div>
+    </div>
+
+    <app-audit-export-actions
+      *ngIf="isComplete"
+      [hasExports]="findings.length > 0"
+      [findingCount]="findings.length"
+      (exportCsv)="exportCsv()"
+      (exportJson)="exportJson()"
+      (exportLighthouse)="exportLighthouse()"
+      (exportPdf)="exportPdf()"
+      (exportHtml)="exportHtml()"
+      (exportMd)="exportMd()"
+    ></app-audit-export-actions>
+  </div>
+
+  <div class="panel log-panel" *ngIf="pageHtml && isComplete">
+    <header class="panel-header">
+      <h2 class="t-heading">{{ 'audit.source' | t }}</h2>
+      <button type="button" class="btn-reset t-label" (click)="toggleHtmlView()">
+        {{ htmlViewOpen ? ('audit.hide' | t) : ('audit.view' | t) }} {{ 'audit.html' | t }}
+      </button>
+    </header>
+    <div class="html-source" *ngIf="htmlViewOpen">
+      <div class="source-line" *ngFor="let line of htmlLines; let i = index"
+        [class.highlight]="hasLineHighlight(i)"
+        [style.border-left]="hasLineHighlight(i) ? '4px solid #D71921' : '4px solid transparent'"
+        [style.background]="hasLineHighlight(i) ? 'rgba(215,25,33,0.08)' : 'transparent'">
+        <span class="line-num">{{ i + 1 }}</span>
+        <span class="line-html" [innerHTML]="formatHtmlLine(line)"></span>
+      </div>
+    </div>
+  </div>
+</section>

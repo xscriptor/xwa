@@ -1,0 +1,141 @@
+<header class="section-header">
+  <div>
+    <h1 class="t-heading">{{ 'history.title' | t }}</h1>
+    <span class="t-label">{{ 'history.subtitle' | t }}</span>
+  </div>
+  <div class="header-actions">
+    <button type="button" class="btn-refresh t-label" (click)="loadHistory()" [disabled]="isLoading">
+      {{ isLoading ? ('history.refreshing' | t) : ('history.refresh' | t) }}
+    </button>
+    <button type="button" class="btn-refresh t-label" (click)="toggleCompare()"
+      [class.active]="compareMode">
+      {{ compareMode ? ('history.exit_compare' | t) : ('history.compare' | t) }}
+    </button>
+    <button type="button" class="btn-refresh btn-danger t-label" *ngIf="audits.length > 0"
+      (click)="clearAll()" [disabled]="isLoading">
+      {{ clearing ? ('history.clearing' | t) : ('history.clear_all' | t) }}
+    </button>
+  </div>
+</header>
+
+<!-- Error -->
+<section class="panel" *ngIf="errorMessage">
+  <div class="error-box">
+    <span class="t-label text-error">[!] {{ errorMessage }}</span>
+  </div>
+</section>
+
+<!-- Loading -->
+<section class="panel" *ngIf="isLoading && audits.length === 0">
+  <div class="t-label text-secondary">{{ 'history.refreshing' | t }}...</div>
+</section>
+
+<!-- Empty -->
+<section class="panel" *ngIf="!isLoading && audits.length === 0 && !errorMessage">
+  <div class="t-label text-secondary">{{ 'history.no_data' | t }}</div>
+  <p class="t-data text-secondary" style="margin-top:var(--space-sm);font-size:var(--caption);">
+    {{ 'history.no_data_desc' | t }}
+  </p>
+</section>
+
+<!-- Score trend chart -->
+<section class="panel trend-panel" *ngIf="scoreHistory.length >= 2">
+  <header class="panel-header">
+    <h2 class="t-heading">{{ 'history.trend' | t }}</h2>
+    <span class="t-label">{{ scoreHistory.length }} {{ 'history.audits' | t }}</span>
+  </header>
+  <div class="trend-chart">
+    <svg [attr.viewBox]="'0 0 ' + chartWidth + ' 160'" class="trend-svg">
+      <line *ngFor="let i of [0,1,2,3]" [attr.y1]="30 + i * 35" [attr.x1]="40"
+        [attr.y2]="30 + i * 35" [attr.x2]="chartWidth - 10"
+        stroke="var(--border)" stroke-width="1" stroke-dasharray="4,4"/>
+      <polyline *ngIf="scoreHistory.length >= 2"
+        [attr.points]="trendPoints('errors')"
+        fill="none" stroke="var(--error)" stroke-width="2"/>
+      <polyline *ngIf="scoreHistory.length >= 2"
+        [attr.points]="trendPoints('warnings')"
+        fill="none" stroke="var(--warning)" stroke-width="2"/>
+      <polyline *ngIf="scoreHistory.length >= 2"
+        [attr.points]="trendPoints('total')"
+        fill="none" stroke="var(--interactive)" stroke-width="2"/>
+      <text *ngFor="let s of scoreHistory; let i = index"
+        [attr.x]="40 + i * stepX" y="150" class="trend-label"
+        text-anchor="middle">{{ s.date.slice(5) }}</text>
+      <text x="10" y="35" class="trend-label" text-anchor="end">{{ 'history.high' | t }}</text>
+      <text x="10" y="145" class="trend-label" text-anchor="end">{{ 'history.low' | t }}</text>
+    </svg>
+    <div class="trend-legend">
+      <span class="trend-legend-item"><span class="trend-dot" style="background:var(--error)"></span> {{ 'audit.errors' | t }}</span>
+      <span class="trend-legend-item"><span class="trend-dot" style="background:var(--warning)"></span> {{ 'audit.warnings' | t }}</span>
+      <span class="trend-legend-item"><span class="trend-dot" style="background:var(--interactive)"></span> {{ 'history.total' | t }}</span>
+    </div>
+  </div>
+</section>
+
+<!-- Comparison panel -->
+<section class="panel compare-panel" *ngIf="comparisonResult">
+  <header class="panel-header">
+    <h2 class="t-heading">{{ 'history.comparison' | t }}</h2>
+    <span class="t-label">{{ comparisonResult.diff.length }} {{ 'history.diffs' | t }}</span>
+  </header>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <span class="t-label">A: {{ comparisonResult.a?.created_at?.slice(0, 10) }}</span>
+      <div class="compare-stats">
+        <div><span class="t-data">{{ 'history.errors' | t }} {{ compareSeverityCount(comparisonResult.a, 'Error') }}</span></div>
+        <div><span class="t-data">{{ 'history.warnings' | t }} {{ compareSeverityCount(comparisonResult.a, 'Warning') }}</span></div>
+        <div><span class="t-data">{{ 'history.total' | t }} {{ comparisonResult.a?.findings?.length || 0 }}</span></div>
+      </div>
+    </div>
+    <div class="compare-col">
+      <span class="t-label">B: {{ comparisonResult.b?.created_at?.slice(0, 10) }}</span>
+      <div class="compare-stats">
+        <div><span class="t-data">{{ 'history.errors' | t }} {{ compareSeverityCount(comparisonResult.b, 'Error') }}</span></div>
+        <div><span class="t-data">{{ 'history.warnings' | t }} {{ compareSeverityCount(comparisonResult.b, 'Warning') }}</span></div>
+        <div><span class="t-data">{{ 'history.total' | t }} {{ comparisonResult.b?.findings?.length || 0 }}</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="compare-diffs">
+    <div *ngFor="let d of comparisonResult.diff" class="diff-line t-data"
+      [class.diff-neg]="d.startsWith('[-]')"
+      [class.diff-pos]="d.startsWith('[+]')"
+      [class.diff-chg]="d.startsWith('[~]')">{{ d }}</div>
+    <div *ngIf="comparisonResult.diff.length === 0" class="t-label text-secondary">
+      {{ 'history.no_diffs' | t }}
+    </div>
+  </div>
+</section>
+
+<!-- Audit table -->
+<section class="panel audit-table" *ngIf="audits.length > 0">
+  <table>
+    <thead>
+      <tr>
+        <th class="t-label" *ngIf="compareMode">{{ 'history.select' | t }}</th>
+        <th class="t-label">{{ 'history.url' | t }}</th>
+        <th class="t-label">{{ 'history.status' | t }}</th>
+        <th class="t-label">{{ 'history.findings' | t }}</th>
+        <th class="t-label">{{ 'history.date' | t }}</th>
+        <th class="t-label"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of audits" [class.selected]="selectedIds.has(a.id)">
+        <td *ngIf="compareMode">
+          <button type="button" class="select-btn t-label"
+            [class.active]="selectedIds.has(a.id)"
+            (click)="toggleSelection(a.id)"
+            [disabled]="!compareMode">+</button>
+        </td>
+        <td class="t-data">{{ a.url }}</td>
+        <td><span class="t-label" [ngClass]="statusClass(a.status)">{{ a.status }}</span></td>
+        <td class="t-data">{{ a.findings?.length ?? '-' }}</td>
+        <td class="t-data">{{ a.created_at }}</td>
+        <td>
+          <a [routerLink]="'/audit'" [queryParams]="{load: a.id}" class="t-label load-link">{{ 'history.load' | t }}</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

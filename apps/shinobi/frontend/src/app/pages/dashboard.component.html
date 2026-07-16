@@ -1,0 +1,366 @@
+@if (statusMsg) {
+<div class="inline-status" [class.inline-ok]="statusType==='ok'" [class.inline-error]="statusType==='error'" [class.inline-warn]="statusType==='warn'">[{{ statusType === 'ok' ? 'OK' : statusType === 'error' ? 'ERROR' : 'WARN' }}] {{ statusMsg }}</div>
+}
+
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-value">{{ stats.total }}</div><div class="stat-label">Jobs</div></div>
+  <div class="stat-card"><div class="stat-value">{{ stats.running }}</div><div class="stat-label">Active</div></div>
+  <div class="stat-card"><div class="stat-value">{{ stats.pages }}</div><div class="stat-label">Pages</div></div>
+  <div class="stat-card"><div class="stat-value">{{ stats.files }}</div><div class="stat-label">Files</div></div>
+  <div class="stat-card"><div class="stat-value">{{ stats.deep }}</div><div class="stat-label">Deep</div></div>
+  @if (diskStats) {
+  <div class="stat-card"><div class="stat-value t-data" style="font-size:16px">{{ diskStats.disk_size_human }}</div><div class="stat-label">Disk Used</div></div>
+  }
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" [class.active]="mode==='fast'" (click)="mode='fast'"><span class="mode-icon">></span> Fast Test <span class="mode-desc">crawl + download</span></button>
+  <button class="mode-tab" [class.active]="mode==='deep'" (click)="mode='deep'"><span class="mode-icon">#</span> Deep Research <span class="mode-desc">extract + analyze</span></button>
+</div>
+
+@if (mode === 'fast') {
+<div class="card">
+  <h2>> Scan Config</h2>
+  <div class="form-grid">
+    <div class="form-group full"><label>Target URL</label><input type="url" [(ngModel)]="config.url" placeholder="https://example.com" (keydown.enter)="startScrape()"></div>
+    <div class="form-group"><label>Depth</label><input type="number" [(ngModel)]="config.depth" min="0" max="10"></div>
+    <div class="form-group"><label>Max Pages</label><input type="number" [(ngModel)]="config.max_pages" min="1" max="10000"></div>
+    <div class="form-group"><label>Delay (ms)</label><input type="number" [(ngModel)]="config.delay_ms" min="0" max="30000"></div>
+    <div class="form-group"><label>Concurrency</label><input type="number" [(ngModel)]="config.concurrency" min="1" max="20"></div>
+    <div class="form-group"><label>Rate Limit</label><input type="number" [(ngModel)]="config.rate_limit" min="0" max="60000" placeholder="0 = use delay"></div>
+    <div class="form-group"><label>File Types</label><input type="text" [(ngModel)]="config.file_types" placeholder="html,css,js,png,jpg,pdf"></div>
+    <div class="form-group full"><label>Webhook URL</label><input type="url" [(ngModel)]="config.webhook_url" placeholder="https://hooks.example.com/scrape-complete"></div>
+  </div>
+  <h3>> Anti-Blocking</h3>
+  <div class="form-grid">
+    <div class="checkbox-group"><input type="checkbox" id="uaRotation" [(ngModel)]="config.user_agent_rotation"><label for="uaRotation">rotate user-agent</label></div>
+    <div class="checkbox-group"><input type="checkbox" id="respectRobots" [(ngModel)]="config.respect_robots_txt"><label for="respectRobots">respect robots.txt</label></div>
+  </div>
+  <h3>> Rendering</h3>
+  <div class="form-grid">
+    <div class="checkbox-group"><input type="checkbox" id="jsRender" [(ngModel)]="config.javascript_rendering"><label for="jsRender">javascript rendering</label></div>
+    <div class="checkbox-group"><input type="checkbox" id="screenshots" [(ngModel)]="config.take_screenshots"><label for="screenshots">take screenshots</label></div>
+  </div>
+  <h3>> Site Cloning</h3>
+  <div class="form-grid">
+    <div class="checkbox-group"><input type="checkbox" id="rewriteUrls" [(ngModel)]="config.rewrite_urls"><label for="rewriteUrls">rewrite URLs for offline browsing</label></div>
+    <div class="checkbox-group"><input type="checkbox" id="genIndex" [(ngModel)]="config.generate_index"><label for="genIndex">generate index.html</label></div>
+    <div class="checkbox-group"><input type="checkbox" id="exportWarc" [(ngModel)]="config.export_warc"><label for="exportWarc">export WARC archive</label></div>
+    <div class="checkbox-group"><input type="checkbox" id="dedup" [(ngModel)]="config.deduplicate"><label for="dedup">deduplicate content</label></div>
+    <div class="checkbox-group"><input type="checkbox" id="sameDomain" [(ngModel)]="config.same_domain_only"><label for="sameDomain">same domain only</label></div>
+    <div class="checkbox-group"><input type="checkbox" id="downloadAssets" [(ngModel)]="config.download_assets"><label for="downloadAssets">download assets</label></div>
+    <div class="checkbox-group"><input type="checkbox" id="extractEmails" [(ngModel)]="config.extract_emails"><label for="extractEmails">extract emails &amp; phones</label></div>
+  </div>
+  <h3>> Authentication</h3>
+  <div class="form-grid">
+    <div class="form-group"><label>Username</label><input type="text" [(ngModel)]="config.auth_username"></div>
+    <div class="form-group"><label>Password</label><input type="password" [(ngModel)]="config.auth_password"></div>
+    <div class="form-group"><label>Mode</label><select [(ngModel)]="config.auth_mode"><option value="">none</option><option value="basic">Basic Auth</option></select></div>
+  </div>
+  <div class="actions"><button class="btn btn-primary" (click)="startScrape()" [disabled]="starting">{{ starting ? 'Scanning...' : '> Start Scan' }}</button></div>
+</div>
+}
+
+@if (mode === 'deep') {
+<div class="card">
+  <h2>> Deep Research</h2>
+  <div class="submode-tabs">
+    <button class="submode-tab" [class.active]="deepSubMode==='single'" (click)="deepSubMode='single'">Single URL</button>
+    <button class="submode-tab" [class.active]="deepSubMode==='crawl'" (click)="deepSubMode='crawl'">Crawl + Extract</button>
+    <button class="submode-tab" [class.active]="deepSubMode==='batch'" (click)="deepSubMode='batch'">Batch URLs</button>
+    <button class="submode-tab" [class.active]="deepSubMode==='pycrawl'" (click)="deepSubMode='pycrawl'">Python Crawl + ZIP</button>
+  </div>
+
+  @if (deepSubMode === 'single') {
+  <div class="form-grid" style="margin-top:12px"><div class="form-group full"><label>Target URL</label><input type="url" [(ngModel)]="deepConfig.url" placeholder="https://example.com/page" (keydown.enter)="startDeepSingle()"></div></div>
+  <h3>> Extraction</h3>
+  <div class="form-grid">
+    <div class="checkbox-group"><input type="checkbox" id="extractStructured" [(ngModel)]="deepConfig.extract_structured"><label for="extractStructured">structured data (JSON-LD, microdata, OG)</label></div>
+    <div class="checkbox-group"><input type="checkbox" id="nlpEnabled" [(ngModel)]="deepConfig.nlp_enabled"><label for="nlpEnabled">NLP analysis</label></div>
+  </div>
+  <h3>> Custom Selectors</h3>
+  <div class="form-group full"><input type="text" [(ngModel)]="customSelectorInput" placeholder=".product-price, .article-body"><span class="field-hint">CSS selectors separated by commas</span></div>
+  <div class="actions"><button class="btn btn-primary" (click)="startDeepSingle()" [disabled]="deepStarting">{{ deepStarting ? 'Extracting...' : '# Extract Page' }}</button></div>
+  }
+
+  @if (deepSubMode === 'crawl') {
+  <div class="form-grid" style="margin-top:12px">
+    <div class="form-group full"><label>Target URL</label><input type="url" [(ngModel)]="deepCrawlConfig.url" placeholder="https://example.com" (keydown.enter)="startDeepCrawl()"></div>
+    <div class="form-group"><label>Depth</label><input type="number" [(ngModel)]="deepCrawlConfig.depth" min="0" max="10"></div>
+    <div class="form-group"><label>Max Pages</label><input type="number" [(ngModel)]="deepCrawlConfig.max_pages" min="1" max="1000"></div>
+  </div>
+  <h3>> Extraction</h3>
+  <div class="form-grid">
+    <div class="checkbox-group"><input type="checkbox" id="crawlExtractStructured" [(ngModel)]="deepCrawlConfig.extract_structured"><label for="crawlExtractStructured">structured data per page</label></div>
+    <div class="checkbox-group"><input type="checkbox" id="crawlNlpEnabled" [(ngModel)]="deepCrawlConfig.nlp_enabled"><label for="crawlNlpEnabled">NLP analysis per page</label></div>
+  </div>
+  <div class="actions"><button class="btn btn-primary" (click)="startDeepCrawl()" [disabled]="starting">{{ starting ? 'Crawling...' : '# Deep Crawl' }}</button></div>
+  }
+
+  @if (deepSubMode === 'batch') {
+  <div class="form-group full" style="margin-top:12px"><label>URLs (one per line)</label><textarea [(ngModel)]="batchUrls" rows="6" placeholder="https://example.com/page1&#10;https://example.com/page2"></textarea></div>
+  <div class="actions"><button class="btn btn-primary" (click)="startDeepBatch()" [disabled]="deepStarting">{{ deepStarting ? 'Extracting...' : '# Extract Batch' }}</button></div>
+  }
+
+  @if (deepSubMode === 'pycrawl') {
+  <div class="form-grid" style="margin-top:12px">
+    <div class="form-group full"><label>Target URL</label><input type="url" [(ngModel)]="pyCrawlConfig.url" placeholder="https://example.com" (keydown.enter)="startPyCrawl()"></div>
+    <div class="form-group"><label>Depth</label><input type="number" [(ngModel)]="pyCrawlConfig.depth" min="0" max="10"></div>
+    <div class="form-group"><label>Max Pages</label><input type="number" [(ngModel)]="pyCrawlConfig.max_pages" min="1" max="1000"></div>
+  </div>
+  <h3>> Extraction</h3>
+  <div class="form-grid">
+    <div class="checkbox-group"><input type="checkbox" id="pyExtractStructured" [(ngModel)]="pyCrawlConfig.extract_structured"><label for="pyExtractStructured">structured data per page</label></div>
+    <div class="checkbox-group"><input type="checkbox" id="pyNlpEnabled" [(ngModel)]="pyCrawlConfig.nlp_enabled"><label for="pyNlpEnabled">NLP analysis per page</label></div>
+  </div>
+  <div class="field-hint" style="margin-top:8px">Downloads HTML, CSS, JS, images and packages into ZIP</div>
+  <div class="actions"><button class="btn btn-primary" (click)="startPyCrawl()" [disabled]="deepStarting">{{ deepStarting ? 'Starting...' : '# Crawl + ZIP' }}</button></div>
+
+  @if (pyCrawlJobId) {
+  <div style="margin-top:var(--space-md)">
+    <div class="detail-row"><span class="label">Status</span><span class="value" style="text-transform:uppercase;letter-spacing:0.05em">{{ pyCrawlStatus }}</span></div>
+    <div class="detail-row"><span class="label">Pages</span><span class="value">{{ pyCrawlPages }}</span></div>
+    <div class="detail-row"><span class="label">Files</span><span class="value">{{ pyCrawlFiles }}</span></div>
+    <div id="progress-bar"><div id="progress-fill" [style.width.%]="pyCrawlProgress"></div></div>
+    @if (pyCrawlStatus === 'running') {
+    <div class="actions"><button class="btn btn-danger btn-sm" (click)="cancelPyCrawl()">Cancel</button></div>
+    }
+    <div class="terminal">
+      @for (line of pyCrawlLog.slice(-80); track $index) {
+      <div class="terminal-line">{{ line }}</div>
+      }
+    </div>
+  </div>
+  }
+  }
+</div>
+}
+
+@if (pyCrawlResults.length) {
+<div class="card">
+  <h2>> Crawl Results ({{ pyCrawlResults.length }} pages)</h2>
+  @if (pyCrawlResult.zip_path) {
+  <div class="actions" style="margin-bottom:var(--space-sm)">
+    <button class="btn btn-primary" (click)="windowOpen('/api/files/' + pyCrawlResult.domain + '.zip')">Download ZIP</button>
+  </div>
+  }
+  <div class="crawl-results-layout">
+    <div class="crawl-results-sidebar">
+      @for (r of pyCrawlResults; track r.url) {
+      <div class="crawl-result-item" [class.selected]="pyCrawlSelectedResult?.url === r.url" (click)="pyCrawlSelectedResult = r">
+        <div class="t-caption" style="font-size:9px;word-break:break-all;color:var(--interactive)">{{ r.url }}</div>
+        <div class="t-data" style="font-size:8px;color:var(--text-secondary)">{{ (r.emails||[]).length }}emails {{ (r.phones||[]).length }}phones</div>
+      </div>
+      }
+    </div>
+    <div class="crawl-results-detail">
+      @if (pyCrawlSelectedResult) {
+      <div class="deep-meta">
+        <div class="detail-row"><span class="label">URL</span><span class="value" style="font-size:10px;word-break:break-all">{{ pyCrawlSelectedResult.url }}</span></div>
+        <div class="detail-row"><span class="label">Emails</span><span class="value">{{ (pyCrawlSelectedResult.emails||[]).join(', ') || '—' }}</span></div>
+      </div>
+      @if (pyCrawlSelectedResult.structured) {
+      <details class="deep-section" open><summary class="deep-summary">Structured Data</summary><pre class="deep-pre">{{ formatJson(pyCrawlSelectedResult.structured) }}</pre></details>
+      }
+      @if (pyCrawlSelectedResult.nlp) {
+      <details class="deep-section" open><summary class="deep-summary">NLP Analysis</summary><pre class="deep-pre">{{ formatJson(pyCrawlSelectedResult.nlp) }}</pre></details>
+      }
+      @if (pyCrawlSelectedResult.metadata) {
+      <details class="deep-section"><summary class="deep-summary">Metadata</summary><pre class="deep-pre">{{ formatJson(pyCrawlSelectedResult.metadata) }}</pre></details>
+      }
+      } @else {
+      <div class="empty-state"><p>Select a page to view details</p></div>
+      }
+    </div>
+  </div>
+</div>
+}
+
+@if (activeJob) {
+<div class="card">
+  <h2>> Progress</h2>
+  <div id="progress-bar"><div id="progress-fill" [style.width.%]="progressPct"></div></div>
+  <div class="job-detail" style="margin-top:12px">
+    <div class="detail-section">
+      <div class="detail-row"><span class="label">Status</span><span class="value" [class]="'value ' + statusClass(activeJob.status)">{{ activeJob.status }}</span></div>
+      <div class="detail-row"><span class="label">Pages</span><span class="value">{{ activeJob.pages_scraped }} / {{ activeJob.total_pages }}</span></div>
+      <div class="detail-row"><span class="label">Files</span><span class="value">{{ activeJob.files_downloaded }}</span></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-row"><span class="label">Current URL</span><span class="value current-url">{{ activeJob.current_url || '—' }}</span></div>
+      <div class="detail-row"><span class="label">Errors</span><span class="value">{{ activeJob.errors.length }}</span></div>
+    </div>
+  </div>
+  @if (activeJob.status === 'running') { <div class="actions"><button class="btn btn-danger" (click)="cancelJob(activeJob.id)">Cancel</button></div> }
+</div>
+}
+
+<div class="card">
+  <div class="search-bar">
+    <span class="search-prefix">></span>
+    <input type="text" [(ngModel)]="searchQuery" placeholder="search jobs, files, deep results...">
+  </div>
+
+  <div class="tabs">
+    <button class="tab" [class.active]="activeTab==='jobs'" (click)="activeTab='jobs'">Jobs ({{ totalJobs }})</button>
+    <button class="tab" [class.active]="activeTab==='files'" (click)="activeTab='files'; loadFiles()">Files ({{ totalFiles }})</button>
+    <button class="tab" [class.active]="activeTab==='deep'" (click)="activeTab='deep'; loadDeepResults()">Deep ({{ totalDeep }})</button>
+    <button class="tab" [class.active]="activeTab==='schedules'" (click)="activeTab='schedules'; loadSchedules()">Schedules ({{ schedules.length }})</button>
+  </div>
+
+  @if (activeTab === 'jobs') {
+  @if (loadingJobs) { <div class="inline-status inline-loading">[LOADING]</div> }
+  <div class="job-list">
+    @for (job of filteredJobs; track job.id) {
+    <div class="job-item">
+      <div class="job-info">
+        <div class="job-url">{{ job.url }}</div>
+        <div class="job-meta">
+          <span [class]="statusClass(job.status)">{{ job.status }} </span>
+          <span>{{ job.pages_scraped }}/{{ job.total_pages }}p {{ job.files_downloaded }}f</span>
+        </div>
+      </div>
+      <div class="actions-inline">
+        <button class="btn btn-sm btn-gold" (click)="exportJob(job.id)">JSON</button>
+        <button class="btn btn-sm" (click)="windowOpen('/api/jobs/'+job.id+'/download')">ZIP</button>
+        <button class="btn btn-sm btn-danger-outline" (click)="deleteJob(job.id, $event)">Del</button>
+        @if (job.status === 'running') { <button class="btn btn-sm btn-danger" (click)="cancelJob(job.id)">X</button> }
+      </div>
+    </div>
+    } @empty { @if (!loadingJobs) { <div class="empty-state"><p>No jobs yet. Enter a URL to start.</p></div> } }
+  </div>
+  @if (totalJobs > pageSize) {
+  <div class="pagination"><button class="btn btn-sm" (click)="prevPage('jobs')" [disabled]="pageJobs===0">Prev</button><span class="t-caption">{{ getPageInfo('jobs') }}</span><button class="btn btn-sm" (click)="nextPage('jobs')" [disabled]="pageJobs + pageSize >= totalJobs">Next</button></div>
+  }
+  }
+
+  @if (activeTab === 'files') {
+  @if (loadingFiles) { <div class="inline-status inline-loading">[LOADING]</div> }
+  <div class="file-list">
+    @for (f of filteredFiles; track f.path) { @if (!f.is_dir) {
+    <div class="file-item" (click)="previewFileItem(f)">
+      <span class="file-icon" [innerHTML]="getFileIcon(f.name.split('.').pop() || '')"></span>
+      <span class="file-name">{{ f.path }}</span>
+      <span class="file-size">{{ formatSize(f.size) }}</span>
+    </div>
+    } } @empty { @if (!loadingFiles) { <div class="empty-state"><p>No files yet.</p></div> } }
+  </div>
+  <div class="actions" style="margin-top:12px"><button class="btn btn-sm" (click)="loadFiles()">Refresh</button></div>
+  @if (totalFiles > pageSize) {
+  <div class="pagination"><button class="btn btn-sm" (click)="prevPage('files')" [disabled]="pageFiles===0">Prev</button><span class="t-caption">{{ getPageInfo('files') }}</span><button class="btn btn-sm" (click)="nextPage('files')" [disabled]="pageFiles + pageSize >= totalFiles">Next</button></div>
+  }
+  }
+
+  @if (activeTab === 'deep') {
+  @if (loadingDeep) { <div class="inline-status inline-loading">[LOADING]</div> }
+  <div class="deep-list">
+    @for (r of filteredDeep; track r.id) {
+    <div class="deep-item" [class.selected]="selectedDeepResult?.id === r.id" (click)="selectDeepResult(r)">
+      <div class="deep-item-info">
+        <div class="deep-item-url">{{ r.url }}</div>
+        <div class="deep-item-meta">
+          <span>{{ r.created_at.slice(0, 10) }}</span>
+          <span>{{ r.extracted.emails.length }}emails</span>
+          @if (r.structured_data) { @for (t of getStructuredTypes(r); track t) { <span class="deep-badge">{{ t }}</span> } }
+          @if (r.nlp_data) { <span class="deep-badge">nlp</span> }
+        </div>
+      </div>
+      <div class="actions-inline">
+        <button class="btn btn-sm btn-gold" (click)="exportDeepResult(r); $event.stopPropagation()">JSON</button>
+        <button class="btn btn-sm btn-danger-outline" (click)="deleteDeepResult(r.id, $event)">Del</button>
+      </div>
+    </div>
+    } @empty { @if (!loadingDeep) { <div class="empty-state"><p>No deep results yet.</p></div> } }
+  </div>
+  <div class="actions" style="margin-top:12px">
+    <button class="btn btn-sm btn-gold" (click)="exportDeepCsv()">CSV</button>
+    <button class="btn btn-sm" (click)="loadDeepResults()">Refresh</button>
+    <button class="btn btn-sm btn-danger-outline" (click)="clearDeepResults()" [disabled]="deleting">Clear All</button>
+  </div>
+  @if (totalDeep > pageSize) {
+  <div class="pagination"><button class="btn btn-sm" (click)="prevPage('deep')" [disabled]="pageDeep===0">Prev</button><span class="t-caption">{{ getPageInfo('deep') }}</span><button class="btn btn-sm" (click)="nextPage('deep')" [disabled]="pageDeep + pageSize >= totalDeep">Next</button></div>
+  }
+  }
+
+  @if (activeTab === 'schedules') {
+  @if (loadingSchedules) { <div class="inline-status inline-loading">[LOADING]</div> }
+  <div class="form-grid" style="margin-bottom:12px">
+    <div class="form-group"><label>URL</label><input type="url" [(ngModel)]="newScheduleUrl" placeholder="https://example.com" (keydown.enter)="addSchedule()"></div>
+    <div class="form-group"><label>Interval (min)</label><input type="number" [(ngModel)]="newScheduleInterval" min="5" max="1440"></div>
+    <div class="form-group" style="justify-content:flex-end"><button class="btn btn-primary btn-sm" style="margin-top:auto" (click)="addSchedule()">+ Add</button></div>
+  </div>
+  <div class="deep-list">
+    @for (s of schedules; track s.id) {
+    <div class="deep-item">
+      <div class="deep-item-info">
+        <div class="deep-item-url">{{ s.url }}</div>
+        <div class="deep-item-meta"><span>Every {{ s.interval_min }}min</span>@if (s.last_run) { <span>last {{ s.last_run.slice(0, 16) }}</span> }<span>next {{ s.next_run.slice(0, 16) }}</span></div>
+      </div>
+      <div class="actions-inline"><button class="btn btn-sm btn-danger-outline" (click)="deleteSchedule(s)">Del</button></div>
+    </div>
+    } @empty { @if (!loadingSchedules) { <div class="empty-state"><p>No schedules.</p></div> } }
+  </div>
+  }
+</div>
+
+<div class="card">
+  <h2>> Database</h2>
+  <div class="actions">
+    <button class="btn btn-sm" (click)="exportDatabase()">Export</button>
+    <button class="btn btn-sm" (click)="importDatabase()">Import</button>
+    <button class="btn btn-sm btn-danger-outline" (click)="clearDatabase()" [disabled]="deleting">Clear All</button>
+  </div>
+</div>
+
+@if (selectedDeepResult) {
+<div class="card">
+  <h2>> Result Detail</h2>
+  <div class="deep-meta">
+    <div class="detail-row"><span class="label">URL</span><span class="value" style="font-size:11px;word-break:break-all">{{ selectedDeepResult.url }}</span></div>
+    <div class="detail-row"><span class="label">Emails</span><span class="value">{{ selectedDeepResult.extracted.emails.join(', ') || '—' }}</span></div>
+    <div class="detail-row"><span class="label">Phones</span><span class="value">{{ selectedDeepResult.extracted.phones.join(', ') || '—' }}</span></div>
+    @if (selectedDeepResult.structured_data) { <div class="detail-row"><span class="label">Structured</span><span class="value">{{ getStructuredTypes(selectedDeepResult).join(', ') }}</span></div> }
+  </div>
+  @if (selectedDeepResult.structured_data) { <details class="deep-section"><summary class="deep-summary">Structured Data</summary><pre class="deep-pre">{{ formatJson(selectedDeepResult.structured_data) }}</pre></details> }
+  @if (selectedDeepResult.nlp_data) { <details class="deep-section"><summary class="deep-summary">NLP Analysis</summary><pre class="deep-pre">{{ formatJson(selectedDeepResult.nlp_data) }}</pre></details> }
+  <div class="actions"><button class="btn btn-sm btn-gold" (click)="exportDeepResult(selectedDeepResult)">Export JSON</button></div>
+</div>
+}
+
+@if (showKeys) {
+<div class="keys-hint">
+  <span><kbd>Ctrl</kbd>+<kbd>Enter</kbd> start scrape</span>
+  <span><kbd>?</kbd> toggle keys</span>
+  <span><kbd>Esc</kbd> close preview</span>
+</div>
+}
+
+@if (previewFile) {
+<div class="preview-overlay" (click)="previewFile=null; previewContent=null">
+  <div class="preview-modal" (click)="$event.stopPropagation()">
+    <div class="preview-header">
+      <span class="t-data">{{ previewFile.path }}</span>
+      <button class="btn btn-sm" (click)="previewFile=null; previewContent=null">Close</button>
+    </div>
+    <div class="preview-body">
+      @if (previewLoading) { <span class="inline-status inline-loading">[LOADING]</span> }
+      @else if (previewContent) { <div [innerHTML]="previewContent"></div> }
+    </div>
+  </div>
+</div>
+}
+
+<footer class="footer">
+  <a href="https://github.com/xscriptor/xwa" class="footer-link" title="XWA">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.167 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+  </a>
+  <a href="https://dev.xscriptor.com" class="footer-link" title="dev.xscriptor.com">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+  </a>
+  <a href="https://github.com/xscriptor" class="footer-link" title="GitHub">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+  </a>
+  <a href="mailto:x&#64;xscriptor.com" class="footer-link" title="Contact">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+  </a>
+</footer>

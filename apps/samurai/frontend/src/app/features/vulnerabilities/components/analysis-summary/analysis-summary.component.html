@@ -1,0 +1,132 @@
+<section class="panel full-width analysis-summary" *ngIf="summary">
+  <div class="summary-head">
+    <h2 class="t-heading">{{ 'ANALYSIS SNAPSHOT' | t }}</h2>
+    <span class="t-label">{{ 'EXTRACTED SUMMARY FROM LIVE ANALYSIS' | t }}</span>
+  </div>
+
+  <div class="summary-layout">
+    <article class="hero-module dot-grid-subtle">
+      <span class="t-label">{{ 'TOTAL FINDINGS' | t }}</span>
+      <div class="hero-row">
+        <span class="t-display-lg t-data" [attr.aria-label]="('Total findings: ' | t) + summary.totalFindings">{{ summary.totalFindings }}</span>
+        <span class="hero-unit t-label">{{ 'ISSUES' | t }}</span>
+      </div>
+      <div class="segment-line">
+        <span class="segment" *ngFor="let segment of totalFindingsSegments" [class.filled]="segment" [class.neutral]="segment"></span>
+      </div>
+    </article>
+
+    <article class="instrument-module">
+      <div class="instrument-head">
+        <span class="t-label">{{ 'RISK INDEX' | t }}</span>
+        <span class="metric-value" [class.hot]="summary.riskScore >= 70" [class.warning]="summary.riskScore >= 40 && summary.riskScore < 70" [attr.aria-label]="('Risk index: ' | t) + summary.riskScore + (' percent' | t)">
+          {{ summary.riskScore }}%
+        </span>
+      </div>
+      <div class="segment-line">
+        <span class="segment" *ngFor="let segment of riskSegments" [class.filled]="segment" [class.accent]="segment"></span>
+      </div>
+
+      <div class="instrument-head compact">
+        <span class="t-label">{{ 'AFFECTED ENDPOINTS' | t }}</span>
+        <span class="metric-value">{{ summary.coveragePct }}%</span>
+      </div>
+      <div class="segment-line compact">
+        <span class="segment" *ngFor="let segment of coverageSegments" [class.filled]="segment" [class.warning-segment]="segment"></span>
+      </div>
+    </article>
+
+    <article class="totals-module">
+      <div class="stat-row">
+        <span class="t-label">{{ 'ENDPOINTS DISCOVERED' | t }}</span>
+        <span class="stat-value">{{ summary.totalLinks }}</span>
+      </div>
+      <div class="stat-row">
+        <span class="t-label">{{ 'VULNERABLE ENDPOINTS' | t }}</span>
+        <span class="stat-value text-accent">{{ summary.vulnerableLinks }}</span>
+      </div>
+      <div class="stat-row">
+        <span class="t-label">{{ 'CLEAN ENDPOINTS' | t }}</span>
+        <span class="stat-value text-success">{{ summary.cleanLinks }}</span>
+      </div>
+      <div class="stat-row">
+        <span class="t-label">{{ 'AVG FINDINGS / ENDPOINT' | t }}</span>
+        <span class="stat-value">{{ summary.avgFindingsPerLink }}</span>
+      </div>
+      <div class="stat-row">
+        <span class="t-label">{{ 'TERMINAL EVENTS' | t }}</span>
+        <span class="stat-value">{{ summary.terminalEvents }}</span>
+      </div>
+    </article>
+  </div>
+
+  <div class="severity-grid">
+    <article class="severity-row">
+      <div class="severity-info">
+        <span class="t-label">{{ 'CRITICAL' | t }}</span>
+        <span class="stat-value text-accent">{{ summary.critical }}</span>
+      </div>
+      <div class="segment-line mini">
+        <span class="segment" *ngFor="let segment of severitySegments(summary.critical, summary.totalFindings)" [class.filled]="segment" [class.accent]="segment"></span>
+      </div>
+    </article>
+
+    <article class="severity-row">
+      <div class="severity-info">
+        <span class="t-label">{{ 'HIGH' | t }}</span>
+        <span class="stat-value text-warning">{{ summary.high }}</span>
+      </div>
+      <div class="segment-line mini">
+        <span class="segment" *ngFor="let segment of severitySegments(summary.high, summary.totalFindings)" [class.filled]="segment" [class.warning-segment]="segment"></span>
+      </div>
+    </article>
+
+    <article class="severity-row">
+      <div class="severity-info">
+        <span class="t-label">{{ 'MEDIUM' | t }}</span>
+        <span class="stat-value">{{ summary.medium }}</span>
+      </div>
+      <div class="segment-line mini">
+        <span class="segment" *ngFor="let segment of severitySegments(summary.medium, summary.totalFindings)" [class.filled]="segment" [class.neutral]="segment"></span>
+      </div>
+    </article>
+
+    <article class="severity-row">
+      <div class="severity-info">
+        <span class="t-label">{{ 'LOW' | t }}</span>
+        <span class="stat-value text-secondary">{{ summary.low }}</span>
+      </div>
+      <div class="segment-line mini">
+        <span class="segment" *ngFor="let segment of severitySegments(summary.low, summary.totalFindings)" [class.filled]="segment" [class.success-segment]="segment"></span>
+      </div>
+    </article>
+  </div>
+
+  <article class="trend-module" *ngIf="trendSnapshots.length">
+    <div class="trend-head">
+      <span class="t-label">{{ 'RISK TREND / LAST' | t }} {{ trendSnapshots.length }} {{ 'SCANS' | t }}</span>
+      <span class="metric-value" [class.hot]="(trendLatestDelta ?? 0) > 0" [class.warning]="(trendLatestDelta ?? 0) < 0">
+        <ng-container *ngIf="trendLatestDelta !== null">
+          {{ trendLatestDelta > 0 ? '+' : '' }}{{ trendLatestDelta }} {{ 'pts' | t }}
+        </ng-container>
+        <ng-container *ngIf="trendLatestDelta === null">
+          {{ 'STABLE' | t }}
+        </ng-container>
+      </span>
+    </div>
+
+    <div class="sparkline-wrap">
+      <svg viewBox="0 0 320 64" preserveAspectRatio="none" [attr.aria-label]="'Risk trend' | t">
+        <polyline class="sparkline" [attr.points]="trendPolylinePoints"></polyline>
+      </svg>
+    </div>
+
+    <div class="trend-meta">
+      <div class="trend-item" *ngFor="let snap of trendSnapshots | slice:0:6">
+        <span class="t-label">{{ snap.label }}</span>
+        <span class="stat-value">{{ snap.riskScore }}%</span>
+        <span class="t-label">{{ snap.totalFindings }} {{ 'findings' | t }}</span>
+      </div>
+    </div>
+  </article>
+</section>

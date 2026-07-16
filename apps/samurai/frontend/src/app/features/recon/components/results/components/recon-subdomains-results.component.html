@@ -1,0 +1,34 @@
+<div *ngIf="subdomains; else noSubdomains" class="result-card">
+  <div class="card-header">
+    <span class="t-label">{{ 'SUBDOMAIN SIGNALS' | t }}</span>
+    <span class="card-meta">{{ activeCount() }} {{ 'ACTIVE' | t }} / {{ totalDiscovered() }} {{ 'DISCOVERED' | t }}</span>
+  </div>
+  <div class="card-content">
+    <div class="panels">
+      <section class="panel">
+        <h4 class="panel-title">{{ '[ ACTIVE HOSTS ]' | t }}</h4>
+        <div *ngIf="activeEntries().length === 0" class="empty-state">{{ 'No active hosts resolved during this run.' | t }}</div>
+        <div *ngFor="let item of activeEntries()" class="subdomain-row">
+          <span class="host-name">{{ item[0] }}</span>
+          <span class="host-ips">{{ item[1].join(', ') }}</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h4 class="panel-title">{{ '[ DISCOVERED HOSTS ]' | t }}</h4>
+        <div *ngIf="discoveredHosts().length === 0" class="empty-state">{{ 'No passive hostnames were discovered.' | t }}</div>
+        <div *ngFor="let host of discoveredHosts()" class="discovered-row">
+          <span class="host-name">{{ host }}</span>
+          <span class="host-state" [class.active]="isActive(host)">{{ isActive(host) ? ('ACTIVE' | t) : ('PASSIVE' | t) }}</span>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<ng-template #noSubdomains>
+  <div class="result-card empty-card">
+    <div class="card-header">{{ 'SUBDOMAINS' | t }}</div>
+    <div class="card-content empty-state">{{ 'This scan did not return subdomain data.' | t }}</div>
+  </div>
+</ng-template>

@@ -1,0 +1,111 @@
+:host {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  min-width: 250px;
+  border-right: 1px solid var(--border-visible);
+  background-color: var(--surface);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg) 0;
+}
+
+.brand {
+  padding: 0 var(--space-xl) var(--space-lg);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--space-md);
+}
+
+.brand h1 {
+  margin-bottom: var(--space-2xs);
+}
+
+.nav-links {
+  list-style: none;
+  flex: 1;
+}
+
+.nav-links li {
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-links a {
+  display: block;
+  padding: var(--space-lg) var(--space-xl);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+  background-color: var(--surface-raised);
+}
+
+.nav-links a.active {
+  color: var(--text-display);
+  background-color: var(--black);
+  border-left-color: var(--interactive);
+}
+
+.sidebar-footer {
+  padding: var(--space-md) var(--space-xl) 0;
+  margin-top: auto;
+}
+
+.social-links {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-visible);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  color: var(--text-display);
+  border-color: var(--interactive);
+  background-color: var(--surface-raised);
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  border: 1px solid var(--border-visible);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  padding: 0.45rem 0.7rem;
+  font-family: var(--font-data);
+  font-size: var(--caption);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  color: var(--success);
+  border-color: var(--success);
+}
+
+.content {
+  flex: 1;
+  padding: var(--space-2xl) var(--space-3xl);
+  overflow-y: auto;
+}

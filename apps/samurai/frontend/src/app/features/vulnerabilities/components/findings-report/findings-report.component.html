@@ -1,0 +1,36 @@
+<section class="panel full-width" *ngIf="completedScanDetails" [attr.aria-label]="'Post scan topology and findings' | t">
+  <h2 class="t-heading text-interactive">{{ 'POST-SCAN TOPOLOGY & FINDINGS (ID #' | t }}{{ completedScanDetails.id }})</h2>
+  <p class="t-label text-secondary helper-text">{{ 'Click on each node (global or by link) to reveal all of its intercepted vulnerabilities.' | t }}</p>
+
+  <!-- Filtros -->
+  <app-findings-filters
+    [severityFilter]="severityFilter"
+    [typeFilter]="typeFilter"
+    [availableTypes]="availableTypes"
+    [hasActiveFilters]="hasActiveFilters"
+    (severityChanged)="severityFilter = $event; onFiltersChanged()"
+    (typeChanged)="typeFilter = $event; onFiltersChanged()"
+    (resetFilters)="resetFilters()">
+  </app-findings-filters>
+
+  <!-- Botones de exportación -->
+  <app-findings-export-actions
+    [findingsCount]="filteredFindingsCount"
+    (exportCsv)="exportFindingsAsCsv()"
+    (exportJson)="exportFindingsAsJson()"
+    (exportPdf)="exportFindingsAsPdf()"
+    (exportBinary)="exportFindingsAsBinary()">
+  </app-findings-export-actions>
+
+  <!-- Estado: Sin links encontrados -->
+  <app-findings-empty-state *ngIf="findingsNodes.length === 0"></app-findings-empty-state>
+
+  <!-- Accordion con findings -->
+  <app-findings-accordion 
+    [filteredLinks]="filteredLinks"
+    *ngIf="filteredLinks.length > 0">
+  </app-findings-accordion>
+
+  <!-- Estado: Sin resultados para filtros actuales -->
+  <app-findings-no-results *ngIf="filteredLinks.length === 0 && findingsNodes.length > 0"></app-findings-no-results>
+</section>

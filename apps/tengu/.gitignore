@@ -1,0 +1,32 @@
+# Rust
+target/
+
+# Angular / Node
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+
+# Build output (Angular)
+static/
+
+# Generated exports
+exports/
+
+# Environment / secrets
+.env
+.env.local
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.iml

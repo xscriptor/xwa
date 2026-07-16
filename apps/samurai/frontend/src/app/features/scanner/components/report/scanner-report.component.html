@@ -1,0 +1,159 @@
+<section class="panel report-panel" *ngIf="scanDetail; else emptyState">
+  <div class="report-header">
+    <div>
+      <h2 class="t-heading">{{ 'DETAILED_SCAN_REPORT' | t }}</h2>
+      <span class="t-label text-secondary">ID #{{ scanDetail?.id }} | {{ scanDetail?.status }} | {{ scanDetail?.scan_type }}</span>
+    </div>
+
+    <div class="report-stats">
+      <div class="stat-chip">
+        <span class="t-label">{{ 'LINKS' | t }}</span>
+        <span class="t-body">{{ totalLinks }}</span>
+      </div>
+      <div class="stat-chip">
+        <span class="t-label">{{ 'FINDINGS' | t }}</span>
+        <span class="t-body">{{ totalFindings }}</span>
+      </div>
+      <div class="stat-chip">
+        <span class="t-label">{{ 'OPEN PORTS' | t }}</span>
+        <span class="t-body">{{ openPortFindings.length }}</span>
+      </div>
+      <div class="stat-chip">
+        <span class="t-label">{{ 'CONTACTS' | t }}</span>
+        <span class="t-body">{{ contactFindingsCount }}</span>
+      </div>
+      <div class="stat-chip">
+        <span class="t-label">{{ 'UNSANITIZED' | t }}</span>
+        <span class="t-body">{{ unsanitizedCount }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="input-group">
+      <label class="t-label" for="scanner-report-search">{{ 'SEARCH' | t }}</label>
+      <input id="scanner-report-search" name="scanner-report-search" type="text" [(ngModel)]="searchText" (ngModelChange)="onFilterChanged()" placeholder="URL, finding, payload..." />
+    </div>
+
+    <div class="input-group">
+      <label class="t-label" for="scanner-report-severity">{{ 'SEVERITY' | t }}</label>
+      <select id="scanner-report-severity" name="scanner-report-severity" [(ngModel)]="severityFilter" (ngModelChange)="onFilterChanged()">
+        <option value="all">{{ 'All severities' | t }}</option>
+        <option value="critical">{{ 'Critical' | t }}</option>
+        <option value="high">{{ 'High' | t }}</option>
+        <option value="medium">{{ 'Medium' | t }}</option>
+        <option value="low">{{ 'Low' | t }}</option>
+        <option value="info">{{ 'Info' | t }}</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label class="t-label" for="scanner-report-scope">{{ 'SCOPE' | t }}</label>
+      <select id="scanner-report-scope" name="scanner-report-scope" [(ngModel)]="scopeFilter" (ngModelChange)="onFilterChanged()">
+        <option value="all">{{ 'All results' | t }}</option>
+        <option value="global">{{ 'Global only' | t }}</option>
+        <option value="link">{{ 'Per link only' | t }}</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label class="t-label" for="scanner-report-type">{{ 'TYPE' | t }}</label>
+      <select id="scanner-report-type" name="scanner-report-type" [(ngModel)]="findingTypeFilter" (ngModelChange)="onFilterChanged()">
+        <option value="all">{{ 'All types' | t }}</option>
+        <option *ngFor="let type of availableFindingTypes" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+
+    <button type="button" class="filter-reset" (click)="clearFilters()" [attr.aria-label]="'Clear all active scanner report filters' | t">{{ 'CLEAR FILTERS' | t }}</button>
+  </div>
+
+  <div class="open-ports-wrap" *ngIf="openPortsDetailed.length">
+    <span class="t-label">{{ 'PORTS_WITH_SERVICE_DETAILS' | t }}</span>
+    <div class="open-ports-grid">
+      <div class="port-pill" *ngFor="let port of openPortsDetailed">
+        <span class="port-token">{{ port.token }}</span>
+        <span class="port-service">{{ port.service }}</span>
+        <span class="port-version">{{ port.version }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="finding-section" *ngIf="globalFindings.length">
+    <h3 class="t-label section-title">{{ 'GLOBAL_FINDINGS' | t }}</h3>
+    <div class="finding-row" *ngFor="let finding of globalFindings">
+      <div class="finding-main">
+        <div class="finding-head">
+          <span class="badge severity" [ngClass]="finding.severity">{{ finding.severity | uppercase }}</span>
+          <span class="t-label">{{ finding.finding_type }}</span>
+          <span class="badge" *ngIf="finding.cvss_score">CVSS {{ finding.cvss_score }}</span>
+        </div>
+        <span class="t-body finding-description">{{ finding.description }}</span>
+        <div class="finding-summary" *ngIf="finding.finding_type === 'UNSANITIZED_INPUT_CANDIDATE' || finding.finding_type === 'REFLECTED_INPUT_ECHO'">
+          <span class="detail-line"><strong>{{ 'Interpretation:' | t }}</strong> {{ getUnsanitizedSummary(finding).meaning }}</span>
+          <span class="detail-line"><strong>{{ 'URL:' | t }}</strong> {{ getUnsanitizedSummary(finding).url }}</span>
+          <span class="detail-line"><strong>{{ 'Method:' | t }}</strong> {{ getUnsanitizedSummary(finding).method }}</span>
+          <span class="detail-line"><strong>{{ 'Action:' | t }}</strong> {{ getUnsanitizedSummary(finding).action }}</span>
+          <span class="detail-line"><strong>{{ 'Fields:' | t }}</strong> {{ getUnsanitizedSummary(finding).fields }}</span>
+        </div>
+        <div class="finding-payload" *ngIf="finding.poc_payload">
+          <pre>{{ finding.poc_payload }}</pre>
+        </div>
+      </div>
+
+      <div class="open-port-detail" *ngIf="finding.finding_type === 'OPEN_PORT'">
+        <span class="detail-line"><strong>{{ 'Port:' | t }}</strong> {{ getPortTokenFromPayload(finding.poc_payload) }}</span>
+        <span class="detail-line"><strong>{{ 'Service:' | t }}</strong> {{ getServiceFromPayload(finding.poc_payload) }}</span>
+        <span class="detail-line"><strong>{{ 'Version:' | t }}</strong> {{ getVersionFromPayload(finding.poc_payload) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-node" *ngIf="!globalFindings.length && !discoveredLinks.length">
+    {{ 'No findings match the current filters.' | t }}
+  </div>
+
+  <details class="link-accordion" *ngFor="let link of discoveredLinks">
+    <summary [attr.aria-label]="('Toggle findings for ' | t) + link.url">
+      <div class="summary-info">
+        <span class="t-label status-code">{{ link.status_code }} HTTP</span>
+        <span class="t-label status-code host">{{ getHost(link.url) }}</span>
+        <span class="t-body summary-url">{{ link.url }}</span>
+      </div>
+      <span class="badge warning" *ngIf="link.findings.length">! {{ link.findings.length }} {{ 'Issues' | t }}</span>
+      <span class="badge success" *ngIf="!link.findings.length">{{ 'Clean' | t }}</span>
+    </summary>
+
+    <div class="accordion-content">
+      <span class="t-label text-secondary">Content-Type: {{ link.content_type }}</span>
+
+      <div class="finding-row nested" *ngFor="let finding of link.findings">
+        <div class="finding-main">
+          <div class="finding-head">
+            <span class="badge severity" [ngClass]="finding.severity">{{ finding.severity | uppercase }}</span>
+            <span class="t-label">{{ finding.finding_type }}</span>
+            <span class="badge" *ngIf="finding.cvss_score">CVSS {{ finding.cvss_score }}</span>
+          </div>
+          <span class="t-body finding-description">{{ finding.description }}</span>
+          <div class="finding-summary" *ngIf="finding.finding_type === 'UNSANITIZED_INPUT_CANDIDATE' || finding.finding_type === 'REFLECTED_INPUT_ECHO'">
+          <span class="detail-line"><strong>{{ 'Interpretation:' | t }}</strong> {{ getUnsanitizedSummary(finding).meaning }}</span>
+          <span class="detail-line"><strong>{{ 'URL:' | t }}</strong> {{ getUnsanitizedSummary(finding).url }}</span>
+          <span class="detail-line"><strong>{{ 'Method:' | t }}</strong> {{ getUnsanitizedSummary(finding).method }}</span>
+          <span class="detail-line"><strong>{{ 'Action:' | t }}</strong> {{ getUnsanitizedSummary(finding).action }}</span>
+          <span class="detail-line"><strong>{{ 'Fields:' | t }}</strong> {{ getUnsanitizedSummary(finding).fields }}</span>
+          </div>
+          <div class="finding-payload" *ngIf="finding.poc_payload">
+            <pre>{{ finding.poc_payload }}</pre>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!link.findings.length" class="t-body empty-node">{{ 'No vulnerabilities detected on this node.' | t }}</div>
+    </div>
+  </details>
+</section>
+
+<ng-template #emptyState>
+  <section class="panel report-panel empty-report">
+    <div class="t-body text-secondary">{{ 'No completed scan report available yet.' | t }}</div>
+  </section>
+</ng-template>

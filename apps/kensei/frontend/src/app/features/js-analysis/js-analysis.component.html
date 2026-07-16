@@ -1,0 +1,51 @@
+<div class="route-container">
+  <header class="section-header">
+    <div>
+      <h1 class="t-heading">JS ANALYSIS</h1>
+      <span class="t-label">JAVASCRIPT BUNDLE DEPENDENCIES</span>
+    </div>
+  </header>
+
+  <div class="selector-row" *ngIf="profiles.length > 0">
+    <label class="t-label" for="js-profile-select">PROFILE</label>
+    <select id="js-profile-select" class="input-field" (change)="loadProfile(+$any($event.target).value)">
+      <option value="">— SELECT —</option>
+      <option *ngFor="let p of profiles" [value]="p.id">{{ p.domain_target }} (ID {{ p.id }})</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="t-label" style="margin: var(--space-lg) 0;">Loading...</div>
+  <div *ngIf="error" class="t-label text-error" style="margin-bottom: var(--space-lg);">[ {{ error }} ]</div>
+
+  <div *ngIf="profile && !loading">
+    <div class="report-header">
+      <span class="t-data">{{ profile.domain_target }}</span>
+      <span class="t-caption text-secondary">{{ profile.created_at | date:'medium' }} · {{ profile.js_dependencies.length }} dependencies</span>
+    </div>
+
+    <div *ngIf="profile.js_dependencies.length === 0" class="t-label text-secondary" style="margin-top: var(--space-lg);">
+      [ NO JS DEPENDENCIES FOUND ]
+    </div>
+
+    <div class="dep-grid" *ngIf="profile.js_dependencies.length > 0">
+      <div *ngFor="let d of profile.js_dependencies" class="dep-item">
+        <span class="t-data">{{ d.name }}</span>
+        <span class="t-caption text-secondary">v{{ d.version }}<span *ngIf="d.package_manager"> · {{ d.package_manager }}</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="version-db-toggle" (click)="toggleVersionDb()">
+    <span class="t-label">{{ showVersionDb ? '▼' : '▶' }} KNOWN LIBRARY VERSIONS</span>
+  </div>
+
+  <div *ngIf="showVersionDb" class="version-db-panel">
+    <div *ngIf="versionDbLoading" class="t-label">Loading...</div>
+    <div *ngIf="versionDb" class="db-grid">
+      <div *ngFor="let key of dbKeys()" class="db-item">
+        <span class="t-data">{{ key }}</span>
+        <span class="t-caption text-success">latest: {{ versionDb[key].latest }}</span>
+      </div>
+    </div>
+  </div>
+</div>

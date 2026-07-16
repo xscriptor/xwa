@@ -1,0 +1,78 @@
+# =============================
+# Docker & Containers
+# =============================
+*db_data/
+*redis_data/
+
+# Environments
+.env
+.env.local
+
+# =============================
+# Node / Angular (Frontend)
+# =============================
+node_modules/
+dist/
+tmp/
+out-tsc/
+bazel-out/
+
+.angular/
+.nx/
+coverage/
+
+# =============================
+# Python / FastAPI (Backend)
+# =============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+.envrc
+.direnv/
+ENV/
+env.bak/
+venv.bak/
+**/.venv/
+**/venv/
+**/env/
+pip-log.txt
+pip-delete-this-directory.txt
+
+reports/
+outputs/
+artifacts/
+captures/
+*.har
+*.pcap
+*.sqlite3
+
+# =============================
+# TUI (future)
+# =============================
+kensei-tui/target/
+
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+kensei-tui/*.json
+kensei-tui/*.csv
+kensei-tui/*.bin
+kensei-tui/*.enc
+
+# =============================
+# OS generated files
+# =============================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

@@ -1,0 +1,18 @@
+services:
+  tengu:
+    build: .
+    container_name: tengu
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - RUST_LOG=tengu=info,tower_http=info
+      - TENGU_MAX_HISTORY=100
+      - TENGU_RATE_LIMIT_BURST=10
+      - TENGU_RATE_LIMIT_PER_SECOND=2
+    volumes:
+      - tengu_data:/data
+
+volumes:
+  tengu_data:

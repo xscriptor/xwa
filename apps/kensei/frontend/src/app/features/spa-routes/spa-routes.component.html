@@ -1,0 +1,47 @@
+<div class="route-container">
+  <header class="section-header">
+    <div>
+      <h1 class="t-heading">SPA ROUTES</h1>
+      <span class="t-label">ANGULAR, REACT, VUE ROUTE DISCOVERY</span>
+    </div>
+  </header>
+
+  <div class="selector-row" *ngIf="profiles.length > 0">
+    <label class="t-label" for="spa-profile-select">PROFILE</label>
+    <select id="spa-profile-select" class="input-field" (change)="loadProfile(+$any($event.target).value)">
+      <option value="">— SELECT —</option>
+      <option *ngFor="let p of profiles" [value]="p.id">{{ p.domain_target }} (ID {{ p.id }})</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="t-label" style="margin: var(--space-lg) 0;">Loading...</div>
+  <div *ngIf="error" class="t-label text-error" style="margin-bottom: var(--space-lg);">[ {{ error }} ]</div>
+
+  <div *ngIf="profile && !loading">
+    <div class="report-header">
+      <span class="t-data">{{ profile.domain_target }}</span>
+      <span class="t-caption text-secondary">{{ profile.created_at | date:'medium' }} · {{ regularRoutes.length }} routes · {{ guards.length }} guards</span>
+    </div>
+
+    <div *ngIf="regularRoutes.length === 0 && guards.length === 0" class="t-label text-secondary" style="margin-top: var(--space-lg);">
+      [ NO ROUTES DISCOVERED ]
+    </div>
+
+    <div class="route-grid" *ngIf="regularRoutes.length > 0">
+      <div *ngFor="let r of regularRoutes" class="route-item">
+        <span class="t-data">{{ r.path }}</span>
+        <span class="t-caption text-secondary">{{ r.route_type }}<span *ngIf="r.framework"> · {{ r.framework }}</span></span>
+      </div>
+    </div>
+
+    <section class="panel" *ngIf="guards.length > 0" style="margin-top: var(--space-lg);">
+      <span class="t-label">AUTH GUARDS ({{ guards.length }})</span>
+      <div class="route-grid">
+        <div *ngFor="let g of guards" class="route-item">
+          <span class="t-data">{{ g.path }}</span>
+          <span class="t-caption text-secondary">{{ g.framework || 'unknown' }}</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

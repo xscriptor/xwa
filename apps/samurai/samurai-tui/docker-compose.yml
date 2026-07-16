@@ -1,0 +1,22 @@
+services:
+  samurai-tui:
+    build: .
+    image: samurai-tui:latest
+    container_name: samurai-tui
+    stdin_open: true
+    tty: true
+    environment:
+      - SAMURAI_DB_BACKEND=sqlite
+      - SAMURAI_SQLITE_PATH=/data/samurai.db
+      - RUST_LOG=info
+    volumes:
+      - samurai-tui-data:/data
+    networks:
+      - samurai-tui-net
+
+volumes:
+  samurai-tui-data:
+
+networks:
+  samurai-tui-net:
+    driver: bridge

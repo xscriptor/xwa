@@ -1,0 +1,31 @@
+[package]
+name = "samurai-tui"
+version = "2.5.0"
+edition = "2021"
+description = "Samurai Cybersecurity Platform — Terminal Edition"
+license = "MIT"
+
+[dependencies]
+ratatui = "0.29"
+crossterm = { version = "0.28", features = ["event-stream"] }
+tokio = { version = "1", features = ["full"] }
+sqlx = { version = "0.8", features = ["runtime-tokio", "postgres", "sqlite", "chrono"] }
+chrono = { version = "0.4", features = ["serde"] }
+reqwest = { version = "0.12", features = ["json", "socks", "rustls-tls"], default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+aes-gcm = "0.10"
+pbkdf2 = { version = "0.12", features = ["simple"] }
+sha2 = "0.10"
+rand = "0.8"
+scraper = "0.20"
+clap = { version = "4", features = ["derive"] }
+log = "0.4"
+env_logger = "0.11"
+url = "2"
+hickory-resolver = "0.24"
+futures = "0.3"
+
+[profile.release]
+opt-level = 3
+lto = true

@@ -5,41 +5,41 @@
 <p><em>Modular web analysis platform — under active development</em></p>
 </div>
 
-<p><em><a href="https://github.com/xscriptor/xwa">XWA</a></em> is the umbrella monorepo that aggregates specialized submodules into a cohesive web analysis ecosystem.</p>
+<p><em>XWA</em> is a monorepo housing a suite of web analysis and security tools. Each tool lives under <code>apps/</code> as a self-contained project with its own Docker Compose setup and documentation.</p>
 
 <hr>
 
-<h2>Submodules</h2>
+<h2>Apps</h2>
 
 <table>
   <tr>
-    <th>Submodule</th>
+    <th>App</th>
     <th>Focus</th>
     <th>Stack</th>
     <th>Status</th>
   </tr>
   <tr>
-    <td><strong><a href="https://github.com/xscriptor/samurai">samurai</a></strong></td>
+    <td><strong><a href="apps/samurai/">samurai</a></strong></td>
     <td>Web cybersecurity analysis</td>
-    <td>Angular 21 + FastAPI/Python + Rust TUI</td>
+    <td>Angular + FastAPI/Python + Rust TUI</td>
     <td>Released</td>
   </tr>
   <tr>
-    <td><strong><a href="https://github.com/xscriptor/shinobi">shinobi</a></strong></td>
+    <td><strong><a href="apps/shinobi/">shinobi</a></strong></td>
     <td>Stealth web scraping with anti-blocking</td>
-    <td>Rust (Axum) + Angular 19 + Python extractor</td>
+    <td>Rust (Axum) + Angular + Python extractor</td>
     <td>Released</td>
   </tr>
   <tr>
-    <td><strong>kensei</strong></td>
+    <td><strong><a href="apps/kensei/">kensei</a></strong></td>
     <td>Web technology stack profiler</td>
-    <td>TBD</td>
+    <td>Angular + FastAPI/Python</td>
     <td>Planned</td>
   </tr>
   <tr>
-    <td><strong><a href="https://github.com/xscriptor/tengu">tengu</a></strong></td>
+    <td><strong><a href="apps/tengu/">tengu</a></strong></td>
     <td>Web quality auditor</td>
-    <td>Rust (Axum) + Angular 19</td>
+    <td>Rust (Axum) + Angular</td>
     <td>Released</td>
   </tr>
   <tr>
@@ -72,15 +72,16 @@
 
 <h2>Getting Started</h2>
 
-<h3>Clone with Submodules</h3>
-<pre><code>git clone --recurse-submodules https://github.com/xscriptor/xwa.git</code></pre>
-
-<h3>Or Initialize After Cloning</h3>
+<h3>Clone</h3>
 <pre><code>git clone https://github.com/xscriptor/xwa.git
-cd xwa
-git submodule update --init --recursive</code></pre>
+cd xwa/xwa</code></pre>
 
-<p>Each submodule contains its own Docker Compose configuration and standalone setup instructions. Refer to the individual README files for detailed guidance.</p>
+<h3>Run an App</h3>
+<p>Each app is self-contained. For example, to start <strong>samurai</strong>:</p>
+<pre><code>cd apps/samurai
+docker compose up</code></pre>
+
+<p>Refer to each app's <code>README.md</code> for detailed setup instructions.</p>
 
 <hr>
 

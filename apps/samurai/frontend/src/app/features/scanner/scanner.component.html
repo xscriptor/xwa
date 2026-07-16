@@ -1,0 +1,74 @@
+<div class="route-container">
+  <header class="section-header">
+    <div>
+      <h1 class="t-heading">{{ 'NETWORK_SCANNER' | t }}</h1>
+      <span class="t-label">{{ 'NATIVE NMAP ASYNC WORKER' | t }}</span>
+    </div>
+    
+    <div class="system-status">
+      <div class="status-dot" [style.background-color]="isScanning ? 'var(--warning)' : 'var(--success)'"></div>
+      <span class="t-label" aria-live="polite">{{ isScanning ? ('SCANNING...' | t) : ('MODULE READY' | t) }}</span>
+    </div>
+  </header>
+
+  <div class="dashboard-grid">
+    <app-scanner-target-config
+      [targetDomain]="targetDomain"
+      [scanProfile]="scanProfile"
+      [scanTimeout]="scanTimeout"
+      [webAppSurfaceScan]="webAppSurfaceScan"
+      [collectContactIntel]="collectContactIntel"
+      [detectUnsanitizedInputs]="detectUnsanitizedInputs"
+      [webMaxPages]="webMaxPages"
+      [isScanning]="isScanning"
+      [currentScanId]="currentScanId"
+      (targetDomainChange)="targetDomain = $event"
+      (scanProfileChange)="scanProfile = $event"
+      (scanTimeoutChange)="scanTimeout = $event"
+      (webAppSurfaceScanChange)="webAppSurfaceScan = $event"
+      (collectContactIntelChange)="collectContactIntel = $event"
+      (detectUnsanitizedInputsChange)="detectUnsanitizedInputs = $event"
+      (webMaxPagesChange)="webMaxPages = $event"
+      (initiate)="initiateScan()"
+      (cancel)="cancelScan()"
+    ></app-scanner-target-config>
+
+    <div class="stack-column">
+      <app-scanner-metrics
+        [vulnerabilitiesFound]="vulnerabilitiesFound"
+        [contactsFound]="contactsFound"
+        [unsanitizedFindings]="unsanitizedFindings"
+        [latestOpenPortDelta]="latestOpenPortDelta"
+        [openPortsDetailed]="openPortsDetailed"
+      ></app-scanner-metrics>
+
+      <app-scanner-terminal
+        [terminalLogs]="terminalLogs"
+        [isScanning]="isScanning"
+      ></app-scanner-terminal>
+    </div>
+
+    <app-scanner-export-actions
+      class="full-width"
+      [hasExports]="!!currentScanDetail"
+      (exportCsv)="exportScannerAsCsv()"
+      (exportJson)="exportScannerAsJson()"
+      (exportPdf)="exportScannerAsPdf()"
+      (exportBinary)="exportScannerAsBinary()"
+    ></app-scanner-export-actions>
+
+    <app-scanner-report
+      class="full-width"
+      [scanDetail]="currentScanDetail"
+      [openPortsDetailed]="openPortsDetailed"
+      (exportSnapshotChange)="onReportExportSnapshot($event)"
+    ></app-scanner-report>
+
+    <app-scanner-history
+      class="full-width"
+      [scannerHistory]="scannerHistory"
+      [selectedScanId]="currentScanId"
+      (selectScan)="selectScannerHistoryRun($event)"
+    ></app-scanner-history>
+  </div>
+</div>
