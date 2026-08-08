@@ -1,5 +1,5 @@
 
-<h1 align="center">X Web Analyzer</h1>
+<h1 align="center">X Web Analysis</h1>
 
 <div align="center">
 <p><em>Modular web analysis platform — under active development</em></p>
